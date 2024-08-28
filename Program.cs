@@ -1,21 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
-if (args.Length == 3)
+foreach (var arg in args)
 {
-    if (args[0] == "say")
-    {
-        var message = args[1];
-        var frequency = int.Parse(args[2]);
-        foreach (var i in Enumerable.Range(1, frequency))
-        {
-            Console.Write(message + " ");
-        }
-    }
+    Console.WriteLine(arg);
 }
-else
-{
-    Console.WriteLine("Incorrect use case:");
-    Console.WriteLine("Correct use case: dotnet run -- say \"Message\" count");
-}
-
-
 
