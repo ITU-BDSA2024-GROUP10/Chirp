@@ -43,7 +43,7 @@ void Cheep(string message)
     string currentTime = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
     string outputMessage = $"{userName},\"{message}\",{currentTime}";
     
-    StreamWriter writer = new StreamWriter("C:\\Users\\rasmu\\Chirp.CLI\\chirp_cli_db.csv", true);
+    StreamWriter writer = new StreamWriter("chirp_cli_db.csv", true);
     writer.WriteLine(outputMessage);
     writer.Close();
 }
@@ -52,7 +52,7 @@ List<string> ReadFile()
 {
     try
     {
-        StreamReader reader = new("C:\\Users\\rasmu\\Chirp.CLI\\chirp_cli_db.csv");
+        StreamReader reader = new("chirp_cli_db.csv");
         Console.WriteLine("the program running in chirp_cli_db.csv");
         reader.ReadLine();
         List<string> lines = reader.ReadToEnd().Split('\n').ToList();
