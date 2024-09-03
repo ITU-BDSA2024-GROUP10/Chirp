@@ -79,13 +79,12 @@ class Chirp
 
     public static Chirp ChirpFromString(string inputString)
     {
-        Regex csvParser = new Regex("(?'Username'[\\w]*),\"(?'Messege'[^\"]*)\",(?'TimeStamp'[\\w]*)");
+        int last = inputString.LastIndexOf(",");
+        int first = inputString.IndexOf(",");
         
-        string[] elements = csvParser.Split(inputString);
-        
-        string name = elements[1];
-        string message = elements[2];
-        DateTimeOffset date = DateTimeOffset.FromUnixTimeSeconds(long.Parse(elements[3]));
+        string name = inputString.Substring(0,first);
+        string message = inputString.Substring(first+2, last-first-3);
+        DateTimeOffset date = DateTimeOffset.FromUnixTimeSeconds(long.Parse(inputString.Substring(last+1)));
         
         return new Chirp(name, message, date);
     }
