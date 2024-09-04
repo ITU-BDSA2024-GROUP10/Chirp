@@ -19,8 +19,8 @@ As a \<role>, I want \<goal>
 \<why/benefit>
 
 \#\# Acceptance criteria \
-  \- Criteria1 \
-  \- Criteria2
+  \- [ ] Criteria1 \
+  \- [ ] Criteria2
 
 ### Commits
 #### First Line
