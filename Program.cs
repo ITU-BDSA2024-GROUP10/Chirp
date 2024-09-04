@@ -14,30 +14,30 @@ else
         Read();
     } else if (args[0] == "cheep")
     {
-        Cheep(args[1]);
+        WriteCheep(args[1]);
     }
 }
 
 
 void Read()
 {
-    List<Chirp> chirps = new();
+    List<Cheep> cheeps = new();
     var lines = ReadFile();
     foreach (var line in lines)
     {
         if (!String.IsNullOrEmpty(line))
         {
-            chirps.Add(Chirp.ChirpFromString(line));
+            cheeps.Add(Cheep.CheepFromString(line));
         }
     }
 
-    foreach (var chirp in chirps)
+    foreach (var cheep in cheeps)
     {
-        Console.WriteLine(chirp);
+        Console.WriteLine(cheep);
     }
 }
 
-void Cheep(string message)
+void WriteCheep(string message)
 {
     string userName = Environment.UserName;
     string currentTime = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
@@ -71,13 +71,13 @@ List<string> ReadFile()
 
 }
 
-class Chirp
+class Cheep
 {
     string _name { get; }
     string _message { get; }
     DateTimeOffset _date { get; }
 
-    public static Chirp ChirpFromString(string inputString)
+    public static Cheep CheepFromString(string inputString)
     {
         int last = inputString.LastIndexOf(",");
         int first = inputString.IndexOf(",");
@@ -86,10 +86,10 @@ class Chirp
         string message = inputString.Substring(first+2, last-first-3);
         DateTimeOffset date = DateTimeOffset.FromUnixTimeSeconds(long.Parse(inputString.Substring(last+1)));
         
-        return new Chirp(name, message, date);
+        return new Cheep(name, message, date);
     }
     
-    public Chirp(string name, string message, DateTimeOffset date)
+    public Cheep(string name, string message, DateTimeOffset date)
     {
         _name = name;
         _message = message;
