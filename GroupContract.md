@@ -1,20 +1,45 @@
 # Group Contract
-## Members:
-Co-authored-by: Alex \<alext@itu.dk> 
+## Members
+Alex \<alext@itu.dk>\
+Anthon \<acah@itu.dk>\
+Christoffer \<gryn@itu.dk>\
+Rasmus \<rarl@itu.dk>\
+Mathias \<mlao@itu.dk>
 
-Co-authored-by: Anthon \<acah@itu.dk> 
+## Naming Conventions
+### Branches
+#### Title 
+small-characters-with-dashes
+  
+### Issue
+#### Title 
+As a \<role>, I want \<goal>
 
-Co-authored-by: Christoffer \<gryn@itu.dk> 
+#### Description
+\<why/benefit>
 
-Co-authored-by: Rasmus \<rarl@itu.dk> 
+\#\# Acceptance criteria \
+  \- Criteria1 \
+  \- Criteria2
 
-Co-authored-by: Mathias \<mlao@itu.dk> 
+### Commits
+#### First Line
+\<what>
 
+#### Description
+\<why>
+
+#### Co-authored
+Co-authored-by: Alex \<alext@itu.dk>\
+Co-authored-by: Anthon \<acah@itu.dk>\
+Co-authored-by: Christoffer \<gryn@itu.dk>\
+Co-authored-by: Rasmus \<rarl@itu.dk>\
+Co-authored-by: Mathias \<mlao@itu.dk>
 
 ## Meeting
 Tuesday for exercise:
-- Standup
-- Prep for Wendsday
+- Stand-up
+- Prep for Wednsday
 
 Wendsday for exercises and after:
 - Get overview
