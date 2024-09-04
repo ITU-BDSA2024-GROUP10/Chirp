@@ -19,7 +19,8 @@ Tuesday for exercise:
 Wendsday for exercises and after:
 - Get overview
 - Describe tasks
-- Preform tasks
+- Create issues on GitHub
+- Solve issues
 - Plan meeting as needed
 
 ## Code of conduct
