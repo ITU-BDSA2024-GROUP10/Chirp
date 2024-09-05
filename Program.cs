@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Text.RegularExpressions;
+using Chirp.CLI;
 
 if (args.Length == 0)
 {
@@ -71,7 +72,7 @@ List<string> ReadFile()
 
 }
 
-class Cheep
+public class Cheep
 {
     string _name { get; }
     string _message { get; }
