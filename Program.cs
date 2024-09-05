@@ -72,7 +72,7 @@ List<string> ReadFile()
 
 }
 
-public class Cheep
+public record Cheep
 {
     string _name { get; }
     string _message { get; }
