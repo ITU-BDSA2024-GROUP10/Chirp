@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Text.RegularExpressions;
 using DocoptNet;
+using Chirp.CLI;
 
 const string usage = @"Chirp CLI version.
 
@@ -75,7 +76,7 @@ List<string> ReadFile()
 
 }
 
-class Cheep
+public class Cheep
 {
     string _name { get; }
     string _message { get; }
