@@ -17,24 +17,13 @@ Options:
 
 var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
-
-if (args.Length == 0)
+if (arguments["read"].IsTrue) 
 {
-    Console.WriteLine("Incorrect arguments! Try: ");
-    Console.WriteLine("* dotnet run -- read");
-    Console.WriteLine("* dotnet run -- cheep \"message\"");
-}
-else
+    Read();
+} else if (arguments["cheep"].IsTrue)
 {
-    if (args[0] == "read")
-    {
-        Read();
-    } else if (args[0] == "cheep")
-    {
-        WriteCheep(args[1]);
-    }
+    WriteCheep(arguments["<message>"].ToString());
 }
-
 
 void Read()
 {
@@ -49,9 +38,7 @@ void Read()
     }
 
     foreach (var cheep in cheeps)
-    {
         Console.WriteLine(cheep);
-    }
 }
 
 void WriteCheep(string message)
