@@ -44,7 +44,6 @@ void Read()
 
 void WriteCheep(string message)
 {
-    //TODO: Fix writer to not override existing lines 
     string userName = Environment.UserName;
     DateTimeOffset currentTime = DateTimeOffset.Now.DateTime;
     var records = new List<Cheep>
@@ -52,7 +51,7 @@ void WriteCheep(string message)
         new (userName, message, currentTime)
     };
     
-    using (var writer = new StreamWriter("chirp_cli_db.csv"))
+    using (var writer = new StreamWriter("chirp_cli_db.csv", true))
     using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
     {
         csv.Context.RegisterClassMap<CheepMap>();
