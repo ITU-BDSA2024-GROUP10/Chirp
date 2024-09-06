@@ -1,24 +1,30 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Text.RegularExpressions;
+using DocoptNet;
 using Chirp.CLI;
 
-if (args.Length == 0)
-{
-    Console.WriteLine("Incorrect arguments! Try: ");
-    Console.WriteLine("* dotnet run -- read");
-    Console.WriteLine("* dotnet run -- cheep \"message\"");
-}
-else
-{
-    if (args[0] == "read")
-    {
-        Read();
-    } else if (args[0] == "cheep")
-    {
-        WriteCheep(args[1]);
-    }
-}
+const string usage = @"Chirp CLI version.
 
+Usage:
+    chirp read <limit>
+    chirp cheep <message>
+    chirp (-h | --help)
+    chirp --version
+
+Options:
+    -h --help   Show this screen.
+    --version   Show version.
+";
+
+var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
+
+if (arguments["read"].IsTrue) 
+{
+    Read();
+} else if (arguments["cheep"].IsTrue)
+{
+    WriteCheep(arguments["<message>"].ToString());
+}
 
 void Read()
 {
@@ -33,9 +39,7 @@ void Read()
     }
 
     foreach (var cheep in cheeps)
-    {
         Console.WriteLine(cheep);
-    }
 }
 
 void WriteCheep(string message)
