@@ -6,27 +6,15 @@ public class Cheep
     public string message { get; set; }
     public DateTime date { get; set; }
 
-    public static Cheep CheepFromString(string inputString)
-    {
-        int last = inputString.LastIndexOf(",");
-        int first = inputString.IndexOf(",");
-
-        string name = inputString.Substring(0, first);
-        string message = inputString.Substring(first + 2, last - first - 3);
-        DateTime date = DateTimeOffset.FromUnixTimeSeconds(long.Parse(inputString.Substring(last + 1))).DateTime;
-
-        return new Cheep(name, message, long.Parse(inputString.Substring(last + 1)));
-    }
-
     public Cheep()
     {
     }
 
-    public Cheep(string author, string message, long unixTime)
+    public Cheep(string author, string message, DateTime date)
     {
         this.author = author;
         this.message = message;
-        date = DateTimeOffset.FromUnixTimeSeconds(unixTime).DateTime;
+        this.date = date;
     }
 
     public override string ToString()
