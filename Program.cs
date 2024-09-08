@@ -20,7 +20,13 @@ var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
 if (arguments["read"].IsTrue) 
 {
-    Read();
+    CsvHandler<Cheep> csvHandler = new("chirp_cli_db.csv", new CheepMap());
+    List<Cheep> cheeps = csvHandler.ReadCheeps();
+    foreach (var cheep in cheeps)
+    {
+        Console.WriteLine(cheep);
+    }
+    //Read();
 } else if (arguments["cheep"].IsTrue)
 {
     WriteCheep(arguments["<message>"].ToString());
