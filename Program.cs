@@ -1,7 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
+
+using System.Globalization;
 using System.Text.RegularExpressions;
 using DocoptNet;
 using Chirp.CLI;
+using CsvHelper;
+using CsvHelper.Configuration;
 
 const string usage = @"Chirp CLI version.
 
@@ -32,31 +36,23 @@ if (arguments["read"].IsTrue)
     WriteCheep(arguments["<message>"].ToString());
 }
 
-void Read()
-{
-    List<Cheep> cheeps = new();
-    var lines = ReadFile();
-    foreach (var line in lines)
-    {
-        if (!String.IsNullOrEmpty(line))
-        {
-            cheeps.Add(Cheep.CheepFromString(line));
-        }
-    }
-
-    foreach (var cheep in cheeps)
-        Console.WriteLine(cheep);
-}
-
 void WriteCheep(string message)
 {
     string userName = Environment.UserName;
-    string currentTime = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
-    string outputMessage = $"{userName},\"{message}\",{currentTime}";
+    DateTime currentTime = DateTimeOffset.Now.DateTime;
+    var records = new List<Cheep>
+    {
+        new (userName, message, currentTime)
+    };
     
-    StreamWriter writer = new StreamWriter("chirp_cli_db.csv", true);
-    writer.WriteLine(outputMessage);
-    writer.Close();
+    using (var writer = new StreamWriter("chirp_cli_db.csv", true))
+    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+    {
+        csv.Context.RegisterClassMap<CheepMap>();
+        csv.WriteRecords(records);
+        csv.NextRecord();
+        writer.Flush();
+    }
 }
 
 List<string> ReadFile()
@@ -81,4 +77,3 @@ List<string> ReadFile()
     
 
 }
-
