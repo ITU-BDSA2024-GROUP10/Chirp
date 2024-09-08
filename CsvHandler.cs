@@ -23,17 +23,19 @@ public class CsvHandler<T>
     }
     
     
-    public List<T> ReadCheeps()
+    public List<T> Read(int amountToRead)
     {
-        List<T> cheeps = new();
+        List<T> elements = new();
         using (var reader = new StreamReader(fileName, Encoding.UTF8))
         using (var csv = new CsvReader(reader, config))
         {
             csv.Context.RegisterClassMap(classMap);
             csv.Read();
             csv.ReadHeader();
-            cheeps = csv.GetRecords<T>().ToList();
+            elements = csv.GetRecords<T>().ToList();
         }
-        return cheeps;
+        
+        amountToRead = Math.Min(elements.Count, amountToRead);
+        return elements.GetRange(elements.Count-amountToRead, amountToRead);
     }
 }

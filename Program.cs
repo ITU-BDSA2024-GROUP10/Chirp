@@ -22,16 +22,17 @@ Options:
 
 var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
-if (arguments["read"].IsTrue) 
+if (arguments["read"].IsTrue)
 {
     CsvHandler<Cheep> csvHandler = new("chirp_cli_db.csv", new CheepMap());
-    List<Cheep> cheeps = csvHandler.ReadCheeps();
+    List<Cheep> cheeps = csvHandler.Read(arguments["<limit>"].AsInt);
+    
     foreach (var cheep in cheeps)
     {
         Console.WriteLine(cheep);
     }
-    //Read();
-} else if (arguments["cheep"].IsTrue)
+}
+else if (arguments["cheep"].IsTrue)
 {
     WriteCheep(arguments["<message>"].ToString());
 }
@@ -39,12 +40,12 @@ if (arguments["read"].IsTrue)
 void WriteCheep(string message)
 {
     string userName = Environment.UserName;
-    DateTime currentTime = DateTimeOffset.Now.DateTime;
+    DateTime currentTime = DateTime.Now;
     var records = new List<Cheep>
     {
-        new (userName, message, currentTime)
+        new(userName, message, currentTime)
     };
-    
+
     using (var writer = new StreamWriter("chirp_cli_db.csv", true))
     using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
     {
@@ -53,27 +54,4 @@ void WriteCheep(string message)
         csv.NextRecord();
         writer.Flush();
     }
-}
-
-List<string> ReadFile()
-{
-    try
-    {
-        StreamReader reader = new("chirp_cli_db.csv");
-        Console.WriteLine("the program running in chirp_cli_db.csv");
-        reader.ReadLine();
-        List<string> lines = reader.ReadToEnd().Split('\n').ToList();
-        reader.Close();
-        
-        return lines;
-
-    }
-    catch (IOException e)
-    {
-        Console.WriteLine("The file could not be read:");
-        Console.WriteLine(e.Message);
-        return null;
-    }
-    
-
 }
