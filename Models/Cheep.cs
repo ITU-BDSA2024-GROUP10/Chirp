@@ -1,30 +1,36 @@
+using CsvHelper.Configuration.Attributes;
+
 public class Cheep
 {
-    string _name { get; }
-    string _message { get; }
-    DateTimeOffset _date { get; }
+    public string author { get; set; }
+    public string message { get; set; }
+    public DateTime date { get; set; }
 
     public static Cheep CheepFromString(string inputString)
     {
         int last = inputString.LastIndexOf(",");
         int first = inputString.IndexOf(",");
-        
-        string name = inputString.Substring(0,first);
-        string message = inputString.Substring(first+2, last-first-3);
-        DateTimeOffset date = DateTimeOffset.FromUnixTimeSeconds(long.Parse(inputString.Substring(last+1)));
 
-        return new Cheep(name, message, date);
+        string name = inputString.Substring(0, first);
+        string message = inputString.Substring(first + 2, last - first - 3);
+        DateTime date = DateTimeOffset.FromUnixTimeSeconds(long.Parse(inputString.Substring(last + 1))).DateTime;
+
+        return new Cheep(name, message, long.Parse(inputString.Substring(last + 1)));
     }
-    
-    public Cheep(string name, string message, DateTimeOffset date)
+
+    public Cheep()
     {
-        _name = name;
-        _message = message;
-        _date = date;
-		 }
-    
+    }
+
+    public Cheep(string author, string message, long unixTime)
+    {
+        this.author = author;
+        this.message = message;
+        date = DateTimeOffset.FromUnixTimeSeconds(unixTime).DateTime;
+    }
+
     public override string ToString()
     {
-        return $"{_name} @ {_date.DateTime}: {_message}";
+        return $"{author} @ {date}: {message}";
     }
 }
