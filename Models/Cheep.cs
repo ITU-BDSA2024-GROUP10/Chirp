@@ -1,5 +1,3 @@
-using CsvHelper.Configuration.Attributes;
-
 public class Cheep
 {
     public string author { get; set; }

@@ -1,11 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Globalization;
-using System.Text.RegularExpressions;
 using DocoptNet;
-using Chirp.CLI;
-using CsvHelper;
-using CsvHelper.Configuration;
+using Chirp.CLI.SimpleDB;
 
 const string usage = @"Chirp CLI version.
 
@@ -20,44 +16,30 @@ Options:
     --version   Show version.
 ";
 
+var db = new CSVDatabase<Cheep>("chirp_cli_db.csv", new CheepMap());
 var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
-if (arguments["read"].IsTrue)
+if (arguments["read"].IsTrue) 
 {
-    CsvHandler<Cheep> csvHandler = new("chirp_cli_db.csv", new CheepMap());
-    List<Cheep> cheeps = csvHandler.Read(arguments["<limit>"].AsInt);
-    
-    foreach (var cheep in cheeps)
-    {
-        Console.WriteLine(cheep);
-    }
+    ReadCheeps(arguments);
 }
-else if (arguments["cheep"].IsTrue)
+else if (arguments["cheep"].IsTrue) 
 {
     WriteCheep(arguments["<message>"].ToString());
 }
 
 void WriteCheep(string message)
 {
-    string userName = Environment.UserName;
-    DateTime currentTime = DateTime.Now;
-    var records = new List<Cheep>
-    {
-        new(userName, message, currentTime)
-    };
-    
-    bool fileExists = File.Exists("chirp_cli_db.csv");
-    var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
-    {
-        HasHeaderRecord = !fileExists
-    };
+    var author = Environment.UserName;
+    var time = DateTime.Now;
+    var cheep = new Cheep(author, message, time);
+    db.Store(cheep);
+}
 
-    using (var writer = new StreamWriter("chirp_cli_db.csv", true))
-    using (var csv = new CsvWriter(writer, config))
-    {
-        csv.Context.RegisterClassMap<CheepMap>();
-        csv.WriteRecords(records);
-        csv.NextRecord();
-        writer.Flush();
-    }
+void ReadCheeps(IDictionary<string, ValueObject> arguments)
+{
+    List<Cheep> cheeps = (List<Cheep>)db.Read(arguments["<limit>"].AsInt);
+
+    foreach (var cheep in cheeps)
+        Console.WriteLine(cheep);
 }
