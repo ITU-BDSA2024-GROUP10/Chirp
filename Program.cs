@@ -1,12 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Globalization;
-using System.Text.RegularExpressions;
 using DocoptNet;
-using Chirp.CLI;
-using CsvHelper;
-using CsvHelper.Configuration;
-using SimpleDB;
 using Chirp.CLI.SimpleDB;
 
 const string usage = @"Chirp CLI version.
