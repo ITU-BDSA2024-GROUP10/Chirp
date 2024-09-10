@@ -28,7 +28,7 @@ var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 if (arguments["read"].IsTrue)
 {
     List<Cheep> cheeps = (List<Cheep>)db.Read(arguments["<limit>"].AsInt);
-    
+
     foreach (var cheep in cheeps)
     {
         Console.WriteLine(cheep);
@@ -40,9 +40,9 @@ else if (arguments["cheep"].IsTrue)
 }
 
 void WriteCheep(string message)
-{  
+{
     var author = Environment.UserName;
     var time = DateTime.Now;
-    var cheep = new(author, message, time);
+    var cheep = new Cheep (author, message, time);
     db.Store(cheep);
 }
