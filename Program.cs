@@ -45,9 +45,15 @@ void WriteCheep(string message)
     {
         new(userName, message, currentTime)
     };
+    
+    bool fileExists = File.Exists("chirp_cli_db.csv");
+    var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+    {
+        HasHeaderRecord = !fileExists
+    };
 
     using (var writer = new StreamWriter("chirp_cli_db.csv", true))
-    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+    using (var csv = new CsvWriter(writer, config))
     {
         csv.Context.RegisterClassMap<CheepMap>();
         csv.WriteRecords(records);
