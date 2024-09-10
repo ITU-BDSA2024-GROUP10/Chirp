@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using Chirp.CLI;
 using DocoptNet;
 using Chirp.CLI.SimpleDB;
 
@@ -40,6 +41,5 @@ void ReadCheeps(IDictionary<string, ValueObject> arguments)
 {
     List<Cheep> cheeps = (List<Cheep>)db.Read(arguments["<limit>"].AsInt);
 
-    foreach (var cheep in cheeps)
-        Console.WriteLine(cheep);
+    UserInterface.PrintCheeps(cheeps);
 }
