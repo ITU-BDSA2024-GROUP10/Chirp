@@ -6,6 +6,8 @@ using DocoptNet;
 using Chirp.CLI;
 using CsvHelper;
 using CsvHelper.Configuration;
+using SimpleDB;
+using Chirp.CLI.SimpleDB;
 
 const string usage = @"Chirp CLI version.
 
@@ -20,12 +22,12 @@ Options:
     --version   Show version.
 ";
 
+var db = new CSVDatabase<Cheep>("chirp_cli_db.csv", new CheepMap());
 var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
 if (arguments["read"].IsTrue)
 {
-    CsvHandler<Cheep> csvHandler = new("chirp_cli_db.csv", new CheepMap());
-    List<Cheep> cheeps = csvHandler.Read(arguments["<limit>"].AsInt);
+    List<Cheep> cheeps = (List<Cheep>)db.Read(arguments["<limit>"].AsInt);
     
     foreach (var cheep in cheeps)
     {
@@ -38,26 +40,9 @@ else if (arguments["cheep"].IsTrue)
 }
 
 void WriteCheep(string message)
-{
-    string userName = Environment.UserName;
-    DateTime currentTime = DateTime.Now;
-    var records = new List<Cheep>
-    {
-        new(userName, message, currentTime)
-    };
-    
-    bool fileExists = File.Exists("chirp_cli_db.csv");
-    var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
-    {
-        HasHeaderRecord = !fileExists
-    };
-
-    using (var writer = new StreamWriter("chirp_cli_db.csv", true))
-    using (var csv = new CsvWriter(writer, config))
-    {
-        csv.Context.RegisterClassMap<CheepMap>();
-        csv.WriteRecords(records);
-        csv.NextRecord();
-        writer.Flush();
-    }
+{  
+    var author = Environment.UserName;
+    var time = DateTime.Now;
+    var cheep = new(author, message, time);
+    db.Store(cheep);
 }
