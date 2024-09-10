@@ -3,7 +3,6 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using System.Text;
 using System.Globalization;
-using CsvReader;
 
 namespace Chirp.CLI.SimpleDB;
 public class CSVDatabase<T> : IDatabaseRepository<T>
