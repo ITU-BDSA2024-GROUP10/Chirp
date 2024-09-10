@@ -34,7 +34,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
             elements = csv.GetRecords<Cheep>().ToList();
         }
         
-        int amountToRead = Math.Min(elements.Count, limit ?? elements.Count); // get or default to elements.Count
+        var amountToRead = Math.Min(elements.Count, limit ?? elements.Count); // get or default to elements.Count
 
         return elements.GetRange(elements.Count - amountToRead, amountToRead);
     }
@@ -51,7 +51,8 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
             elements = csv.GetRecords<T>().ToList();
         }
         
-        amountToRead = Math.Min(elements.Count, amountToRead);
+        var amountToRead = Math.Min(elements.Count, amountToRead);
+
         return elements.GetRange(elements.Count-amountToRead, amountToRead);
     }
 }
