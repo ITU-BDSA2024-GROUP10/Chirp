@@ -2,11 +2,10 @@
 using CsvHelper;
 using CsvHelper.Configuration;
 using System.Text;
-using System.IO.Enumeration;
 using System.Globalization;
 
 namespace Chirp.CLI.SimpleDB;
-public class CSVDatabase : IDatabaseRepository<Cheep>
+public class CSVDatabase<T> : IDatabaseRepository<T>
 {   
     readonly String _fileName;
     readonly CsvConfiguration _config;
@@ -27,6 +26,23 @@ public class CSVDatabase : IDatabaseRepository<Cheep>
     {
         List<Cheep> elements = new();
         using (var reader = new StreamReader(_fileName, Encoding.UTF8))
+        using (var csv = new CsvReader(reader, _config))
+        {
+            csv.Context.RegisterClassMap(_classMap);
+            csv.Read();
+            csv.ReadHeader();
+            elements = csv.GetRecords<Cheep>().ToList();
+        }
+        
+        int amountToRead = Math.Min(elements.Count, limit ?? elements.Count); // get or default to elements.Count
+
+        return elements.GetRange(elements.Count - amountToRead, amountToRead);
+    }
+
+    public void Store(Cheep record)
+    {
+        List<T> elements = new();
+        using (var reader = new StreamReader(fileName, Encoding.UTF8))
         using (var csv = new CsvReader(reader, config))
         {
             csv.Context.RegisterClassMap(classMap);
@@ -37,11 +53,5 @@ public class CSVDatabase : IDatabaseRepository<Cheep>
         
         amountToRead = Math.Min(elements.Count, amountToRead);
         return elements.GetRange(elements.Count-amountToRead, amountToRead);
-    }
-    }
-
-    public void Store(Cheep record)
-    {
-        throw new NotImplementedException();
     }
 }
