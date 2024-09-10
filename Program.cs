@@ -25,8 +25,14 @@ Options:
 var db = new CSVDatabase<Cheep>("chirp_cli_db.csv", new CheepMap());
 var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
-if (arguments["read"].IsTrue) NewMethod(arguments);
-else if (arguments["cheep"].IsTrue) WriteCheep(arguments["<message>"].ToString());
+if (arguments["read"].IsTrue) 
+{
+    ReadCheeps(arguments);
+}
+else if (arguments["cheep"].IsTrue) 
+{
+    WriteCheep(arguments["<message>"].ToString());
+}
 
 void WriteCheep(string message)
 {
@@ -36,7 +42,7 @@ void WriteCheep(string message)
     db.Store(cheep);
 }
 
-void NewMethod(IDictionary<string, ValueObject> arguments)
+void ReadCheeps(IDictionary<string, ValueObject> arguments)
 {
     List<Cheep> cheeps = (List<Cheep>)db.Read(arguments["<limit>"].AsInt);
 
