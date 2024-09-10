@@ -30,8 +30,6 @@ namespace Chirp.CLI.SimpleDB
             using (var csv = new CsvReader(reader, _config))
             {
                 csv.Context.RegisterClassMap(_classMap);
-                csv.Read();
-                csv.ReadHeader();
                 elements = csv.GetRecords<T>().ToList();
             }
             
