@@ -3,6 +3,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using System.Text;
 using System.Globalization;
+using CsvReader;
 
 namespace Chirp.CLI.SimpleDB;
 public class CSVDatabase<T> : IDatabaseRepository<T>
@@ -22,16 +23,16 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         };
     }
 
-    public IEnumerable<Cheep> Read(int? limit = null)
+    public IEnumerable<T> Read(int? limit = null)
     {
-        List<Cheep> elements = new();
+        List<T> elements = new();
         using (var reader = new StreamReader(_fileName, Encoding.UTF8))
         using (var csv = new CsvReader(reader, _config))
         {
             csv.Context.RegisterClassMap(_classMap);
             csv.Read();
             csv.ReadHeader();
-            elements = csv.GetRecords<Cheep>().ToList();
+            elements = csv.GetRecords<T>().ToList();
         }
         
         var amountToRead = Math.Min(elements.Count, limit ?? elements.Count); // get or default to elements.Count
@@ -39,20 +40,8 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         return elements.GetRange(elements.Count - amountToRead, amountToRead);
     }
 
-    public void Store(Cheep record)
+    public void Store(T record)
     {
-        List<T> elements = new();
-        using (var reader = new StreamReader(fileName, Encoding.UTF8))
-        using (var csv = new CsvReader(reader, config))
-        {
-            csv.Context.RegisterClassMap(classMap);
-            csv.Read();
-            csv.ReadHeader();
-            elements = csv.GetRecords<T>().ToList();
-        }
         
-        var amountToRead = Math.Min(elements.Count, amountToRead);
-
-        return elements.GetRange(elements.Count-amountToRead, amountToRead);
     }
 }
