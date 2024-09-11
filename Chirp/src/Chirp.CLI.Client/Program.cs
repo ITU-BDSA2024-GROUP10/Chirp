@@ -22,12 +22,14 @@ var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
 if (arguments["read"].IsTrue) 
 {
-    ReadCheeps(arguments);
+    DisplayCheeps();
 }
 else if (arguments["cheep"].IsTrue) 
 {
     WriteCheep(arguments["<message>"].ToString());
 }
+
+return;
 
 void WriteCheep(string message)
 {
@@ -37,7 +39,7 @@ void WriteCheep(string message)
     db.Store(cheep);
 }
 
-void ReadCheeps(IDictionary<string, ValueObject> arguments)
+void DisplayCheeps()
 {
     var cheeps = db.Read(arguments["<limit>"].AsInt);
 
