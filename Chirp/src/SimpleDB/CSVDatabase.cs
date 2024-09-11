@@ -1,10 +1,9 @@
-﻿using SimpleDB;
+using System.Globalization;
+using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
-using System.Text;
-using System.Globalization;
 
-namespace Chirp.CLI.SimpleDB
+namespace SimpleDB
 {
     public class CSVDatabase<T> : IDatabaseRepository<T>
     {   

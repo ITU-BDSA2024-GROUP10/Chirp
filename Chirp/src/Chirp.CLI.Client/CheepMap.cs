@@ -1,5 +1,6 @@
-﻿
 using CsvHelper.Configuration;
+
+namespace SimpleDB;
 
 public class CheepMap : ClassMap<Cheep>
 {
