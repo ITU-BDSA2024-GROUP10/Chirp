@@ -22,7 +22,7 @@ var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
 if (arguments["read"].IsTrue) 
 {
-    DisplayCheeps(arguments["<limit>"].AsInt);
+    DisplayCheeps(db, arguments["<limit>"].AsInt);
 }
 else if (arguments["cheep"].IsTrue) 
 {
@@ -39,8 +39,8 @@ void WriteCheep(string message)
     db.Store(cheep);
 }
 
-void DisplayCheeps(int limit)
+void DisplayCheeps(IDatabaseRepository<Cheep> dbr , int limit)
 {
-    var cheeps = db.Read(limit);
+    var cheeps = dbr.Read(limit);
     UserInterface.PrintCheeps(cheeps);
 }
