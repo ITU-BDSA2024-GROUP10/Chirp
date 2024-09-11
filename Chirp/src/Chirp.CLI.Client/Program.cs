@@ -39,7 +39,7 @@ void WriteCheep(string message)
 
 void ReadCheeps(IDictionary<string, ValueObject> arguments)
 {
-    var cheeps = (List<Cheep>)db.Read(arguments["<limit>"].AsInt);
+    var cheeps = db.Read(arguments["<limit>"].AsInt);
 
     UserInterface.PrintCheeps(cheeps);
 }
