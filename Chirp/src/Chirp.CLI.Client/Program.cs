@@ -1,8 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Chirp.CLI;
+using Chirp.CLI.Client;
 using DocoptNet;
-using Chirp.CLI.SimpleDB;
+using SimpleDB;
 
 const string usage = @"Chirp CLI version.
 
@@ -17,17 +17,19 @@ Options:
     --version   Show version.
 ";
 
-var db = new CSVDatabase<Cheep>("chirp_cli_db.csv", new CheepMap());
+var db = new CSVDatabase<Cheep>("data/chirp_cli_db.csv", new CheepMap());
 var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
 if (arguments["read"].IsTrue) 
 {
-    ReadCheeps(arguments);
+    DisplayCheeps(db, arguments["<limit>"].AsInt);
 }
 else if (arguments["cheep"].IsTrue) 
 {
     WriteCheep(arguments["<message>"].ToString());
 }
+
+return;
 
 void WriteCheep(string message)
 {
@@ -37,9 +39,8 @@ void WriteCheep(string message)
     db.Store(cheep);
 }
 
-void ReadCheeps(IDictionary<string, ValueObject> arguments)
+void DisplayCheeps(IDatabaseRepository<Cheep> dbr , int limit)
 {
-    List<Cheep> cheeps = (List<Cheep>)db.Read(arguments["<limit>"].AsInt);
-
+    var cheeps = dbr.Read(limit);
     UserInterface.PrintCheeps(cheeps);
 }
