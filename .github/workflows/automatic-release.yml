@@ -24,7 +24,10 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore Chirp/
-
+      
+      - name: Build
+        run: dotnet build --no-restore Chirp/
+      
       - name: Test
         run: dotnet test --no-build --verbosity normal Chirp/
 
