@@ -29,7 +29,7 @@ namespace SimpleDB
                 using (var csv = new CsvReader(reader, _config))
                 {
                     csv.Context.RegisterClassMap(_classMap);
-                    elements = csv.GetRecords<T>();
+                    elements = csv.GetRecords<T>().ToList();
                 }
             return limit == null ? elements : elements.Take(limit.Value);
         }
