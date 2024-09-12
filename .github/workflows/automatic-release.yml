@@ -78,6 +78,7 @@ jobs:
 
       # Build for all platforms
       - name: Build for all platforms
+        working-directory: Chirp
         run: |
           dotnet publish -c Release -r linux-x64 --self-contained false -p:PublishSingleFile=true -o ./publish/linux-x64
           dotnet publish -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o ./publish/win-x64
