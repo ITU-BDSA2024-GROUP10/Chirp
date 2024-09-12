@@ -1,5 +1,6 @@
 #This aumtomaticly release when a pul request to main is accepted
 name: Release on PR Merge
+permissions: write-all
 
 on:
   pull_request:
