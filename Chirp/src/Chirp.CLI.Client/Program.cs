@@ -26,20 +26,20 @@ if (arguments["read"].IsTrue)
 }
 else if (arguments["cheep"].IsTrue) 
 {
-    WriteCheep(arguments["<message>"].ToString());
+    WriteCheep(db, arguments["<message>"].ToString());
 }
 
 return;
 
-void WriteCheep(string message)
+void WriteCheep(IDatabaseRepository<Cheep> dbr, string message)
 {
     var author = Environment.UserName;
     var time = DateTime.Now;
     var cheep = new Cheep(author, message, time);
-    db.Store(cheep);
+    dbr.Store(cheep);
 }
 
-void DisplayCheeps(IDatabaseRepository<Cheep> dbr , int limit)
+void DisplayCheeps(IDatabaseRepository<Cheep> dbr, int limit)
 {
     var cheeps = dbr.Read(limit);
     UserInterface.PrintCheeps(cheeps);
