@@ -5,13 +5,13 @@ using CsvHelper.Configuration;
 
 namespace SimpleDB
 {
-    public class CSVDatabase<T> : IDatabaseRepository<T>
+    public class CsvDatabase<T> : IDatabaseRepository<T>
     {   
         private readonly string _fileName;
         private readonly CsvConfiguration _config;
         private readonly ClassMap<T> _classMap;
 
-        public CSVDatabase(string fileName, ClassMap<T> classMap) 
+        public CsvDatabase(string fileName, ClassMap<T> classMap) 
         {
             _fileName = fileName;
             _classMap = classMap;
