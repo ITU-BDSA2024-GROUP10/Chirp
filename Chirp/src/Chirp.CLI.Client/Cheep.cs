@@ -1,8 +1,8 @@
 public class Cheep
 {
-    public string author { get; set; }
-    public string message { get; set; }
-    public DateTime date { get; set; }
+    public string Author { get; set; }
+    public string Message { get; set; }
+    public DateTime Date { get; set; }
 
     public Cheep()
     {
@@ -10,13 +10,13 @@ public class Cheep
 
     public Cheep(string author, string message, DateTime date)
     {
-        this.author = author;
-        this.message = message;
-        this.date = date;
+        this.Author = author;
+        this.Message = message;
+        this.Date = date;
     }
 
     public override string ToString()
     {
-        return $"{author} @ {date}: {message}";
+        return $"{Author} @ {Date}: {Message}";
     }
 }

@@ -17,7 +17,7 @@ Options:
     --version   Show version.
 ";
 
-var db = new CSVDatabase<Cheep>("data/chirp_cli_db.csv", new CheepMap());
+var db = new CsvDatabase<Cheep>("data/chirp_cli_db.csv", new CheepMap());
 var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
 if (arguments["read"].IsTrue) 
@@ -26,20 +26,20 @@ if (arguments["read"].IsTrue)
 }
 else if (arguments["cheep"].IsTrue) 
 {
-    WriteCheep(arguments["<message>"].ToString());
+    WriteCheep(db, arguments["<message>"].ToString());
 }
 
 return;
 
-void WriteCheep(string message)
+void WriteCheep(IDatabaseRepository<Cheep> dbr, string message)
 {
     var author = Environment.UserName;
     var time = DateTime.Now;
     var cheep = new Cheep(author, message, time);
-    db.Store(cheep);
+    dbr.Store(cheep);
 }
 
-void DisplayCheeps(IDatabaseRepository<Cheep> dbr , int limit)
+void DisplayCheeps(IDatabaseRepository<Cheep> dbr, int limit)
 {
     var cheeps = dbr.Read(limit);
     UserInterface.PrintCheeps(cheeps);
