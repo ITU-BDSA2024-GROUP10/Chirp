@@ -53,6 +53,10 @@ jobs:
           # Get PR labels
           PR_LABELS=$(echo "${{ github.event.pull_request.labels[*].name }}")
 
+          # Debug
+          echo "Label fetched"
+          echo PR_LABELS
+          
           # Check which label is present and increment the version accordingly
           if [[ "$PR_LABELS" == *"breaking"* ]]; then
             MAJOR=$((MAJOR + 1))
@@ -92,12 +96,14 @@ jobs:
           dotnet publish -c Release -r osx-x64 --self-contained false -o publish/osx-x64
 
       - name: List publish directories - DEBUG
+        working-directory: Chirp
         run: |
           echo "Contents of ./publish:"
           ls -R publish
           
       # Create ZIP files
       - name: Zip the output
+        working-directory: Chirp
         run: |
           zip -r chirp-linux-x64.zip publish/linux-x64
           zip -r chirp-win-x64.zip publish/win-x64
@@ -110,6 +116,7 @@ jobs:
         with:
           tag_name: ${{ env.NEW_VERSION }}  # Use the new version tag
           name: Release ${{ env.NEW_VERSION }}  # Set release name
+          working-directory: Chirp
           files: |
             chirp-linux-x64.zip
             chirp-win-x64.zip
