@@ -77,18 +77,24 @@ jobs:
           git config --local user.email "actions@github.com"
           git tag $NEW_VERSION
           git push origin $NEW_VERSION
-
+     
+      #debug
+      - name: List Chirp directory - DEBUG
+        run: |
+          echo "Contents of Chirp directory:"
+          ls -R Chirp
+      
       - name: Build for all platforms
         working-directory: Chirp
         run: |
-          dotnet publish -c Release -r linux-x64 --self-contained false -o ./publish/linux-x64
-          dotnet publish -c Release -r win-x64 --self-contained false -o ./publish/win-x64
-          dotnet publish -c Release -r osx-x64 --self-contained false -o ./publish/osx-x64
+          dotnet publish -c Release -r linux-x64 --self-contained false -o publish/linux-x64
+          dotnet publish -c Release -r win-x64 --self-contained false -o publish/win-x64
+          dotnet publish -c Release -r osx-x64 --self-contained false -o publish/osx-x64
 
-      - name: List publish directories
+      - name: List publish directories - DEBUG
         run: |
           echo "Contents of ./publish:"
-          ls -R ./publish
+          ls -R publish
           
       # Create ZIP files
       - name: Zip the output
