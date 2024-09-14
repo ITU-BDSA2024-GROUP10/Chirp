@@ -78,7 +78,6 @@ jobs:
           git tag $NEW_VERSION
           git push origin $NEW_VERSION
 
-      # Build for all platforms
       - name: Build for all platforms
         working-directory: Chirp
         run: |
@@ -86,12 +85,18 @@ jobs:
           dotnet publish -c Release -r win-x64 --self-contained false -o ./publish/win-x64
           dotnet publish -c Release -r osx-x64 --self-contained false -o ./publish/osx-x64
 
+      - name: List publish directories
+        run: |
+          echo "Contents of ./publish:"
+          ls -R ./publish
+          
       # Create ZIP files
       - name: Zip the output
         run: |
-          zip -r chirp-linux-x64.zip ./publish/linux-x64
-          zip -r chirp-win-x64.zip ./publish/win-x64
-          zip -r chirp-osx-x64.zip ./publish/osx-x64
+          zip -r chirp-linux-x64.zip publish/linux-x64
+          zip -r chirp-win-x64.zip publish/win-x64
+          zip -r chirp-osx-x64.zip publish/osx-x64
+
 
       # Upload the release artifacts and create the release
       - name: Create GitHub release
