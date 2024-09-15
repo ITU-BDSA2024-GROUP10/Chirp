@@ -71,6 +71,7 @@ jobs:
               PATCH=$((PATCH + 1))
             elif [[ "$label" == "refactor" ]]; then
               echo "Refactor label detected. Skipping release process."
+              echo "SKIP_RELEASE=true" >> $GITHUB_ENV
               exit 0
             fi
           done
