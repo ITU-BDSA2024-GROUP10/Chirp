@@ -72,4 +72,29 @@ public class CsvDatabaseTest : IDisposable, IClassFixture<CsvDatabaseTextFixture
         fixture.Dispose();
     }
 
+    /*[Fact]
+    public void Store_NonExsitingFile_ShouldWriteHeaderAndRecord()
+    {
+        //Arrange
+        CsvTestObject data1 = new ("test1", 1, DateTime.Now, true);
+        CsvTestObject data2 = new ("test2", 2, DateTime.Now.AddHours(-1234), false);
+        CsvTestObject data3 = new ("test3", 3, DateTime.Now.AddHours(1234), true);
+        
+        fixture.mockCsvWriter.Setup(c => c.WriteHeader<CsvTestObject>());
+        fixture.mockCsvWriter.Setup(c => c.WriteRecord(data1));
+        fixture.mockCsvWriter.Setup(c => c.WriteRecord(data2));
+        fixture.mockCsvWriter.Setup(c => c.WriteRecord(data3));
+        
+        //Act
+        fixture.csvDatabase.Store(data1);
+        fixture.csvDatabase.Store(data2);
+        fixture.csvDatabase.Store(data3);
+        
+        //Asert
+        //fixture.mockCsvWriter.Verify(c => c.WriteHeader<CsvTestObject>(), Times.Once);
+        fixture.mockCsvWriter.Verify(c => c.WriteRecord(data1), Times.Once);
+        fixture.mockCsvWriter.Verify(c => c.WriteRecord(data2), Times.Once);
+        fixture.mockCsvWriter.Verify(c => c.WriteRecord(data3), Times.Once);
+    }*/
+
 }
