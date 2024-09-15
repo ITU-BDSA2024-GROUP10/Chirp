@@ -11,4 +11,12 @@ public class CsvTestObject
     {
         
     }
+    
+    public CsvTestObject(string field1String, int field2Int, DateTime field3DataTime, bool field4Bool)
+    {
+        this.field1String = field1String;
+        this.field2Int = field2Int;
+        this.field3DataTime = field3DataTime;
+        this.field4Bool = field4Bool;
+    }
 }
