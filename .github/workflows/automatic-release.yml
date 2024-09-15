@@ -45,7 +45,8 @@ jobs:
       - name: Get PR labels
         id: get_labels
         run: |
-          echo "PR_LABELS=$(jq -r '.pull_request.labels+ | map(.name) | join(",")' <<< "${{ toJson(github.event) }}")" >> $GITHUB_ENV
+          PR_LABELS="${{ join(github.event.pull_request.labels.*.name, ',') }}"
+          echo "PR_LABELS=$PR_LABELS" >> $GITHUB_ENV
           echo "Labels fetched: $PR_LABELS"
 
       # Determine the next version based on PR labels
