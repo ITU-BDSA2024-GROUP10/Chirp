@@ -42,6 +42,12 @@ jobs:
           echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
           echo "Current latest tag is $LATEST_TAG"
 
+      - name: Get PR labels
+        id: get_labels
+        run: |
+          echo "PR_LABELS=$(jq -r '.pull_request.labels+ | map(.name) | join(",")' <<< "${{ toJson(github.event) }}")" >> $GITHUB_ENV
+          echo "Labels fetched: $PR_LABELS"
+
       # Determine the next version based on PR labels
       - name: Calculate next version
         id: calculate_version
@@ -49,25 +55,21 @@ jobs:
           # Extract major, minor, patch from the latest tag (strip leading 'v')
           VERSION=${LATEST_TAG#v}
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
-
-          # Get PR labels
-          PR_LABELS=$(echo "${{ github.event.pull_request.labels[*].name }}")
-
-          # Debug
-          echo "Label fetched"
-          echo $PR_LABELS
           
           # Check which label is present and increment the version accordingly
-          if [[ "$PR_LABELS" == *"breaking"* ]]; then
-            MAJOR=$((MAJOR + 1))
-            MINOR=0
-            PATCH=0
-          elif [[ "$PR_LABELS" == *"feature"* ]]; then
-            MINOR=$((MINOR + 1))
-            PATCH=0
-          elif [[ "$PR_LABELS" == *"bug"* ]]; then
-            PATCH=$((PATCH + 1))
-          fi
+          for label in $(echo "$PR_LABELS" | tr ',' ' '); do
+             if [[ "$label" == "breaking" ]]; then
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+              break
+            elif [[ "$label" == "feature" ]]; then
+              MINOR=$((MINOR + 1))
+              PATCH=0
+            elif [[ "$label" == "bug" ]]; then
+              PATCH=$((PATCH + 1))
+            fi
+          done
 
           # Construct the new version
           NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
