@@ -53,6 +53,9 @@ jobs:
       - name: Calculate next version
         id: calculate_version
         run: |
+          # Initizalise skip release
+          echo "SKIP_RELEASE=false" >> $GITHUB_ENV
+          
           # Extract major, minor, patch from the latest tag (strip leading 'v')
           VERSION=${LATEST_TAG#v}
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
@@ -83,6 +86,7 @@ jobs:
 
       # Create a new Git tag with the calculated version
       - name: Create Git Tag
+        if: env.SKIP_RELEASE != 'true'
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
@@ -90,6 +94,7 @@ jobs:
           git push origin $NEW_VERSION
       
       - name: Build for all platforms
+        if: env.SKIP_RELEASE != 'true'
         working-directory: Chirp
         run: |
           dotnet publish -c Release -r linux-x64 --self-contained false -o publish/linux-x64
@@ -98,6 +103,7 @@ jobs:
           
       # Create ZIP files
       - name: Zip the output
+        if: env.SKIP_RELEASE != 'true'
         working-directory: Chirp
         run: |
           zip -r chirp-linux-x64.zip publish/linux-x64
@@ -107,6 +113,7 @@ jobs:
 
       # Upload the release artifacts and create the release
       - name: Create GitHub release
+        if: env.SKIP_RELEASE != 'true'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.NEW_VERSION }}  # Use the new version tag
