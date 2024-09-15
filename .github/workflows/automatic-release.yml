@@ -116,10 +116,9 @@ jobs:
         with:
           tag_name: ${{ env.NEW_VERSION }}  # Use the new version tag
           name: Release ${{ env.NEW_VERSION }}  # Set release name
-          working-directory: Chirp
           files: |
-            chirp-linux-x64.zip
-            chirp-win-x64.zip
-            chirp-osx-x64.zip
+            Chirp/chirp-linux-x64.zip
+            Chirp/chirp-win-x64.zip
+            Chirp/chirp-osx-x64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
