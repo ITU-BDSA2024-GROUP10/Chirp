@@ -17,7 +17,7 @@ Options:
     --version   Show version.
 ";
 
-var db = new CsvDatabase<Cheep>("data/chirp_cli_db.csv", new CheepMap());
+var db = CheepCsvDatabase.Instance;
 var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
 if (arguments["read"].IsTrue) 
