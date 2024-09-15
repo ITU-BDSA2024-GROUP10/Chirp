@@ -27,7 +27,7 @@ public class CsvTestObject
         }
 
         CsvTestObject other = (CsvTestObject)obj;
-        return field1String == other.field1String && field2Int == other.field2Int &&
-               field3DataTime == other.field3DataTime && field4Bool == other.field4Bool;
+        return field1String.Equals(other.field1String) && field2Int.Equals(other.field2Int) &&
+               field3DataTime.ToString().Equals(other.field3DataTime.ToString()) && field4Bool.Equals(other.field4Bool);
     }
 }
