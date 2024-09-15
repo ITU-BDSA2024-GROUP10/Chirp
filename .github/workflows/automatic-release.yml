@@ -55,7 +55,7 @@ jobs:
 
           # Debug
           echo "Label fetched"
-          echo PR_LABELS
+          echo $PR_LABELS
           
           # Check which label is present and increment the version accordingly
           if [[ "$PR_LABELS" == *"breaking"* ]]; then
