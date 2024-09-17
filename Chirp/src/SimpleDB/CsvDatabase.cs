@@ -34,7 +34,7 @@ namespace SimpleDB
             
             if (limit == null || limit > elements.Count())
             {
-                limit = elements.Count() - 1;
+                limit = elements.Count();
             }
 
             return elements.GetRange((int)(elements.Count() - limit), (int)limit);
