@@ -64,6 +64,28 @@ class CsvDatabaseTextFixture
             }
         }
     }
+
+    public List<CsvTestObject> ExtractDataFromCsvDatabase()
+    {
+        List<CsvTestObject> result = new ();
+
+        using (var reader = new StreamReader(testCsvDatabaseFilePath, Encoding.UTF8))
+        {
+            reader.ReadLine(); 
+            var lines = reader.ReadToEnd().Split("\n");
+            foreach (var line in lines)
+            {
+                if (String.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+                result.Add(new CsvTestObject(line.Split(",")));
+            }
+        }
+
+        return result;
+    }
+    
 }
 
 public class CsvDatabaseTest : IDisposable, IClassFixture<CsvDatabaseTextFixture>
