@@ -17,6 +17,7 @@ public class CliEndToEndTest : IDisposable
     public CliEndToEndTest(ITestOutputHelper testPrint)
     {
         dbr = new CsvDatabase<Cheep>(filePath, new CheepMap());
+        this.testPrint = testPrint;
     }
     
 
