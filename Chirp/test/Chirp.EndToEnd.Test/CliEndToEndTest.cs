@@ -19,18 +19,16 @@ public class CliEndToEndTest : IDisposable
         dbr = new CsvDatabase<Cheep>(filePath, new CheepMap());
         this.testPrint = testPrint;
     }
-    
 
     [Fact]
     public void TestRead()
     {
         ArrangeDataBase();
         string end = "";
-
         using (var process = new Process())
         {
             process.StartInfo.FileName = "/usr/bin/dotnet";
-            process.StartInfo.Arguments = "/Chirp/src/Chirp.CLI.Client/bin/Debug/net7.0/Chirp.CLI.Client.dll read 10";
+            process.StartInfo.Arguments = "run --project src\\Chirp.CLI.Client read 10";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.WorkingDirectory = "../../../../../";
             process.StartInfo.RedirectStandardError = true;
