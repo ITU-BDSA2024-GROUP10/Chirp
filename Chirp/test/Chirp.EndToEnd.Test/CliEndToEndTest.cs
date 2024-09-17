@@ -27,7 +27,7 @@ public class CliEndToEndTest : IDisposable
         string end = "";
         using (var process = new Process())
         {
-            process.StartInfo.FileName = "/usr/bin/dotnet";
+            process.StartInfo.FileName = "dotnet";
             process.StartInfo.Arguments = "run --project src\\Chirp.CLI.Client read 10";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.WorkingDirectory = "../../../../../";
