@@ -86,6 +86,13 @@ class CsvDatabaseTextFixture
         return result;
     }
     
+    public bool HasHeader()
+    {
+        using (var reader = new StreamReader(testCsvDatabaseFilePath, Encoding.UTF8))
+        {
+            return reader.ReadLine().Equals("field1,field2,field3,field4");
+        }
+    }
 }
 
 public class CsvDatabaseTest : IDisposable, IClassFixture<CsvDatabaseTextFixture>
