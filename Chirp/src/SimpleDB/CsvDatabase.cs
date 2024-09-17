@@ -24,14 +24,20 @@ namespace SimpleDB
 
         public IEnumerable<T> Read(int? limit = null)
         {
-            IEnumerable<T> elements;
+            List<T> elements;
             using (var reader = new StreamReader(_fileName, Encoding.UTF8))
-                using (var csv = new CsvReader(reader, _config))
-                {
-                    csv.Context.RegisterClassMap(_classMap);
-                    elements = csv.GetRecords<T>().ToList();
-                }
-            return limit == null ? elements : elements.Take(limit.Value);
+            using (var csv = new CsvReader(reader, _config))
+            {
+                csv.Context.RegisterClassMap(_classMap);
+                elements = csv.GetRecords<T>().ToList();
+            }
+            
+            if (limit == null || limit > elements.Count())
+            {
+                limit = elements.Count() - 1;
+            }
+
+            return elements.GetRange((int)(elements.Count() - limit), (int)limit);
         }
 
         public void Store(T record)
