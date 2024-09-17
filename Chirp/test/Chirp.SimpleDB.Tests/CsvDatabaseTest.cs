@@ -245,7 +245,23 @@ public class CsvDatabaseTest : IDisposable, IClassFixture<CsvDatabaseTextFixture
         Assert.Equal(testData[2], result[1]);
     }
 
+    [Fact]
+    public void IntegrationTest()
+    {
+        //Arrange
+        List<CsvTestObject> result = new ();
         
-        fixture.Dispose();
+        //Act
+        foreach (var data in testData)
+        {
+            fixture.csvDatabase.Store(data);
+        }
+        result = fixture.csvDatabase.Read(3).ToList();
+        
+        //Asert
+        Assert.Equal(3, result.Count);
+        Assert.Equal(testData[0], result[0]);
+        Assert.Equal(testData[1], result[1]);
+        Assert.Equal(testData[2], result[2]);
     }
 }
