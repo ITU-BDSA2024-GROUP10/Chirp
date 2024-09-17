@@ -140,84 +140,111 @@ public class CsvDatabaseTest : IDisposable, IClassFixture<CsvDatabaseTextFixture
         fixture.mockCsvWriter.Verify(c => c.WriteRecord(data2), Times.Once);
         fixture.mockCsvWriter.Verify(c => c.WriteRecord(data3), Times.Once);
     }*/
-
+    
     [Fact]
-    public void Integration_NonExsistingFileReadingAll_ShouldBeAbelToWriteAndRead()
+    public void STORE_ExsistingFile_ShouldWriteRecords()
     {
         //Arrange
-        CsvTestObject data1 = new ("test1", 1, DateTime.Now, true);
-        CsvTestObject data2 = new ("test2", 2, DateTime.Now.AddHours(-1234), false);
-        CsvTestObject data3 = new ("test3", 3, DateTime.Now.AddHours(1234), true);
-
+        fixture.CreateTestCsvDatabaseFile();
         List<CsvTestObject> result = new ();
         
         //Act
-        fixture.csvDatabase.Store(data1);
-        fixture.csvDatabase.Store(data2);
-        fixture.csvDatabase.Store(data3);
-
-        result = fixture.csvDatabase.Read(3).ToList();
-
+        foreach (var data in testData)
+        {
+            fixture.csvDatabase.Store(data);
+        }
+        result = fixture.ExtractDataFromCsvDatabase();
+        
         //Asert
         Assert.Equal(3, result.Count);
-        Assert.True(result[0].Equals(data1));
-        Assert.True(result[1].Equals(data2));
-        Assert.True(result[2].Equals(data3));
+        Assert.True(fixture.HasHeader());
+        Assert.Equal(testData[0], result[0]);
+        Assert.Equal(testData[1], result[1]);
+        Assert.Equal(testData[2], result[2]);
         
         fixture.Dispose();
     }
     
     [Fact]
-    public void Integration_ExsistingFileReadingAll_ShouldBeAbelToWriteAndRead()
-    {   
+    public void STORE_NonExsistingFile_ShouldWriteRecordsAndHeader()
+    {
         //Arrange
-        fixture.SetupTestCsvDatabase();
-        
-        CsvTestObject data1 = new ("test1", 1, DateTime.Now, true);
-        CsvTestObject data2 = new ("test2", 2, DateTime.Now.AddHours(-1234), false);
-        CsvTestObject data3 = new ("test3", 3, DateTime.Now.AddHours(1234), true);
-
         List<CsvTestObject> result = new ();
         
         //Act
-        fixture.csvDatabase.Store(data1);
-        fixture.csvDatabase.Store(data2);
-        fixture.csvDatabase.Store(data3);
-
-        result = fixture.csvDatabase.Read(3).ToList();
-
+        foreach (var data in testData)
+        {
+            fixture.csvDatabase.Store(data);
+        }
+        result = fixture.ExtractDataFromCsvDatabase();
+        
         //Asert
         Assert.Equal(3, result.Count);
-        Assert.True(result[0].Equals(data1));
-        Assert.True(result[1].Equals(data2));
-        Assert.True(result[2].Equals(data3));
+        Assert.True(fixture.HasHeader());
+        Assert.Equal(testData[0], result[0]);
+        Assert.Equal(testData[1], result[1]);
+        Assert.Equal(testData[2], result[2]);
         
         fixture.Dispose();
     }
     
     [Fact]
-    public void Integration_ExsistingFileReading2Newest_ShouldBeAbelToWriteAndRead()
-    {   
+    public void READ_AllRecords_ShouldReadAllRecords()
+    {
         //Arrange
-        fixture.SetupTestCsvDatabase();
-        
-        CsvTestObject data1 = new ("test1", 1, DateTime.Now, true);
-        CsvTestObject data2 = new ("test2", 2, DateTime.Now.AddHours(-1234), false);
-        CsvTestObject data3 = new ("test3", 3, DateTime.Now.AddHours(1234), true);
-
+        fixture.CreateTestCsvDatabaseFile();
+        fixture.WriteTestDataToCsvDatabase(testData);
         List<CsvTestObject> result = new ();
         
         //Act
-        fixture.csvDatabase.Store(data1);
-        fixture.csvDatabase.Store(data2);
-        fixture.csvDatabase.Store(data3);
-
+        result = fixture.csvDatabase.Read(3).ToList();
+        
+        //Asert
+        Assert.Equal(3, result.Count);
+        Assert.Equal(testData[0], result[0]);
+        Assert.Equal(testData[1], result[1]);
+        Assert.Equal(testData[2], result[2]);
+        
+        fixture.Dispose();
+    }
+    
+    [Fact]
+    public void READ_LimitHigherThanNumberOfRecors_ShouldReadAllRecords()
+    {
+        //Arrange
+        fixture.CreateTestCsvDatabaseFile();
+        fixture.WriteTestDataToCsvDatabase(testData);
+        List<CsvTestObject> result = new ();
+        
+        //Act
+        result = fixture.csvDatabase.Read(10).ToList();
+        
+        //Asert
+        Assert.Equal(3, result.Count);
+        Assert.Equal(testData[0], result[0]);
+        Assert.Equal(testData[1], result[1]);
+        Assert.Equal(testData[2], result[2]);
+        
+        fixture.Dispose();
+    }
+    
+    [Fact]
+    public void READ_LimitLowerThanNumberOfRecors_ShouldReadLimitNewestRecords()
+    {
+        //Arrange
+        fixture.CreateTestCsvDatabaseFile();
+        fixture.WriteTestDataToCsvDatabase(testData);
+        List<CsvTestObject> result = new ();
+        
+        //Act
         result = fixture.csvDatabase.Read(2).ToList();
-
+        
         //Asert
         Assert.Equal(2, result.Count);
-        Assert.True(result[0].Equals(data2));
-        Assert.True(result[1].Equals(data3));
+        Assert.Equal(testData[1], result[0]);
+        Assert.Equal(testData[2], result[1]);
+    }
+
         
         fixture.Dispose();
     }
