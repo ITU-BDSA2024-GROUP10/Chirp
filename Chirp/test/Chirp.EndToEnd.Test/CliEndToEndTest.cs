@@ -4,6 +4,7 @@ using System.IO;
 using JetBrains.Annotations;
 using SimpleDB;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Chirp.EndToEnd.Test;
 
@@ -12,8 +13,8 @@ public class CliEndToEndTest : IDisposable
 {
     string filePath = "end2endtest.csv";
     IDatabaseRepository<Cheep> dbr;
-
-    public CliEndToEndTest()
+    private readonly ITestOutputHelper testPrint;
+    public CliEndToEndTest(ITestOutputHelper testPrint)
     {
         dbr = new CsvDatabase<Cheep>(filePath, new CheepMap());
     }
