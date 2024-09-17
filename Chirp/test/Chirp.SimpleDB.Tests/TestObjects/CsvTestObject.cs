@@ -18,6 +18,14 @@ public class CsvTestObject
         this.field3DataTime = field3DataTime;
         this.field4Bool = field4Bool;
     }
+    
+    public CsvTestObject(string[] fields)
+    {
+        field1String = fields[0];
+        field2Int = int.Parse(fields[1]);
+        field3DataTime = DateTime.Parse(fields[2]);
+        field4Bool = bool.Parse(fields[3]);
+    }
 
     public override bool Equals(object obj)
     {
