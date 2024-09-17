@@ -32,9 +32,10 @@ public class CliEndToEndTest : IDisposable
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.WorkingDirectory = "../../../../../";
             process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.RedirectStandardOutput = true;
             process.Start();
             
-            StreamReader reader = process.StandardOutput;
+            using StreamReader reader = process.StandardOutput;
             end = reader.ReadToEnd();
             process.WaitForExit();
         }
