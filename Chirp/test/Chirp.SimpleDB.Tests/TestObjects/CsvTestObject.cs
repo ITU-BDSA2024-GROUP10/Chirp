@@ -18,6 +18,14 @@ public class CsvTestObject
         this.field3DataTime = field3DataTime;
         this.field4Bool = field4Bool;
     }
+    
+    public CsvTestObject(string[] fields)
+    {
+        field1String = fields[0];
+        field2Int = int.Parse(fields[1]);
+        field3DataTime = DateTime.Parse(fields[2]);
+        field4Bool = bool.Parse(fields[3]);
+    }
 
     public override bool Equals(object obj)
     {
@@ -29,5 +37,10 @@ public class CsvTestObject
         CsvTestObject other = (CsvTestObject)obj;
         return field1String.Equals(other.field1String) && field2Int.Equals(other.field2Int) &&
                field3DataTime.ToString().Equals(other.field3DataTime.ToString()) && field4Bool.Equals(other.field4Bool);
+    }
+
+    public override string ToString()
+    {
+        return $"{field1String},{field2Int},{field3DataTime},{field4Bool}";
     }
 }
