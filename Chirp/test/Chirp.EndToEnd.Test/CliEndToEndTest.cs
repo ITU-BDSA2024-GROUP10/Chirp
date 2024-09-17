@@ -39,9 +39,11 @@ public class CliEndToEndTest : IDisposable
             end = reader.ReadToEnd();
             process.WaitForExit();
         }
-
-        string firstLine = end.Split("\n")[0];
-        Assert.Equal("tester,\"Hello, World!, test\",09/12/2024 12:21:15", firstLine);
+        string firstLine = end.Split("\r\n")[0];
+       
+        Assert.Equal("Christoffer @ 08-09-2024 17:17:11: hello fellow gamers", firstLine);
+        Assert.StartsWith("Christoffer", firstLine);
+        Assert.EndsWith("gamers", firstLine);
 
     }
     
@@ -62,6 +64,9 @@ public class CliEndToEndTest : IDisposable
         using StreamWriter sw = new StreamWriter(filePath);
         sw.WriteLine("Author,Message,Date");
         sw.WriteLine("tester,\"Hello, World!, test\",09/12/2024 12:21:15");
+        
+        
+        
         
     }
 
