@@ -46,15 +46,23 @@ class CsvDatabaseTextFixture
         }
     }
 
-    public void SetupTestCsvDatabase()
+    public void CreateTestCsvDatabaseFile()
     {
         using (var writer = new StreamWriter(testCsvDatabaseFilePath, append: true, Encoding.UTF8))
-            using (var csv = new CsvWriter(writer, config))
+        {
+            writer.WriteLine("field1,field2,field3,field4");
+        }
+    }
+    
+    public void WriteTestDataToCsvDatabase(List<CsvTestObject> testData)
+    {
+        using (var writer = new StreamWriter(testCsvDatabaseFilePath, append: true, Encoding.UTF8))
+        {
+            foreach (var data in testData)
             {
-                csv.Context.RegisterClassMap(classMap);
-                csv.WriteHeader<CsvTestObject>();
-                csv.NextRecord();
+                writer.WriteLine(data.ToString());
             }
+        }
     }
 }
 
