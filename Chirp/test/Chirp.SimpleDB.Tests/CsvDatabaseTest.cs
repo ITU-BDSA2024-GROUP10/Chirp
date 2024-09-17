@@ -98,10 +98,17 @@ class CsvDatabaseTextFixture
 public class CsvDatabaseTest : IDisposable, IClassFixture<CsvDatabaseTextFixture>
 {
     private readonly CsvDatabaseTextFixture fixture;
+    private readonly List<CsvTestObject> testData;
 
     public CsvDatabaseTest()
     {
         fixture = new CsvDatabaseTextFixture();
+        
+        CsvTestObject data1 = new ("test1", 1, DateTime.Now, true);
+        CsvTestObject data2 = new ("test2", 2, DateTime.Now.AddHours(-1234), false);
+        CsvTestObject data3 = new ("test3", 3, DateTime.Now.AddHours(1234), true);
+        
+        testData = new List<CsvTestObject> {data1, data2, data3};
     }
     
     public void Dispose()
