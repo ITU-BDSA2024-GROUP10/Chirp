@@ -30,4 +30,9 @@ public class CsvTestObject
         return field1String.Equals(other.field1String) && field2Int.Equals(other.field2Int) &&
                field3DataTime.ToString().Equals(other.field3DataTime.ToString()) && field4Bool.Equals(other.field4Bool);
     }
+
+    public override string ToString()
+    {
+        return $"{field1String},{field2Int},{field3DataTime},{field4Bool}";
+    }
 }
