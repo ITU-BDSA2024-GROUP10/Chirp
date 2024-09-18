@@ -8,7 +8,7 @@ public sealed class CheepCsvDatabase : CsvDatabase<Cheep>
     
     public static CheepCsvDatabase Instance => Lazy.Value;
 
-    private CheepCsvDatabase() : base("../../data/chirp_cli_db.csv", new CheepMap())
+    private CheepCsvDatabase() : base("chirp_cli_db.csv", new CheepMap())
     {
     }
 }
