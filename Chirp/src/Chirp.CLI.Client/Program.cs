@@ -62,7 +62,7 @@ void webWriteCheep(string message)
 
 void webDisplayCheeps(int limit)
 {
-    var baseURL = "http://localhost:5088";
+    var baseURL = "https://bdsa2024group10chirpremotedb.azurewebsites.net/";
     using HttpClient client = new();
     client.BaseAddress = new Uri(baseURL);
     var response = client.GetFromJsonAsync<Cheep[]>("/cheeps").Result;
