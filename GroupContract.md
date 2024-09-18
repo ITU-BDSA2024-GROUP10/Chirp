@@ -2,6 +2,7 @@
 ## Members
 Alex \<alext@itu.dk>\
 Anthon \<acah@itu.dk>\
+Bryce \<brka@itu.dk>\
 Christoffer \<gryn@itu.dk>\
 Rasmus \<rarl@itu.dk>\
 Mathias \<mlao@itu.dk>
@@ -32,6 +33,7 @@ As a \<role>, I want \<goal>
 #### Co-authored
 Co-authored-by: Alex \<alext@itu.dk>\
 Co-authored-by: Anthon \<acah@itu.dk>\
+Co-authored-by: Bryce \<brka@itu.dk>\
 Co-authored-by: Christoffer \<gryn@itu.dk>\
 Co-authored-by: Rasmus \<rarl@itu.dk>\
 Co-authored-by: Mathias \<mlao@itu.dk>
