@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Net.Http.Json;
 using Chirp.CLI.Client;
 using DocoptNet;
 using SimpleDB;
@@ -22,11 +23,13 @@ var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
 if (arguments["read"].IsTrue) 
 {
-    DisplayCheeps(db, arguments["<limit>"].AsInt);
+    //DisplayCheeps(db, arguments["<limit>"].AsInt);
+    webDisplayCheeps(arguments["<limit>"].AsInt);
 }
 else if (arguments["cheep"].IsTrue) 
 {
-    WriteCheep(db, arguments["<message>"].ToString());
+    //WriteCheep(db, arguments["<message>"].ToString());
+    webWriteCheep(arguments["<message>"].ToString());
 }
 
 return;
@@ -43,4 +46,25 @@ void DisplayCheeps(IDatabaseRepository<Cheep> dbr, int limit)
 {
     var cheeps = dbr.Read(limit);
     UserInterface.PrintCheeps(cheeps);
+}
+
+void webWriteCheep(string message)
+{
+    var author = Environment.UserName;
+    var time = DateTime.Now;
+    var cheep = new Cheep(author, message, time);
+    
+    var baseURL = "http://localhost:5088";
+    using HttpClient client = new();
+    client.BaseAddress = new Uri(baseURL);
+    var response = client.PostAsJsonAsync("/cheep", cheep).Result;
+}
+
+void webDisplayCheeps(int limit)
+{
+    var baseURL = "http://localhost:5088";
+    using HttpClient client = new();
+    client.BaseAddress = new Uri(baseURL);
+    var response = client.GetFromJsonAsync<Cheep[]>("/cheeps").Result;
+    UserInterface.PrintCheeps(response);
 }
