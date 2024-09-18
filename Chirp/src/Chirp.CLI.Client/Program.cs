@@ -54,7 +54,7 @@ void webWriteCheep(string message)
     var time = DateTime.Now;
     var cheep = new Cheep(author, message, time);
     
-    var baseURL = "http://localhost:5088";
+    var baseURL = "https://bdsa2024group10chirpremotedb.azurewebsites.net/";
     using HttpClient client = new();
     client.BaseAddress = new Uri(baseURL);
     var response = client.PostAsJsonAsync("/cheep", cheep).Result;
