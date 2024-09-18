@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.SimpleDB.Tests", "tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI.Client.Test", "test\Chirp.CLI.Client.Test\Chirp.CLI.Client.Test.csproj", "{BCB4A2A2-F16A-4088-9C91-6B20BA8141C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CSVDBService", "src\Chirp.CSVDBService\Chirp.CSVDBService.csproj", "{1C054740-CD2F-4439-AA2B-CA20CE4D6A9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{BCB4A2A2-F16A-4088-9C91-6B20BA8141C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCB4A2A2-F16A-4088-9C91-6B20BA8141C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCB4A2A2-F16A-4088-9C91-6B20BA8141C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C054740-CD2F-4439-AA2B-CA20CE4D6A9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C054740-CD2F-4439-AA2B-CA20CE4D6A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C054740-CD2F-4439-AA2B-CA20CE4D6A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C054740-CD2F-4439-AA2B-CA20CE4D6A9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
