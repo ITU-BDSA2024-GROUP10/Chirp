@@ -107,9 +107,12 @@ jobs:
         if: env.SKIP_RELEASE != 'true'
         working-directory: Chirp
         run: |
-          zip -r chirp-linux-x64.zip publish/linux-x64
-          zip -r chirp-win-x64.zip publish/win-x64
-          zip -r chirp-osx-x64.zip publish/osx-x64
+          cd publish/linux-x64
+          zip -r chirp-linux-x64.zip Chirp
+          cd ../win-x64
+          zip -r chirp-win-x64.zip Chirp
+          cd ../osx-x64
+          zip -r chirp-osx-x64.zip Chirp
 
 
       # Upload the release artifacts and create the release
