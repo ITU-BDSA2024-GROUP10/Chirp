@@ -22,7 +22,7 @@ jobs:
           LABEL_COUNT=$(echo "$PR_LABELS" | awk -F',' '{print NF}')
           echo "LABEL_COUNT=$LABEL_COUNT" >> $GITHUB_ENV
       
-      - name: Contains label
+      - name: Dosent contains label
         if: ${{ env.LABEL_COUNT == '0' }}
         run: |
           echo "The pull request needs a label."
