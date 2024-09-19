@@ -108,11 +108,11 @@ jobs:
         working-directory: Chirp
         run: |
           cd publish/linux-x64
-          zip -r chirp-${{ NEW_VERSION}}-linux-x64.zip Chirp
+          zip -r chirp-${{ env.NEW_VERSION }}-linux-x64.zip Chirp
           cd ../win-x64
-          zip -r chirp-${{ NEW_VERSION}}-win-x64.zip Chirp
+          zip -r chirp-${{ env.NEW_VERSION }}-win-x64.zip Chirp
           cd ../osx-x64
-          zip -r chirp-${{ NEW_VERSION}}-osx-x64.zip Chirp
+          zip -r chirp-${{ env.NEW_VERSION }}-osx-x64.zip Chirp
 
 
       # Upload the release artifacts and create the release
@@ -123,8 +123,8 @@ jobs:
           tag_name: ${{ env.NEW_VERSION }}  # Use the new version tag
           name: Release ${{ env.NEW_VERSION }}  # Set release name
           files: |
-            Chirp/chirp-linux-x64.zip
-            Chirp/chirp-win-x64.zip
-            Chirp/chirp-osx-x64.zip
+            Chirp/publish/linux-x64/chirp-${{ env.NEW_VERSION }}-linux-x64.zip
+            Chirp/publish/win-x64/chirp-${{ env.NEW_VERSION }}-win-x64.zip
+            Chirp/publish/osx-x64/chirp-${{ env.NEW_VERSION }}-osx-x64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
