@@ -17,12 +17,15 @@ jobs:
           echo "PR_LABELS=$PR_LABELS" >> $GITHUB_ENV
           echo "Labels fetched: $PR_LABELS"
 
-      - name: Contains lable
+      - name: Calculate number of labels
         run: |
-          if [ -z "$PR_LABELS" ]; then # cehcks if PR_LABLES length is zero 
-            echo "The pull request needs a lable."
-            exit 1 #This fails the action
-          fi
+          LABEL_COUNT=$(echo "$PR_LABELS" | awk -F',' '{print NF}')
+          echo "LABEL_COUNT=$LABEL_COUNT" >> $GITHUB_ENV
       
-      - name: Check if pull request is up to standart
-        
+      - name: Contains lable
+        if:  ${{ env.LABEL_COUNT == '0' }}
+        run: |
+          echo "The pull request needs a lable."
+          exit 1 #This fails the action
+      
+      - name: Check if pull request labels combination is okay
