@@ -29,3 +29,29 @@ jobs:
           exit 1 #This fails the action
       
       - name: Check if pull request labels combination is okay
+        run: |
+          #if it has exatly one label there is no combination
+          if [ "$LABEL_COUNT" -eq 1 ] exit 0; fi
+
+          #E alows for use of or operators
+          #breaking
+          if echo "$PR_LABELS" | grep -q "\bbreaking\b"; then
+            NOT_ALLOWED_LABELS="refactor|test|workflow"
+            if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
+              exit 1
+            fi
+          #bug
+          elif echo "$PR_LABELS" | grep -q "\bbug\b"; then
+            NOT_ALLOWED_LABELS="refactor"
+            if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
+              exit 1
+            fi
+          #feature
+          elif echo "$PR_LABELS" | grep -q "\bfeature\b"; then
+            NOT_ALLOWED_LABELS="refactor|test"
+            if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
+              exit 1
+            fi
+          fi
+
+          
