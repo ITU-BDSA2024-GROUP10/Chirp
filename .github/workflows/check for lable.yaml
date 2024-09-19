@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  check-lables:
+  check-labels:
     runs-on: ubuntu-latest
     
     steps:  
@@ -22,36 +22,37 @@ jobs:
           LABEL_COUNT=$(echo "$PR_LABELS" | awk -F',' '{print NF}')
           echo "LABEL_COUNT=$LABEL_COUNT" >> $GITHUB_ENV
       
-      - name: Contains lable
-        if:  ${{ env.LABEL_COUNT == '0' }}
+      - name: Contains label
+        if: ${{ env.LABEL_COUNT == '0' }}
         run: |
-          echo "The pull request needs a lable."
-          exit 1 #This fails the action
+          echo "The pull request needs a label."
+          exit 1 # This fails the action
       
       - name: Check if pull request labels combination is okay
         run: |
-          #if it has exatly one label there is no combination
-          if [ "$LABEL_COUNT" -eq 1 ] exit 0; fi
+          # If it has exactly one label, there is no combination issue
+          if [ "$LABEL_COUNT" -eq 1 ]; then exit 0; fi
 
-          #E alows for use of or operators
-          #breaking
+          # E allows for use of OR operators
+          # breaking
           if echo "$PR_LABELS" | grep -q "\bbreaking\b"; then
             NOT_ALLOWED_LABELS="refactor|test|workflow"
             if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
+              echo "Combination of 'breaking' with '$NOT_ALLOWED_LABELS' is not allowed."
               exit 1
             fi
-          #bug
+          # bug
           elif echo "$PR_LABELS" | grep -q "\bbug\b"; then
             NOT_ALLOWED_LABELS="refactor"
             if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
+              echo "Combination of 'bug' with '$NOT_ALLOWED_LABELS' is not allowed."
               exit 1
             fi
-          #feature
+          # feature
           elif echo "$PR_LABELS" | grep -q "\bfeature\b"; then
             NOT_ALLOWED_LABELS="refactor|test"
             if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
+              echo "Combination of 'feature' with '$NOT_ALLOWED_LABELS' is not allowed."
               exit 1
             fi
           fi
-
-          
