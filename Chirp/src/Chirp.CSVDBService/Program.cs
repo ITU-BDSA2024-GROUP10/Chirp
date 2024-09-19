@@ -5,7 +5,7 @@ var app = builder.Build();
 
 var db = CheepCsvDatabase.Instance;
 
-app.MapGet("/cheeps", () => db.Read().ToList());
+app.MapGet("/cheeps", (int limit) => db.Read(limit).ToList());
 app.MapPost("/cheep", (Cheep cheep) => db.Store(cheep));
 
 app.Run();
