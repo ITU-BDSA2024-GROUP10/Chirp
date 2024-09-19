@@ -108,11 +108,11 @@ jobs:
         working-directory: Chirp
         run: |
           cd publish/linux-x64
-          zip -r chirp-linux-x64.zip Chirp
+          zip -r chirp-${{ NEW_VERSION}}-linux-x64.zip Chirp
           cd ../win-x64
-          zip -r chirp-win-x64.zip Chirp
+          zip -r chirp-${{ NEW_VERSION}}-win-x64.zip Chirp
           cd ../osx-x64
-          zip -r chirp-osx-x64.zip Chirp
+          zip -r chirp-${{ NEW_VERSION}}-osx-x64.zip Chirp
 
 
       # Upload the release artifacts and create the release
