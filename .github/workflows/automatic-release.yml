@@ -97,9 +97,10 @@ jobs:
         if: env.SKIP_RELEASE != 'true'
         working-directory: Chirp
         run: |
-          dotnet publish -c Release -r linux-x64 --self-contained false -o publish/linux-x64
-          dotnet publish -c Release -r win-x64 --self-contained false -o publish/win-x64
-          dotnet publish -c Release -r osx-x64 --self-contained false -o publish/osx-x64
+          dotnet publish -c Release -r linux-x64 --self-contained false -o publish/linux-x64 --output-format single-file
+          dotnet publish -c Release -r win-x64 --self-contained false -o publish/win-x64 --output-format single-file
+          dotnet publish -c Release -r osx-x64 --self-contained false -o publish/osx-x64 --output-format single-file
+
           
       # Create ZIP files
       - name: Zip the output
