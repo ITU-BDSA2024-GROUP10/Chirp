@@ -5,3 +5,15 @@ on:
     types: [opened, labeled, unlabeled]
     branches:
       - main
+
+jobs:
+  check-lables:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Get PR labels
+        id: get_labels
+        run: |
+          PR_LABELS="${{ join(github.event.pull_request.labels.*.name, ',') }}"
+          echo "PR_LABELS=$PR_LABELS" >> $GITHUB_ENV
+          echo "Labels fetched: $PR_LABELS"
