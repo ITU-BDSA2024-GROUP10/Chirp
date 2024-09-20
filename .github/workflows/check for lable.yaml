@@ -43,14 +43,14 @@ jobs:
             fi
           # bug
           elif echo "$PR_LABELS" | grep -q "\bbug\b"; then
-            NOT_ALLOWED_LABELS="refactor"
+            NOT_ALLOWED_LABELS="test|workflow"
             if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
               echo "Combination of 'bug' with '$NOT_ALLOWED_LABELS' is not allowed."
               exit 1
             fi
           # feature
           elif echo "$PR_LABELS" | grep -q "\bfeature\b"; then
-            NOT_ALLOWED_LABELS="refactor|test"
+            NOT_ALLOWED_LABELS="test|workflow"
             if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
               echo "Combination of 'feature' with '$NOT_ALLOWED_LABELS' is not allowed."
               exit 1
