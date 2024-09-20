@@ -22,10 +22,12 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build chirp/src/Chirp.CSVDBService/ --configuration Release
+        working-directory: chirp/src/Chirp.CSVDBService
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish chirp/src/Chirp.CSVDBService/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        working-directory: chirp/src/Chirp.CSVDBService
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
