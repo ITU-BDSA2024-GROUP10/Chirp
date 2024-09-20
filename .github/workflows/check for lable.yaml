@@ -53,3 +53,18 @@ jobs:
               exit 1
             fi
           fi
+
+      # The code below was created in colaberation with chat-gpt
+      # Use GitHub Script to set a custom status check
+      - name: Set status check
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'success', # Set 'failure' if the check fails
+              context: 'Check for Labels Status', # This is the status check name
+              description: 'Check for labels completed successfully',
+            })
