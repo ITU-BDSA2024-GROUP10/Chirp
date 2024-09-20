@@ -50,7 +50,7 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             sha: context.sha,
-            state: state, # Set state based on build job result
+            state: state, // Set state based on build job result
             context: 'build and test',
             description: `Build and test ${state === 'success' ? 'completed successfully' : 'failed'}`,
           });
