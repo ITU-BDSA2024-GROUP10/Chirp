@@ -29,3 +29,19 @@ jobs:
       run: dotnet build --no-restore Chirp/
     - name: Test
       run: dotnet test --no-build --verbosity normal Chirp/
+
+    # The code below was created in colaberation with chat-gpt
+    # Use GitHub Script to set a custom status check
+    - name: Set status check
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.repos.createCommitStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            sha: context.sha,
+            state: 'success', # Set 'failure' if the check fails
+            context: 'build and test', # This is the status check name
+            description: 'build and test completed successfully',
+          })
+
