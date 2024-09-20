@@ -1,0 +1,55 @@
+name: Check for label on pull request
+
+on:
+  pull_request:
+
+jobs:
+  check-labels:
+    runs-on: ubuntu-latest
+    
+    steps:  
+      - name: Get PR labels
+        run: |
+          PR_LABELS="${{ join(github.event.pull_request.labels.*.name, ',') }}"
+          echo "PR_LABELS=$PR_LABELS" >> $GITHUB_ENV
+          echo "Labels fetched: $PR_LABELS"
+
+      - name: Calculate number of labels
+        run: |
+          LABEL_COUNT=$(echo "$PR_LABELS" | awk -F',' '{print NF}')
+          echo "LABEL_COUNT=$LABEL_COUNT" >> $GITHUB_ENV
+      
+      - name: Dosent contains label
+        if: ${{ env.LABEL_COUNT == '0' }}
+        run: |
+          echo "The pull request needs a label."
+          exit 1 # This fails the action
+      
+      - name: Check if pull request labels combination is okay
+        run: |
+          # If it has exactly one label, there is no combination issue
+          if [ "$LABEL_COUNT" -eq 1 ]; then exit 0; fi
+
+          # E allows for use of OR operators
+          # breaking
+          if echo "$PR_LABELS" | grep -q "\bbreaking\b"; then
+            NOT_ALLOWED_LABELS="refactor|test|workflow"
+            if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
+              echo "Combination of 'breaking' with '$NOT_ALLOWED_LABELS' is not allowed."
+              exit 1
+            fi
+          # bug
+          elif echo "$PR_LABELS" | grep -q "\bbug\b"; then
+            NOT_ALLOWED_LABELS="test|workflow"
+            if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
+              echo "Combination of 'bug' with '$NOT_ALLOWED_LABELS' is not allowed."
+              exit 1
+            fi
+          # feature
+          elif echo "$PR_LABELS" | grep -q "\bfeature\b"; then
+            NOT_ALLOWED_LABELS="test|workflow"
+            if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
+              echo "Combination of 'feature' with '$NOT_ALLOWED_LABELS' is not allowed."
+              exit 1
+            fi
+          fi
