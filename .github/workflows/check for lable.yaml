@@ -60,11 +60,12 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            github.repos.createCommitStatus({
+            github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: context.sha,
-              state: 'success', # Set 'failure' if the check fails
-              context: 'Check for Labels Status', # This is the status check name
-              description: 'Check for labels completed successfully',
+              state: 'success', # Use 'failure' or 'pending' based on your check logic
+              context: 'Check for Labels Status', # This must match the status check name in your branch protection rule
+              description: 'Check for Labels Status completed successfully'
             })
+
