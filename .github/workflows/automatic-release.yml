@@ -36,14 +36,12 @@ jobs:
 
        # Get the latest tag from the repository
       - name: Get latest tag
-        id: get_latest_tag
         run: |
           LATEST_TAG=$(git describe --tags --abbrev=0 || echo "v0.0.0")  # Get latest tag or default to v0.0.0
           echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
           echo "Current latest tag is $LATEST_TAG"
 
       - name: Get PR labels
-        id: get_labels
         run: |
           PR_LABELS="${{ join(github.event.pull_request.labels.*.name, ',') }}"
           echo "PR_LABELS=$PR_LABELS" >> $GITHUB_ENV
@@ -51,7 +49,6 @@ jobs:
 
       # Determine the next version based on PR labels
       - name: Calculate next version
-        id: calculate_version
         run: |
           # Initizalise skip release
           echo "SKIP_RELEASE=false" >> $GITHUB_ENV
