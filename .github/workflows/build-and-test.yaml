@@ -44,14 +44,17 @@ jobs:
       uses: actions/github-script@v6
       with:
         script: |
-          const { context } = require('@actions/github');
-          const state = ${{ needs.build.result }} === 'success' ? 'success' : 'failure'; // Set state based on the outcome of 'build' job
+          // Remove redundant 'context' declaration if already declared in another step
+          const { context, getOctokit } = require('@actions/github');
+      
+          const sha = context.sha;
+          const state = ${{ needs.build.result }} === 'success' ? 'success' : 'failure'; // Use result of previous job
+      
           await github.rest.repos.createCommitStatus({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            sha: context.sha,
-            state: state, // Set state based on build job result
-            context: 'build and test',
+            sha: sha,
+            state: state,
+            context: 'build and test', // This should match the name in branch protection rule
             description: `Build and test ${state === 'success' ? 'completed successfully' : 'failed'}`,
           });
-
