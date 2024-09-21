@@ -21,8 +21,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 7.0.x
-    #- name: Enter solution
-    #  run: cd Chirp/
     - name: Restore dependencies
       run: dotnet restore Chirp/
     - name: Build
@@ -33,28 +31,22 @@ jobs:
       id: build_status # Give this step an ID to reference its outcome
       run: echo "job_status=$?" # Capture the exit code of the previous command (0 = success, non-zero = failure)
       continue-on-error: true
-  
-  # The code below was created in colaberation with chat-gpt
-  # Use GitHub Script to set a custom status check
+
   set-status:
     runs-on: ubuntu-latest
-    needs: build # This job depends on the 'build' job
+    needs: build
     steps:
     - name: Set status check
       uses: actions/github-script@v6
       with:
         script: |
-          // Remove redundant 'context' declaration if already declared in another step
-          const { context, getOctokit } = require('@actions/github');
-      
           const sha = context.sha;
-          const state = ${{ needs.build.result }} === 'success' ? 'success' : 'failure'; // Use result of previous job
-      
+          const state = '${{ needs.build.result }}' === 'success' ? 'success' : 'failure';
           await github.rest.repos.createCommitStatus({
             owner: context.repo.owner,
             repo: context.repo.repo,
             sha: sha,
             state: state,
-            context: 'build and test', // This should match the name in branch protection rule
+            context: 'build and test',
             description: `Build and test ${state === 'success' ? 'completed successfully' : 'failed'}`,
           });
