@@ -2,6 +2,10 @@ name: Check for label on pull request
 
 on:
   pull_request:
+  pull_request_target:
+    types:
+      - labeled
+      - unlabeled
 
 jobs:
   check-labels:
