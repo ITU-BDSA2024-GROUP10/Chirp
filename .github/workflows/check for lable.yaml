@@ -1,9 +1,10 @@
 name: Check for label on pull request
 
 on:
-  pull_request:
+  push:
   pull_request_target:
     types:
+      - opened
       - labeled
       - unlabeled
 
