@@ -66,5 +66,6 @@ void webDisplayCheeps(int limit)
     client.BaseAddress = new Uri(baseURL); 
     var requestUri = $"/cheeps?limit={limit}";
     var response = client.GetFromJsonAsync<Cheep[]>(requestUri).Result;
+    if (response == null) throw new Exception("No response");
     UserInterface.PrintCheeps(response);
 }
