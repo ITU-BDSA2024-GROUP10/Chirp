@@ -57,6 +57,7 @@ void webWriteCheep(string message)
     using HttpClient client = new();
     client.BaseAddress = new Uri(baseURL);
     var response = client.PostAsJsonAsync("/cheep", cheep).Result;
+    response.EnsureSuccessStatusCode();
 }
 
 void webDisplayCheeps(int limit)
