@@ -4,9 +4,8 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - bdsa2024group10chirpremotedb
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
   workflow_dispatch:
 
 jobs:
