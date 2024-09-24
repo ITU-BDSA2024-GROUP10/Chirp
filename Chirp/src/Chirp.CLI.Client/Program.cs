@@ -21,10 +21,10 @@ Options:
 var db = CheepCsvDatabase.Instance;
 var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
-if (arguments["read"].IsTrue) 
+if (arguments["read"].IsTrue)
 {
     //DisplayCheeps(db, arguments["<limit>"].AsInt);
-    if (arguments["<limit>"].IsNullOrEmpty) WebDisplayCheeps(null);
+    if (arguments["<limit>"].IsNullOrEmpty) WebDisplayCheeps();
     else WebDisplayCheeps(arguments["<limit>"].AsInt);
 }
 else if (arguments["cheep"].IsTrue) 
@@ -61,7 +61,7 @@ void WebWriteCheep(string message)
     response.EnsureSuccessStatusCode();
 }
 
-void WebDisplayCheeps(int? limit)
+void WebDisplayCheeps(int? limit = null)
 {
     var baseUrl = "https://bdsa2024group10chirpremotedb-h3c8bne5cahweegw.northeurope-01.azurewebsites.net/";
     using HttpClient client = new();
