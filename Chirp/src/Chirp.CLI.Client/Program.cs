@@ -70,3 +70,8 @@ void WebDisplayCheeps(int limit)
     if (response == null) throw new Exception("No response");
     UserInterface.PrintCheeps(response);
 }
+
+void WebDisplayCheeps()
+{
+    
+}
