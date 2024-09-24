@@ -24,12 +24,12 @@ var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 if (arguments["read"].IsTrue) 
 {
     //DisplayCheeps(db, arguments["<limit>"].AsInt);
-    webDisplayCheeps(arguments["<limit>"].AsInt);
+    WebDisplayCheeps(arguments["<limit>"].AsInt);
 }
 else if (arguments["cheep"].IsTrue) 
 {
     //WriteCheep(db, arguments["<message>"].ToString());
-    webWriteCheep(arguments["<message>"].ToString());
+    WebWriteCheep(arguments["<message>"].ToString());
 }
 
 return;
@@ -48,23 +48,23 @@ void DisplayCheeps(IDatabaseRepository<Cheep> dbr, int limit)
     UserInterface.PrintCheeps(cheeps);
 }
 
-void webWriteCheep(string message)
+void WebWriteCheep(string message)
 {
     var author = Environment.UserName;
     var time = DateTime.Now;
     var cheep = new Cheep(author, message, time);
-    var baseURL = "https://bdsa2024group10chirpremotedb.azurewebsites.net/";
+    var baseUrl = "https://bdsa2024group10chirpremotedb.azurewebsites.net/";
     using HttpClient client = new();
-    client.BaseAddress = new Uri(baseURL);
+    client.BaseAddress = new Uri(baseUrl);
     var response = client.PostAsJsonAsync("/cheep", cheep).Result;
     response.EnsureSuccessStatusCode();
 }
 
-void webDisplayCheeps(int limit)
+void WebDisplayCheeps(int limit)
 {
-    var baseURL = "https://bdsa2024group10chirpremotedb.azurewebsites.net/";
+    var baseUrl = "https://bdsa2024group10chirpremotedb.azurewebsites.net/";
     using HttpClient client = new();
-    client.BaseAddress = new Uri(baseURL); 
+    client.BaseAddress = new Uri(baseUrl); 
     var requestUri = $"/cheeps?limit={limit}";
     var response = client.GetFromJsonAsync<Cheep[]>(requestUri).Result;
     if (response == null) throw new Exception("No response");
