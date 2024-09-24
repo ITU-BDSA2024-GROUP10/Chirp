@@ -53,7 +53,7 @@ void WebWriteCheep(string message)
     var author = Environment.UserName;
     var time = DateTime.Now;
     var cheep = new Cheep(author, message, time);
-    var baseUrl = "https://bdsa2024group10chirpremotedb.azurewebsites.net/";
+    var baseUrl = "https://bdsa2024group10chirpremotedb-h3c8bne5cahweegw.northeurope-01.azurewebsites.net/";
     using HttpClient client = new();
     client.BaseAddress = new Uri(baseUrl);
     var response = client.PostAsJsonAsync("/cheep", cheep).Result;
@@ -62,7 +62,7 @@ void WebWriteCheep(string message)
 
 void WebDisplayCheeps(int limit)
 {
-    var baseUrl = "https://bdsa2024group10chirpremotedb.azurewebsites.net/";
+    var baseUrl = "https://bdsa2024group10chirpremotedb-h3c8bne5cahweegw.northeurope-01.azurewebsites.net/";
     using HttpClient client = new();
     client.BaseAddress = new Uri(baseUrl); 
     var requestUri = $"/cheeps?limit={limit}";
