@@ -8,7 +8,7 @@ using SimpleDB;
 const string usage = @"Chirp CLI version.
 
 Usage:
-    chirp read <limit>
+    chirp read [<limit>]
     chirp cheep <message>
     chirp (-h | --help)
     chirp --version
@@ -24,7 +24,8 @@ var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 if (arguments["read"].IsTrue) 
 {
     //DisplayCheeps(db, arguments["<limit>"].AsInt);
-    WebDisplayCheeps(arguments["<limit>"].AsInt);
+    if (arguments["<limit>"].IsNullOrEmpty) WebDisplayCheeps(null);
+    else WebDisplayCheeps(arguments["<limit>"].AsInt);
 }
 else if (arguments["cheep"].IsTrue) 
 {
@@ -60,7 +61,7 @@ void WebWriteCheep(string message)
     response.EnsureSuccessStatusCode();
 }
 
-void WebDisplayCheeps(int limit)
+void WebDisplayCheeps(int? limit)
 {
     var baseUrl = "https://bdsa2024group10chirpremotedb-h3c8bne5cahweegw.northeurope-01.azurewebsites.net/";
     using HttpClient client = new();
@@ -71,7 +72,6 @@ void WebDisplayCheeps(int limit)
     UserInterface.PrintCheeps(response);
 }
 
-void WebDisplayCheeps()
+void WebDisplayAllCheeps()
 {
-    
 }
