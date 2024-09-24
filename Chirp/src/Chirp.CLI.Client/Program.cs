@@ -65,8 +65,12 @@ void WebDisplayCheeps(int? limit = null)
 {
     var baseUrl = "https://bdsa2024group10chirpremotedb-h3c8bne5cahweegw.northeurope-01.azurewebsites.net/";
     using HttpClient client = new();
-    client.BaseAddress = new Uri(baseUrl); 
+    client.BaseAddress = new Uri(baseUrl);
     var requestUri = $"/cheeps?limit={limit}";
+    
+    if (limit == null) requestUri = $"/cheeps";
+    else requestUri = $"/cheeps?limit={limit}";
+    
     var response = client.GetFromJsonAsync<Cheep[]>(requestUri).Result;
     if (response == null) throw new Exception("No response");
     UserInterface.PrintCheeps(response);
