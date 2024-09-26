@@ -24,6 +24,29 @@ namespace SimpleDB
 
         public IEnumerable<T> Read(int? limit = null)
         {
+            try
+            {
+                return PerformRead(limit);
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.Error.WriteLine($"ERROR: File {_fileName} not found while reading cheeps. Exception: {ex.Message}");
+                throw;
+            }
+            catch (CsvHelperException ex)
+            {
+                Console.Error.WriteLine($"ERROR: Error occurred while parsing the CSV file {_fileName}. Exception: {ex.Message}");
+                throw new InvalidOperationException($"Error occurred while reading from the file {_fileName}", ex);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"ERROR: An unexpected error occurred while reading cheeps. Exception: {ex.Message}");
+                throw new Exception("An unexpected error occurred while reading from the file.", ex);
+            }
+        }
+
+        public IEnumerable<T> PerformRead(int? limit = null)
+        {
             List<T> elements;
             using (var reader = new StreamReader(_fileName, Encoding.UTF8))
             using (var csv = new CsvReader(reader, _config))
