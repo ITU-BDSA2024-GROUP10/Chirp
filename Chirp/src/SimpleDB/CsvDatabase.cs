@@ -65,6 +65,29 @@ namespace SimpleDB
 
         public void Store(T record)
         {
+            try
+            {
+                PerformStore(record);
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.Error.WriteLine($"ERROR: File {_fileName} not found while storing cheep. Exception: {ex.Message}");
+                throw;
+            }
+            catch (CsvHelperException ex)
+            {
+                Console.Error.WriteLine($"ERROR: Error occurred while saving cheep. Exception: {ex.Message}");
+                throw new InvalidOperationException($"Error occurred while writing cheep to file {_fileName}", ex);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"ERROR: An unexpected error occurred while storing the cheep. Exception: {ex.Message}");
+                throw new Exception("An unexpected error occurred while storing the cheep.", ex);
+            }
+        }
+
+        public void PerformStore(T record)
+        {
             var fileExists = File.Exists(_fileName);
             using var writer = new StreamWriter(_fileName, append: true, Encoding.UTF8);
             using var csv = new CsvWriter(writer, _config);
