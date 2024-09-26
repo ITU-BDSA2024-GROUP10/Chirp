@@ -45,8 +45,23 @@ void WriteCheep(IDatabaseRepository<Cheep> dbr, string message)
 
 void DisplayCheeps(IDatabaseRepository<Cheep> dbr, int limit)
 {
-    var cheeps = dbr.Read(limit);
-    UserInterface.PrintCheeps(cheeps);
+    try
+    {
+        var cheeps = dbr.Read(limit);
+        UserInterface.PrintCheeps(cheeps);
+    }
+    catch (FileNotFoundException)
+    {
+        Console.Error.WriteLine("ERROR: Unable to display cheeps because the data file was not found.");
+    }
+    catch (InvalidOperationException)
+    {
+        Console.Error.WriteLine("ERROR: Unable to display cheeps due to an issue with reading the file. Check the file format?");
+    }
+    catch (Exception)
+    {
+        Console.Error.WriteLine("ERROR: An unexpected error occurred while displaying cheeps.");
+    }
 }
 
 void WebWriteCheep(string message)
