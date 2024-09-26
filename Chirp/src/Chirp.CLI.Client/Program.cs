@@ -23,13 +23,11 @@ var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
 if (arguments["read"].IsTrue)
 {
-    //DisplayCheeps(db, arguments["<limit>"].AsInt);
     if (arguments["<limit>"].IsNullOrEmpty) WebDisplayCheeps();
     else WebDisplayCheeps(arguments["<limit>"].AsInt);
 }
 else if (arguments["cheep"].IsTrue) 
 {
-    //WriteCheep(db, arguments["<message>"].ToString());
     WebWriteCheep(arguments["<message>"].ToString());
 }
 
@@ -89,8 +87,4 @@ void WebDisplayCheeps(int? limit = null)
     var response = client.GetFromJsonAsync<Cheep[]>(requestUri).Result;
     if (response == null) throw new Exception("No response");
     UserInterface.PrintCheeps(response);
-}
-
-void WebDisplayAllCheeps()
-{
 }
