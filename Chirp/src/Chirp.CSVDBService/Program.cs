@@ -26,6 +26,25 @@ app.MapGet("/cheeps", (int? limit) =>
     }
 });
 
-app.MapPost("/cheep", (Cheep cheep) => db.Store(cheep));
+app.MapPost("/cheep", (Cheep cheep) =>
+{
+    try
+    {
+        db.Store(cheep);
+        return Results.Ok(new { message = "Cheep added successfully." }); // 200 OK when successfully stored
+    }
+    catch (FileNotFoundException)
+    {
+        return Results.NotFound(new { message = "Data file not found. Unable to store cheep." }); // 404 if file not found
+    }
+    catch (InvalidOperationException ex)
+    {
+        return Results.BadRequest(new { message = "Error occurred while saving the cheep. Please check the file format.", detail = ex.Message }); // 400 for CSV format errors
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError); // 500 for unexpected errors
+    }
+});
 
 app.Run();
