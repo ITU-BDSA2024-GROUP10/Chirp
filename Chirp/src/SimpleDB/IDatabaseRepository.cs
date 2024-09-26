@@ -2,6 +2,6 @@
 
 public interface IDatabaseRepository<T>
 {
-    public IEnumerable<T> Read(int? limit = null);
-    public void Store(T record);
+    public IEnumerable<T> GetAll();
+    public IEnumerable<T> GetFromAuthor(int authorId);
 }
