@@ -23,13 +23,11 @@ var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 
 if (arguments["read"].IsTrue)
 {
-    //DisplayCheeps(db, arguments["<limit>"].AsInt);
     if (arguments["<limit>"].IsNullOrEmpty) WebDisplayCheeps();
     else WebDisplayCheeps(arguments["<limit>"].AsInt);
 }
 else if (arguments["cheep"].IsTrue) 
 {
-    //WriteCheep(db, arguments["<message>"].ToString());
     WebWriteCheep(arguments["<message>"].ToString());
 }
 
@@ -37,16 +35,47 @@ return;
 
 void WriteCheep(IDatabaseRepository<Cheep> dbr, string message)
 {
-    var author = Environment.UserName;
-    var time = DateTime.Now;
-    var cheep = new Cheep(author, message, time);
-    dbr.Store(cheep);
+    try
+    {
+        var author = Environment.UserName;
+        var time = DateTime.Now;
+        var cheep = new Cheep(author, message, time);
+        dbr.Store(cheep);
+        Console.WriteLine("Cheep stored successfully.");
+    }
+    catch (FileNotFoundException)
+    {
+        Console.Error.WriteLine("ERROR: Unable to store the cheep because the db file was not found.");
+    }
+    catch (InvalidOperationException)
+    {
+        Console.Error.WriteLine("ERROR: Unable to store the cheep due to an issue with saving the file. Check the file format?");
+    }
+    catch (Exception)
+    {
+        Console.Error.WriteLine("ERROR: An unexpected error occurred while storing the cheep.");
+    }
 }
 
 void DisplayCheeps(IDatabaseRepository<Cheep> dbr, int limit)
 {
-    var cheeps = dbr.Read(limit);
-    UserInterface.PrintCheeps(cheeps);
+    try
+    {
+        var cheeps = dbr.Read(limit);
+        UserInterface.PrintCheeps(cheeps);
+    }
+    catch (FileNotFoundException)
+    {
+        Console.Error.WriteLine("ERROR: Unable to display cheeps because the data file was not found.");
+    }
+    catch (InvalidOperationException)
+    {
+        Console.Error.WriteLine("ERROR: Unable to display cheeps due to an issue with reading the file. Check the file format?");
+    }
+    catch (Exception)
+    {
+        Console.Error.WriteLine("ERROR: An unexpected error occurred while displaying cheeps.");
+    }
 }
 
 void WebWriteCheep(string message)
@@ -74,8 +103,4 @@ void WebDisplayCheeps(int? limit = null)
     var response = client.GetFromJsonAsync<Cheep[]>(requestUri).Result;
     if (response == null) throw new Exception("No response");
     UserInterface.PrintCheeps(response);
-}
-
-void WebDisplayAllCheeps()
-{
 }
