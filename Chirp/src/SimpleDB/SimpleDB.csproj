@@ -10,9 +10,4 @@
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="9.0.0-rc.1.24451.1" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Chirp.Razor\Chirp.Razor.csproj" />
-  </ItemGroup>
-
 </Project>
