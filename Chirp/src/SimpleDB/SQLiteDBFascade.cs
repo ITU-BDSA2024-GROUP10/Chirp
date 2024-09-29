@@ -15,6 +15,18 @@ public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
         return connection; 
     }
 
+    private IEnumerable<CheepViewModel> ReadCheeps(SqliteCommand command)
+    {
+        List<CheepViewModel> result = new List<CheepViewModel>();
+            
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            var cheep = new CheepViewModel(reader.GetString(0), reader.GetString(1), reader.GetString(2));
+            result.Add(cheep);
+        }
+        return result;
+    }
     public IEnumerable<CheepViewModel> GetAll()
     {
         var query = @"SELECT u.username, m.text, m.pup_date FROM message m
@@ -24,15 +36,7 @@ public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
             var command = connection.CreateCommand();
             command.CommandText = query;
             
-            List<CheepViewModel> result = new List<CheepViewModel>();
-            
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                var cheep = new CheepViewModel(reader.GetString(0), reader.GetString(1), reader.GetString(2));
-                result.Add(cheep);
-            }
-            return result;
+            return ReadCheeps(command);
         }
     }
 
