@@ -1,4 +1,5 @@
-public record CheepViewModel(string Author, string Message, string Timestamp);
+using SimpleDB;
+using SimpleDB.Model;
 
 public interface ICheepService
 {
@@ -8,22 +9,16 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    // These would normally be loaded from a database for example
-    private static readonly List<CheepViewModel> _cheeps = new()
-        {
-            new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Adrian", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-        };
+    private IDatabaseRepository<CheepViewModel> db = new SQLiteDBFascade();
 
     public List<CheepViewModel> GetCheeps()
     {
-        return _cheeps;
+        return db.GetAll().ToList();
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author)
     {
-        // filter by the provided author name
-        return _cheeps.Where(x => x.Author == author).ToList();
+        return db.GetFromAuthor(author).ToList();
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)

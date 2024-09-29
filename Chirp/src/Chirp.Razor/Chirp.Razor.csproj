@@ -9,5 +9,9 @@
   <ItemGroup>
     <EmbeddedResource Include="data/**/*"/>
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
+  </ItemGroup>
 
 </Project>
