@@ -1,12 +1,18 @@
-﻿using System.Data.SqlClient;
+﻿using System.Collections;
+using System.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 
 namespace SimpleDB;
 
 public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
 {
-    private SqlConnection establishConnection()
+    private readonly string _connectionString = "./data/chirp.db";
+    private SqliteConnection establishConnection()
     {
-        throw new NotImplementedException();
+        var connection = new SqliteConnection($"Data Source={_connectionString}");
+        connection.Open();
+        
+        return connection; 
     }
 
     public IEnumerable<CheepViewModel> GetAll()
