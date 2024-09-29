@@ -28,6 +28,7 @@ public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
         }
         return result;
     }
+    
     public IEnumerable<CheepViewModel> GetAll()
     {
         var query = @"SELECT u.username, m.text, m.pup_date FROM message m
@@ -41,11 +42,11 @@ public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
         }
     }
 
-    public IEnumerable<CheepViewModel> GetFromAuthor(int authorId)
+    public IEnumerable<CheepViewModel> GetFromAuthor(String author)
     {
         var query = @"SELECT u.username, m.text, m.pup_date FROM message m
                         JOIN user u ON m.author_id = u.user_id
-                         WHERE m.author_id = @authorId";
+                         WHERE u.username = @author";
         using (var connection = establishConnection())
         {
             var command = connection.CreateCommand();
