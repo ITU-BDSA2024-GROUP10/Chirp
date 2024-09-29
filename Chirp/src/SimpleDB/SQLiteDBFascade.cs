@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Data.SqlClient;
 using Microsoft.Data.Sqlite;
+using SimpleDB.Model;
 
 namespace SimpleDB;
 

@@ -1,4 +1,4 @@
-public record CheepViewModel(string Author, string Message, string Timestamp);
+using SimpleDB.Model;
 
 public interface ICheepService
 {
