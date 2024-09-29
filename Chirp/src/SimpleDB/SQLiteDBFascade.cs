@@ -2,19 +2,19 @@
 
 namespace SimpleDB;
 
-public class SQLiteDBFascade : IDatabaseRepository<Cheep>
+public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
 {
     private SqlConnection establishConnection()
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Cheep> GetAll()
+    public IEnumerable<CheepViewModel> GetAll()
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Cheep> GetFromAuthor(int authorId)
+    public IEnumerable<CheepViewModel> GetFromAuthor(int authorId)
     {
         throw new NotImplementedException();
     }
