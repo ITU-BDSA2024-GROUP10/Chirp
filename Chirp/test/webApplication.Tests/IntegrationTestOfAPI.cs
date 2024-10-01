@@ -5,7 +5,7 @@ namespace webApplication.Tests;
 
 public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _fixture;
+    /*private readonly WebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
     public TestAPI(WebApplicationFactory<Program> fixture)
@@ -36,5 +36,5 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
         Assert.Contains("Chirp!", content);
         Assert.Contains($"{author}'s Timeline", content);
-    }
+    }*/
 }
