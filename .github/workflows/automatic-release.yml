@@ -39,12 +39,12 @@ jobs:
           echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
           echo "Current latest tag is $LATEST_TAG"
       
-      - name: Build for all platforms
+      - name: release for all platforms
         working-directory: Chirp
         run: |
-          dotnet publish -c Release -r linux-x64 --self-contained false -p:PublishSingleFile=true -o publish/linux-x64
-          dotnet publish -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o publish/win-x64
-          dotnet publish -c Release -r osx-x64 --self-contained false -p:PublishSingleFile=true -o publish/osx-x64
+          dotnet publish --runtime linux-x64 -p:PublishSingleFile=true --self-contained true
+          dotnet publish --runtime win-x64 -p:PublishSingleFile=true --self-contained true
+          dotnet publish --runtime osx-x64 -p:PublishSingleFile=true --self-contained true
           
       # Create ZIP files
       - name: Zip the output
