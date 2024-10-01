@@ -5,11 +5,12 @@ namespace SimpleDB;
 
 public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
 {
-    private readonly string _connectionString =
-        "C:\\Users\\chris\\Desktop\\Pogramerings projekter\\Fælles over github\\Chirp\\Chirp\\data\\chirp.db";
+    private readonly string _connectionString = Environment.GetEnvironmentVariable("CHIRPDBPATH") ??
+    Path.GetTempPath() + "chirp.db";
 
     private SqliteConnection establishConnection()
     {
+        Console.WriteLine("Connection string: " + _connectionString);
         var connection = new SqliteConnection($"Data Source={_connectionString}");
         connection.Open();
 
