@@ -51,12 +51,9 @@ jobs:
       - name: Zip the output
         working-directory: Chirp/src/Chirp.Razor/bin/Release/net8.0/
         run: |
-          cd publish/linux-x64
-          zip -r chirp-${{ env.NEW_VERSION }}-linux-x64.zip Chirp.Razor
-          cd ../win-x64
-          zip -r chirp-${{ env.NEW_VERSION }}-win-x64.zip Chirp.Razor.exe
-          cd ../osx-x64
-          zip -r chirp-${{ env.NEW_VERSION }}-osx-x64.zip Chirp.Razor
+          zip -r chirp-${{ env.NEW_VERSION }}-linux-x64.zip linux-x64/publish/Chirp.Razor
+          zip -r chirp-${{ env.NEW_VERSION }}-win-x64.zip win-x64/publish/Chirp.Razor.exe
+          zip -r chirp-${{ env.NEW_VERSION }}-osx-x64.zip osx-x64/publish/Chirp.Razor
 
       # Upload the release artifacts and create the release
       - name: Create GitHub release
