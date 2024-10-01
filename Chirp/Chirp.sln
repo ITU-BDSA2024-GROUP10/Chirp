@@ -1,16 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI.Client", "src\Chirp.CLI.Client\Chirp.CLI.Client.csproj", "{D6796825-76C8-4ADA-A0B9-CCB62FCE9FDB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDB", "src\SimpleDB\SimpleDB.csproj", "{B55AD19B-195F-49B6-BC9D-8412B7CD262D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.SimpleDB.Tests", "test\Chirp.SimpleDB.Tests\Chirp.SimpleDB.Tests.csproj", "{A31AABCA-B491-4247-8BD6-9FE261B5BF27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI.Client.Test", "test\Chirp.CLI.Client.Test\Chirp.CLI.Client.Test.csproj", "{BCB4A2A2-F16A-4088-9C91-6B20BA8141C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\Chirp.Razor\Chirp.Razor.csproj", "{891ABDAD-2E31-45FA-9876-08646B7AFC4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CSVDBService", "src\Chirp.CSVDBService\Chirp.CSVDBService.csproj", "{1C054740-CD2F-4439-AA2B-CA20CE4D6A9A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CSVDBService.Test", "test\Chirp.CSVDBService.Test\Chirp.CSVDBService.Test.csproj", "{565D0CD3-C146-4B0D-A891-7E8C79645036}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webApplication.Tests", "test\webApplication.Tests\webApplication.Tests.csproj", "{63B46FE4-2737-4642-AB8B-7CB144BA6FD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,10 +14,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D6796825-76C8-4ADA-A0B9-CCB62FCE9FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6796825-76C8-4ADA-A0B9-CCB62FCE9FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6796825-76C8-4ADA-A0B9-CCB62FCE9FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D6796825-76C8-4ADA-A0B9-CCB62FCE9FDB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B55AD19B-195F-49B6-BC9D-8412B7CD262D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B55AD19B-195F-49B6-BC9D-8412B7CD262D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B55AD19B-195F-49B6-BC9D-8412B7CD262D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -30,17 +22,13 @@ Global
 		{A31AABCA-B491-4247-8BD6-9FE261B5BF27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A31AABCA-B491-4247-8BD6-9FE261B5BF27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A31AABCA-B491-4247-8BD6-9FE261B5BF27}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BCB4A2A2-F16A-4088-9C91-6B20BA8141C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BCB4A2A2-F16A-4088-9C91-6B20BA8141C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BCB4A2A2-F16A-4088-9C91-6B20BA8141C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BCB4A2A2-F16A-4088-9C91-6B20BA8141C0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C054740-CD2F-4439-AA2B-CA20CE4D6A9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C054740-CD2F-4439-AA2B-CA20CE4D6A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C054740-CD2F-4439-AA2B-CA20CE4D6A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C054740-CD2F-4439-AA2B-CA20CE4D6A9A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{565D0CD3-C146-4B0D-A891-7E8C79645036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{565D0CD3-C146-4B0D-A891-7E8C79645036}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{565D0CD3-C146-4B0D-A891-7E8C79645036}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{565D0CD3-C146-4B0D-A891-7E8C79645036}.Release|Any CPU.Build.0 = Release|Any CPU
+		{891ABDAD-2E31-45FA-9876-08646B7AFC4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{891ABDAD-2E31-45FA-9876-08646B7AFC4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{891ABDAD-2E31-45FA-9876-08646B7AFC4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{891ABDAD-2E31-45FA-9876-08646B7AFC4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63B46FE4-2737-4642-AB8B-7CB144BA6FD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63B46FE4-2737-4642-AB8B-7CB144BA6FD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63B46FE4-2737-4642-AB8B-7CB144BA6FD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63B46FE4-2737-4642-AB8B-7CB144BA6FD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
