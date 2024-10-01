@@ -1,4 +1,4 @@
-name: Release on PR Merge
+name: Create tag on PR Merge
 permissions: write-all
 
 on:
@@ -8,7 +8,7 @@ on:
       - main
 
 jobs:
-  build-and-release:
+  fetch-labels-and-create-tag:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     
