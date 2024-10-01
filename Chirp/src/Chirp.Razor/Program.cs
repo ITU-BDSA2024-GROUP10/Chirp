@@ -1,8 +1,12 @@
+using SimpleDB;
+using SimpleDB.Model;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<ICheepService, CheepService>();
+builder.Services.AddSingleton<IDatabaseRepository<CheepViewModel>, SQLiteDBFascade>();
 
 
 var app = builder.Build();
