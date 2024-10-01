@@ -40,7 +40,7 @@ jobs:
           echo "Current latest tag is $LATEST_TAG"
       
       - name: release for all platforms
-        working-directory: Chirp
+        working-directory: Chirp/src/Chirp.Razor/
         run: |
           dotnet publish --runtime linux-x64 -p:PublishSingleFile=true --self-contained true
           dotnet publish --runtime win-x64 -p:PublishSingleFile=true --self-contained true
@@ -48,7 +48,7 @@ jobs:
           
       # Create ZIP files
       - name: Zip the output
-        working-directory: Chirp
+        working-directory: Chirp/src/Chirp.Razor/bin/Release/net8.0/
         run: |
           cd publish/linux-x64
           zip -r chirp-${{ env.NEW_VERSION }}-linux-x64.zip Chirp
