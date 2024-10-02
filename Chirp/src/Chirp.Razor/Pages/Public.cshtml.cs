@@ -23,9 +23,10 @@ public class PublicModel : PageModel
         if (!string.IsNullOrEmpty(pageNumber))
         {
             PageNumber = int.Parse(pageNumber);
-            
+            Cheeps = _service.GetCheepsByPage(PageNumber, 12);
+            return Page();
         }
-        Cheeps = _service.GetCheeps();
+        Cheeps = _service.GetAllCheeps();
         return Page();
     }
 }
