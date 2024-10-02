@@ -5,10 +5,8 @@ namespace SimpleDB;
 
 public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
 {
-
-    private readonly string _connectionString = "/home/mathias/Documents/BDSA/Chirp/Chirp/data/chirp.db";
-    //private readonly string _connectionString = Environment.GetEnvironmentVariable("CHIRPDBPATH") ?? 
-    //Path.GetTempPath() + "chirp.db";
+    private readonly string _connectionString = Environment.GetEnvironmentVariable("CHIRPDBPATH") ?? 
+    Path.GetTempPath() + "chirp.db";
 
     private SqliteConnection establishConnection()
     {
