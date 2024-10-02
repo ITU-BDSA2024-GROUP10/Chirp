@@ -5,8 +5,7 @@ namespace SimpleDB;
 
 public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
 {
-    private readonly string _connectionString =
-        "C:\\Users\\chris\\Desktop\\Pogramerings projekter\\Fælles over github\\Chirp\\Chirp\\data\\chirp.db";
+    private readonly string _connectionString = "/home/mathias/Documents/BDSA/Chirp/Chirp/data/chirp.db";
 
     private SqliteConnection establishConnection()
     {
@@ -40,6 +39,25 @@ public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
         {
             var command = connection.CreateCommand();
             command.CommandText = query;
+
+            return ReadCheeps(command);
+        }
+    }
+    
+    public IEnumerable<CheepViewModel> GetByPage(int page, int size)
+    {
+        int offset = page * size;
+        var query = """
+                    SELECT u.username, m.text, m.pub_date FROM message m
+                    JOIN user u ON m.author_id = u.user_id
+                    LIMIT @size OFFSET @offset;
+                    """;
+        using (var connection = establishConnection())
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = query;
+            command.Parameters.AddWithValue("@size", size);
+            command.Parameters.AddWithValue("@offset", offset);
 
             return ReadCheeps(command);
         }
