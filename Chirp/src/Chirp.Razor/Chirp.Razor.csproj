@@ -13,5 +13,9 @@
   <ItemGroup>
     <ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="DataModels\" />
+  </ItemGroup>
 
 </Project>
