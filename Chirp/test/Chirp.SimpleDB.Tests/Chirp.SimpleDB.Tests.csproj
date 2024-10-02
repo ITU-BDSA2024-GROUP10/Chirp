@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SimpleDB\SimpleDB.csproj" />
+    <ProjectReference Include="..\..\src\DBFacade\DBFacade.csproj" />
   </ItemGroup>
 
 </Project>
