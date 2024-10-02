@@ -4,7 +4,7 @@ using SimpleDB.Model;
 public interface ICheepService
 {
     public List<CheepViewModel> GetAllCheeps();
-    public List<CheepViewModel> GetCheepsByPage(int page);
+    public List<CheepViewModel> GetCheepsByPage(int page, int pageSize);
     public List<CheepViewModel> GetCheepsFromAuthor(string author);
 }
 
@@ -17,9 +17,9 @@ public class CheepService : ICheepService
         return db.GetAll().ToList();
     }
     
-    public List<CheepViewModel> GetCheepsByPage(int page)
+    public List<CheepViewModel> GetCheepsByPage(int page, int pageSize)
     {
-        return db.GetAll().ToList();
+        return db.GetByPage(page, pageSize).ToList();
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author)
