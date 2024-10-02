@@ -5,8 +5,10 @@ namespace SimpleDB;
 
 public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
 {
-    private readonly string _connectionString = Environment.GetEnvironmentVariable("CHIRPDBPATH") ?? 
-    Path.GetTempPath() + "chirp.db";
+
+    private readonly string _connectionString = "/home/mathias/Documents/BDSA/Chirp/Chirp/data/chirp.db";
+    //private readonly string _connectionString = Environment.GetEnvironmentVariable("CHIRPDBPATH") ?? 
+    //Path.GetTempPath() + "chirp.db";
 
     private SqliteConnection establishConnection()
     {
@@ -48,7 +50,7 @@ public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
     
     public IEnumerable<CheepViewModel> GetByPage(int page, int pageSize)
     {
-        int offset = page * pageSize;
+        int offset = (page-1) * pageSize;
         var query = """
                     SELECT u.username, m.text, m.pub_date FROM message m
                     JOIN user u ON m.author_id = u.user_id
@@ -85,7 +87,7 @@ public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
     
     public IEnumerable<CheepViewModel> GetFromAuthorByPage(String author, int page, int pageSize)
     {
-        int offset = page * pageSize;
+        int offset = (page-1) * pageSize;
         var query = """
                     SELECT u.username, m.text, m.pub_date FROM message m
                     JOIN user u ON m.author_id = u.user_id
