@@ -5,8 +5,8 @@ namespace SimpleDB;
 
 public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
 {
-    private readonly string _connectionString = Environment.GetEnvironmentVariable("CHIRPDBPATH") ??
-                                                Path.GetTempPath() + "chirp.db";
+    private readonly string _connectionString = Environment.GetEnvironmentVariable("CHIRPDBPATH") ?? 
+    Path.GetTempPath() + "chirp.db";
 
     private SqliteConnection establishConnection()
     {
@@ -46,19 +46,19 @@ public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
         }
     }
     
-    public IEnumerable<CheepViewModel> GetByPage(int page, int size)
+    public IEnumerable<CheepViewModel> GetByPage(int page, int pageSize)
     {
-        int offset = page * size;
+        int offset = page * pageSize;
         var query = """
                     SELECT u.username, m.text, m.pub_date FROM message m
                     JOIN user u ON m.author_id = u.user_id
-                    LIMIT @size OFFSET @offset;
+                    LIMIT @pageSize OFFSET @offset;
                     """;
         using (var connection = establishConnection())
         {
             var command = connection.CreateCommand();
             command.CommandText = query;
-            command.Parameters.AddWithValue("@size", size);
+            command.Parameters.AddWithValue("@pageSize", pageSize);
             command.Parameters.AddWithValue("@offset", offset);
 
             return ReadCheeps(command);
@@ -78,6 +78,28 @@ public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
             var command = connection.CreateCommand();
             command.CommandText = query;
             command.Parameters.AddWithValue("@author", author);
+
+            return ReadCheeps(command);
+        }
+    }
+    
+    public IEnumerable<CheepViewModel> GetFromAuthorByPage(String author, int page, int pageSize)
+    {
+        int offset = page * pageSize;
+        var query = """
+                    SELECT u.username, m.text, m.pub_date FROM message m
+                    JOIN user u ON m.author_id = u.user_id
+                    WHERE u.username = @author
+                    LIMIT @pageSize OFFSET @offset;
+                    """;
+
+        using (var connection = establishConnection())
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = query;
+            command.Parameters.AddWithValue("@author", author);
+            command.Parameters.AddWithValue("@pageSize", pageSize);
+            command.Parameters.AddWithValue("@offset", offset);
 
             return ReadCheeps(command);
         }
