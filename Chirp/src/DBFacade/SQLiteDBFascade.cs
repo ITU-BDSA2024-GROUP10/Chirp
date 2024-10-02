@@ -30,21 +30,6 @@ public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
 
         return result;
     }
-
-    public IEnumerable<CheepViewModel> GetAll()
-    {
-        var query = """
-                    SELECT u.username, m.text, m.pub_date FROM message m
-                    JOIN user u ON m.author_id = u.user_id;
-                    """;
-        using (var connection = establishConnection())
-        {
-            var command = connection.CreateCommand();
-            command.CommandText = query;
-
-            return ReadCheeps(command);
-        }
-    }
     
     public IEnumerable<CheepViewModel> GetByPage(int page, int pageSize)
     {
@@ -60,24 +45,6 @@ public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
             command.CommandText = query;
             command.Parameters.AddWithValue("@pageSize", pageSize);
             command.Parameters.AddWithValue("@offset", offset);
-
-            return ReadCheeps(command);
-        }
-    }
-
-    public IEnumerable<CheepViewModel> GetFromAuthor(String author)
-    {
-        var query = """
-                    SELECT u.username, m.text, m.pub_date FROM message m
-                    JOIN user u ON m.author_id = u.user_id
-                    WHERE u.username = @author;
-                    """;
-
-        using (var connection = establishConnection())
-        {
-            var command = connection.CreateCommand();
-            command.CommandText = query;
-            command.Parameters.AddWithValue("@author", author);
 
             return ReadCheeps(command);
         }
