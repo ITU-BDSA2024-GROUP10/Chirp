@@ -19,7 +19,6 @@ public class PublicModel : PageModel
 
     public ActionResult OnGet(string pageNumber)
     {
-        Console.WriteLine(pageNumber);
         if (!string.IsNullOrEmpty(pageNumber))
         {
             PageNumber = int.Parse(pageNumber);
