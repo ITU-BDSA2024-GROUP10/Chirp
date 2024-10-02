@@ -3,7 +3,8 @@ using SimpleDB.Model;
 
 public interface ICheepService
 {
-    public List<CheepViewModel> GetCheeps();
+    public List<CheepViewModel> GetAllCheeps();
+    public List<CheepViewModel> GetCheepsByPage(int page);
     public List<CheepViewModel> GetCheepsFromAuthor(string author);
 }
 
@@ -11,7 +12,12 @@ public class CheepService : ICheepService
 {
     private IDatabaseRepository<CheepViewModel> db = new SQLiteDBFascade();
 
-    public List<CheepViewModel> GetCheeps()
+    public List<CheepViewModel> GetAllCheeps()
+    {
+        return db.GetAll().ToList();
+    }
+    
+    public List<CheepViewModel> GetCheepsByPage(int page)
     {
         return db.GetAll().ToList();
     }
