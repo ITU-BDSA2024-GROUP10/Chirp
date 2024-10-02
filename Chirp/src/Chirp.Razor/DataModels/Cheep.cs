@@ -7,8 +7,10 @@ public class Cheep
     private DateTime TimeStamp { get; set; }
     private Author Author { get; set; }
 
-    public Cheep(string text, DateTime timeStamp, Author author)
+    public Cheep()
     {
+        
+    }
 
     public Cheep(int id, string text, DateTime timeStamp, Author author)
     {
