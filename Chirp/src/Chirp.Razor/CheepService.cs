@@ -6,6 +6,7 @@ public interface ICheepService
     public List<CheepViewModel> GetAllCheeps();
     public List<CheepViewModel> GetCheepsByPage(int page, int pageSize);
     public List<CheepViewModel> GetCheepsFromAuthor(string author);
+    public List<CheepViewModel> GetCheepsFromAuthorByPage(string author, int page, int pageSize);
 }
 
 public class CheepService : ICheepService
@@ -25,6 +26,11 @@ public class CheepService : ICheepService
     public List<CheepViewModel> GetCheepsFromAuthor(string author)
     {
         return db.GetFromAuthor(author).ToList();
+    }
+    
+    public List<CheepViewModel> GetCheepsFromAuthorByPage(string author, int page, int pageSize)
+    {
+        return db.GetFromAuthorByPage(author, page, pageSize).ToList();
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
