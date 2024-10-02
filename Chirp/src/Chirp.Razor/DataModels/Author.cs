@@ -7,7 +7,10 @@ public class Author
     private string Email { get; set; }
     private List<Cheep> ListOfCheeps { get; set; }
 
+    public Author() 
     {
+        
+    }
     
     public Author(int id, string name, string email)
     {
