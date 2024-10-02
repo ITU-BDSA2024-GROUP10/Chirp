@@ -3,14 +3,13 @@ name: Release on PR Merge
 permissions: write-all
 
 on:
-  pull_request:
-    types: [closed]
-    branches:
-      - main
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
 
 jobs:
   build-and-release:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     
     steps:
@@ -40,88 +39,31 @@ jobs:
           LATEST_TAG=$(git describe --tags --abbrev=0 || echo "v0.0.0")  # Get latest tag or default to v0.0.0
           echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
           echo "Current latest tag is $LATEST_TAG"
-
-      - name: Get PR labels
-        run: |
-          PR_LABELS="${{ join(github.event.pull_request.labels.*.name, ',') }}"
-          echo "PR_LABELS=$PR_LABELS" >> $GITHUB_ENV
-          echo "Labels fetched: $PR_LABELS"
-
-      # Determine the next version based on PR labels
-      - name: Calculate next version
-        run: |
-          # Initizalise skip release
-          echo "SKIP_RELEASE=false" >> $GITHUB_ENV
-          
-          # Extract major, minor, patch from the latest tag (strip leading 'v')
-          VERSION=${LATEST_TAG#v}
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
-          
-          # Check which label is present and increment the version accordingly
-          if echo "$PR_LABELS" | grep -q "\bbreaking\b"; then
-            NOT_ALLOWED_LABELS="refactor|test|workflow"
-            MAJOR=$((MAJOR + 1))
-            MINOR=0
-            PATCH=0
-          # feature
-          elif echo "$PR_LABELS" | grep -q "\bfeature\b"; then
-            MINOR=$((MINOR + 1))
-            PATCH=0
-          # bug
-          elif echo "$PR_LABELS" | grep -q "\bbug\b"; then
-            PATCH=$((PATCH + 1))
-          else
-            echo "No release related label detected. Skipping release process."
-            echo "SKIP_RELEASE=true" >> $GITHUB_ENV
-            exit 0
-          fi
-
-          # Construct the new version
-          NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-          echo "Calculated new version: $NEW_VERSION"
-
-      # Create a new Git tag with the calculated version
-      - name: Create Git Tag
-        if: env.SKIP_RELEASE != 'true'
-        run: |
-          git config --local user.name "GitHub Actions"
-          git config --local user.email "actions@github.com"
-          git tag $NEW_VERSION
-          git push origin $NEW_VERSION
       
-      - name: Build for all platforms
-        if: env.SKIP_RELEASE != 'true'
-        working-directory: Chirp
+      - name: release for all platforms
+        working-directory: Chirp/src/Chirp.Razor/
         run: |
-          dotnet publish -c Release -r linux-x64 --self-contained false -p:PublishSingleFile=true -o publish/linux-x64
-          dotnet publish -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o publish/win-x64
-          dotnet publish -c Release -r osx-x64 --self-contained false -p:PublishSingleFile=true -o publish/osx-x64
-
+          dotnet publish --runtime linux-x64 -p:PublishSingleFile=true --self-contained true
+          dotnet publish --runtime win-x64 -p:PublishSingleFile=true --self-contained true
+          dotnet publish --runtime osx-x64 -p:PublishSingleFile=true --self-contained true
           
       # Create ZIP files
       - name: Zip the output
-        if: env.SKIP_RELEASE != 'true'
-        working-directory: Chirp
+        working-directory: Chirp/src/Chirp.Razor/bin/Release/net8.0/
         run: |
-          cd publish/linux-x64
-          zip -r chirp-${{ env.NEW_VERSION }}-linux-x64.zip Chirp
-          cd ../win-x64
-          zip -r chirp-${{ env.NEW_VERSION }}-win-x64.zip Chirp
-          cd ../osx-x64
-          zip -r chirp-${{ env.NEW_VERSION }}-osx-x64.zip Chirp
-
+          zip -r chirp-${{ env.NEW_VERSION }}-linux-x64.zip linux-x64/publish/Chirp.Razor
+          zip -r chirp-${{ env.NEW_VERSION }}-win-x64.zip win-x64/publish/Chirp.Razor.exe
+          zip -r chirp-${{ env.NEW_VERSION }}-osx-x64.zip osx-x64/publish/Chirp.Razor
 
       # Upload the release artifacts and create the release
       - name: Create GitHub release
-        if: env.SKIP_RELEASE != 'true'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.NEW_VERSION }}  # Use the new version tag
           name: Release ${{ env.NEW_VERSION }}  # Set release name
           files: |
-            Chirp/publish/linux-x64/chirp-${{ env.NEW_VERSION }}-linux-x64.zip
-            Chirp/publish/win-x64/chirp-${{ env.NEW_VERSION }}-win-x64.zip
-            Chirp/publish/osx-x64/chirp-${{ env.NEW_VERSION }}-osx-x64.zip
+            Chirp/src/Chirp.Razor/bin/Release/net8.0/Chirp/publish/linux-x64/chirp-${{ env.NEW_VERSION }}-linux-x64.zip
+            Chirp/src/Chirp.Razor/bin/Release/net8.0/Chirp/publish/win-x64/chirp-${{ env.NEW_VERSION }}-win-x64.zip
+            Chirp/src/Chirp.Razor/bin/Release/net8.0/Chirp/publish/osx-x64/chirp-${{ env.NEW_VERSION }}-osx-x64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
