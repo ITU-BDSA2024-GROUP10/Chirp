@@ -1,3 +1,4 @@
+using Chirp.Razor;
 using SimpleDB;
 using SimpleDB.Model;
 
@@ -25,5 +26,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.MapRazorPages();
+
+TEMPDBCreation.INITDBIfNeeaded();
 
 app.Run();
