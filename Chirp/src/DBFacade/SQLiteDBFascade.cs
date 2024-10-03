@@ -4,16 +4,16 @@ using SimpleDB.Model;
 
 namespace SimpleDB;
 
-public class SQLiteDBFascade : IDatabaseRepository<CheepViewModel>
+public class SQLiteDBFascade : IDatabaseRepository<CheepDTO>
 {
     private DbContext context = null;
     
-    public IEnumerable<CheepViewModel> GetByPage(int page, int pageSize)
+    public IEnumerable<CheepDTO> GetByPage(int page, int pageSize)
     {
         throw new NotImplementedException();
     }
     
-    public IEnumerable<CheepViewModel> GetFromAuthorByPage(String author, int page, int pageSize)
+    public IEnumerable<CheepDTO> GetFromAuthorByPage(String author, int page, int pageSize)
     {
         throw new NotImplementedException();
     }
