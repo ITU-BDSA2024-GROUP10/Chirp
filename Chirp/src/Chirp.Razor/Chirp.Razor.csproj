@@ -11,7 +11,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
+    <ProjectReference Include="..\DBFacade\DBFacade.csproj" />
   </ItemGroup>
   
   <ItemGroup>
