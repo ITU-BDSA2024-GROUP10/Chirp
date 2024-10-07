@@ -24,7 +24,7 @@ public class ChirpDBContext : DbContext
             entity.Property(c => c.Id).ValueGeneratedOnAdd();
 
             //define required fields
-            entity.Property(c => c.Text).IsRequired();
+            entity.Property(c => c.Message).IsRequired();
             entity.Property(c => c.TimeStamp).IsRequired();
 
             //define foreign relation
