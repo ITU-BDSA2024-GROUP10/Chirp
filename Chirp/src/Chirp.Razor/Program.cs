@@ -35,6 +35,14 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate();
 }
 
+// Seed the database with some initial data
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ChirpDBContext>();
+    DbInitializer.SeedDatabase(context);
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
