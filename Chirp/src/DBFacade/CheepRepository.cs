@@ -5,30 +5,38 @@ namespace SimpleDB;
 
 public class CheepRepository : ICheepRepository
 {
-    private DbContext context = null;
+    private ChirpDBContext context;
+    
+    public CheepRepository(ChirpDBContext context)
+    {
+        this.context = context;
+    }
     
     public async Task<IEnumerable<CheepDTO>> GetCheepsByPage(int page, int pageSize)
     {
         var query = context.Cheeps
-            .Select(cheep => new {cheep.Author.Name, cheep.message, cheep.timestamp})
+            .Select(cheep => new {cheep.Author.Name, cheep.Message, cheep.TimeStamp})
+            .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip((page-1)*pageSize)
             .Take(pageSize);
         
-        var cheeps = await query.AsEnumerable();
         
-        return cheeps.map(cheep => new CheepDTO(cheep.name, cheep.message, cheep.timestamp));
+        var cheeps = await query.ToListAsync();
+        
+        return cheeps.Select(cheep => new CheepDTO(cheep.Name, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
     
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorByPage(string author, int page, int pageSize)
     {
         var query = context.Cheeps
             .Where(cheep => cheep.Author.Name == author)
-            .Select(cheep => new {cheep.name, cheep.message, cheep.timestamp})
+            .Select(cheep => new {cheep.Author.Name, cheep.Message, cheep.TimeStamp})
+            .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip((page-1)*pageSize)
             .Take(pageSize);
         
-        var cheeps = await query.AsEnumerable();
+        var cheeps = await query.ToListAsync();
         
-        return cheeps.map(cheep => new CheepDTO(cheep.name, cheep.message, cheep.timestamp));
+        return cheeps.Select(cheep => new CheepDTO(cheep.Name, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
 }
