@@ -2,10 +2,10 @@ namespace Chirp.Razor.DataModels;
 
 public class Cheep
 {
-    private int Id { get; set;  }
-    private string Text { get; set; }
-    private DateTime TimeStamp { get; set; }
-    private Author Author { get; set; }
+    public int Id { get; set;  } 
+    public string Text { get; set; } 
+    public DateTime TimeStamp { get; set; } 
+    public Author Author { get; set; }
 
     public Cheep()
     {
