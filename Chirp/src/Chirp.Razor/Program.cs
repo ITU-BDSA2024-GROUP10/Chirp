@@ -5,14 +5,14 @@ using SimpleDB.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddSingleton<ICheepService, CheepService>();
-builder.Services.AddSingleton<ICheepRepository, CheepRepository>();
-
 // Load database connection via configuration
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
+
+// Add services to the container.
+builder.Services.AddRazorPages();
+builder.Services.AddScoped<ICheepService, CheepService>();
+builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
 var app = builder.Build();
 
