@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<ICheepService, CheepService>();
-builder.Services.AddSingleton<IDatabaseRepository<CheepDTO>, SQLiteDBFascade>();
+builder.Services.AddSingleton<ICheepRepository, CheepRepository>();
 
 // Load database connection via configuration
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
