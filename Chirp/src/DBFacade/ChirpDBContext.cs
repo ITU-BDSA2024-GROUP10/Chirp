@@ -29,7 +29,7 @@ public class ChirpDBContext : DbContext
 
             //define foreign relation
             entity.HasOne(c => c.Author)
-                .WithMany(a => a.ListOfCheeps)
+                .WithMany(a => a.Cheeps)
                 .HasForeignKey(c => c.AuthorId);
         });
 
