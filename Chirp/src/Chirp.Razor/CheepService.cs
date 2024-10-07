@@ -9,7 +9,12 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    private ICheepRepository db = new CheepRepository();
+    private ICheepRepository db;
+    
+    public CheepService(ICheepRepository db)
+    {
+        this.db = db;
+    }
     
     public List<CheepDTO> GetCheepsByPage(int page, int pageSize)
     {
