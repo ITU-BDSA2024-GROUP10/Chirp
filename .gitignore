@@ -478,3 +478,4 @@ $RECYCLE.BIN/
 .idea/workspace.xml
 .idea/.idea.Chirp.dir/.idea/workspace.xml
 Chirp/src/.idea/workspace.xml
+/Chirp/src/Chirp.Razor/database
