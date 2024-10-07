@@ -1,4 +1,5 @@
 using Chirp.Razor;
+using Microsoft.EntityFrameworkCore;
 using SimpleDB;
 using SimpleDB.Model;
 
@@ -9,6 +10,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddSingleton<ICheepService, CheepService>();
 builder.Services.AddSingleton<IDatabaseRepository<CheepDTO>, SQLiteDBFascade>();
 
+// Load database connection via configuration
+string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
 
 var app = builder.Build();
 
