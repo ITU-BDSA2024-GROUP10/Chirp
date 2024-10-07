@@ -13,9 +13,5 @@
   <ItemGroup>
     <ProjectReference Include="..\DBFacade\DBFacade.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="DataModels\" />
-  </ItemGroup>
 
 </Project>
