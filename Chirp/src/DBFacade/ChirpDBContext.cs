@@ -10,6 +10,7 @@ public class ChirpDBContext : DbContext
 
     public ChirpDBContext(DbContextOptions<ChirpDBContext> options) : base(options)
     {
+        DbInitializer.SeedDatabase(this);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
