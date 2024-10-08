@@ -5,6 +5,13 @@ using SimpleDB.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//create directory for the database
+string dir = "database";
+if (!Directory.Exists(dir))
+{
+    Directory.CreateDirectory(dir);
+}
+
 // Load database connection via configuration
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
