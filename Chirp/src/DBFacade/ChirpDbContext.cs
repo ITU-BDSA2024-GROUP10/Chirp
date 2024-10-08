@@ -30,7 +30,8 @@ public class ChirpDBContext : DbContext
             //define foreign relation
             entity.HasOne(c => c.Author)
                 .WithMany(a => a.Cheeps)
-                .HasForeignKey(c => c.AuthorId);
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         //define author entity constraints

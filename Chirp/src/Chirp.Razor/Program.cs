@@ -58,6 +58,4 @@ app.UseRouting();
 
 app.MapRazorPages();
 
-TEMPDBCreation.INITDBIfNeeaded();
-
 app.Run();
