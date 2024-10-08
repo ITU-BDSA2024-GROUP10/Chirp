@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBFacade", "src\DBFacade\DBFacade.csproj", "{B55AD19B-195F-49B6-BC9D-8412B7CD262D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.SimpleDB.Tests", "test\Chirp.SimpleDB.Tests\Chirp.SimpleDB.Tests.csproj", "{A31AABCA-B491-4247-8BD6-9FE261B5BF27}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\Chirp.Razor\Chirp.Razor.csproj", "{891ABDAD-2E31-45FA-9876-08646B7AFC4E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webApplication.Tests", "test\webApplication.Tests\webApplication.Tests.csproj", "{63B46FE4-2737-4642-AB8B-7CB144BA6FD7}"
@@ -18,10 +16,6 @@ Global
 		{B55AD19B-195F-49B6-BC9D-8412B7CD262D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B55AD19B-195F-49B6-BC9D-8412B7CD262D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B55AD19B-195F-49B6-BC9D-8412B7CD262D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A31AABCA-B491-4247-8BD6-9FE261B5BF27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A31AABCA-B491-4247-8BD6-9FE261B5BF27}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A31AABCA-B491-4247-8BD6-9FE261B5BF27}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A31AABCA-B491-4247-8BD6-9FE261B5BF27}.Release|Any CPU.Build.0 = Release|Any CPU
 		{891ABDAD-2E31-45FA-9876-08646B7AFC4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{891ABDAD-2E31-45FA-9876-08646B7AFC4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{891ABDAD-2E31-45FA-9876-08646B7AFC4E}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -2,10 +2,10 @@ namespace Chirp.Razor.DataModels;
 
 public class Author
 {
-    private int Id { get; set; }
-    private string Name { get; set; }
-    private string Email { get; set; }
-    private List<Cheep> ListOfCheeps { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public List<Cheep> Cheeps { get; set; }
 
     public Author() 
     {
@@ -17,6 +17,6 @@ public class Author
         Id = id;
         Email = email;
         Name = name;
-        ListOfCheeps = new List<Cheep>();
+        Cheeps = new List<Cheep>();
     }
 }

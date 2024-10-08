@@ -1,14 +1,26 @@
 using Chirp.Razor;
+using Microsoft.EntityFrameworkCore;
 using SimpleDB;
 using SimpleDB.Model;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//create directory for the database
+string dir = "database";
+if (!Directory.Exists(dir))
+{
+    Directory.CreateDirectory(dir);
+}
+
+// Load database connection via configuration
+string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
+
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSingleton<ICheepService, CheepService>();
-builder.Services.AddSingleton<IDatabaseRepository<CheepDTO>, SQLiteDBFascade>();
-
+builder.Services.AddScoped<ICheepService, CheepService>();
+builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
 var app = builder.Build();
 
@@ -20,13 +32,30 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Create a disposable service scope
+using (var scope = app.Services.CreateScope())
+{
+    // From the scope, get an instance of our database context.
+    // Through the `using` keyword, we make sure to dispose it after we are done.
+    using var context = scope.ServiceProvider.GetService<ChirpDBContext>();
+
+    // Execute the migration from code.
+    context.Database.Migrate();
+}
+
+// Seed the database with some initial data
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ChirpDBContext>();
+    DbInitializer.SeedDatabase(context);
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.MapRazorPages();
-
-TEMPDBCreation.INITDBIfNeeaded();
 
 app.Run();

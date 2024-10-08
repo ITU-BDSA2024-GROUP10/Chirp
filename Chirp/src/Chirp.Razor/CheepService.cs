@@ -9,16 +9,21 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    private IDatabaseRepository<CheepDTO> db = new SQLiteDBFascade();
+    private ICheepRepository db;
+    
+    public CheepService(ICheepRepository db)
+    {
+        this.db = db;
+    }
     
     public List<CheepDTO> GetCheepsByPage(int page, int pageSize)
     {
-        return db.GetByPage(page, pageSize).ToList();
+        return db.GetCheepsByPage(page, pageSize).Result.ToList();
     }
     
     public List<CheepDTO> GetCheepsFromAuthorByPage(string author, int page, int pageSize)
     {
-        return db.GetFromAuthorByPage(author, page, pageSize).ToList();
+        return db.GetCheepsFromAuthorByPage(author, page, pageSize).Result.ToList();
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
