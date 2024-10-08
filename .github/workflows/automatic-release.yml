@@ -1,5 +1,5 @@
 #This aumtomaticly release when a pul request to main is accepted
-name: Release on PR Merge
+name: Automatic release on tag creation
 permissions: write-all
 
 on:
@@ -62,8 +62,8 @@ jobs:
           tag_name: ${{ env.LATEST_TAG }}
           name: Release ${{ env.LATEST_TAG }}  # Set release name
           files: |
-            Chirp/src/Chirp.Razor/bin/Release/net8.0/Chirp/publish/linux-x64/chirp-${{ env.LATEST_TAG }}-linux-x64.zip
-            Chirp/src/Chirp.Razor/bin/Release/net8.0/Chirp/publish/win-x64/chirp-${{ env.LATEST_TAG }}-win-x64.zip
-            Chirp/src/Chirp.Razor/bin/Release/net8.0/Chirp/publish/osx-x64/chirp-${{ env.LATEST_TAG }}-osx-x64.zip
+            Chirp/src/Chirp.Razor/bin/Release/net8.0/chirp-${{ env.LATEST_TAG }}-linux-x64.zip
+            Chirp/src/Chirp.Razor/bin/Release/net8.0/chirp-${{ env.LATEST_TAG }}-win-x64.zip
+            Chirp/src/Chirp.Razor/bin/Release/net8.0/chirp-${{ env.LATEST_TAG }}-osx-x64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
