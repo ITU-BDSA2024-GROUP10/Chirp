@@ -21,11 +21,15 @@ public class ChirpDBContext : DbContext
         {
             //define auto increment key
             entity.HasKey(c => c.Id);
-            entity.Property(c => c.Id).ValueGeneratedOnAdd();
+            entity.Property(c => c.Id)
+                .ValueGeneratedOnAdd();
 
             //define required fields
-            entity.Property(c => c.Message).IsRequired();
-            entity.Property(c => c.TimeStamp).IsRequired();
+            entity.Property(c => c.Message)
+                .IsRequired()
+                .HasMaxLength(160);
+            entity.Property(c => c.TimeStamp)
+                .IsRequired();
 
             //define foreign relation
             entity.HasOne(c => c.Author)
@@ -39,11 +43,20 @@ public class ChirpDBContext : DbContext
         {
             //define auto increment key
             entity.HasKey(a => a.Id);
-            entity.Property(a => a.Id).ValueGeneratedOnAdd();
+            entity.Property(a => a.Id)
+                .ValueGeneratedOnAdd();
 
-            //define required fields
-            entity.Property(a => a.Name).IsRequired();
-            entity.Property(a => a.Email).IsRequired();
+            //define required + unique name
+            entity.Property(a => a.Name)
+                .IsRequired();
+            entity.HasIndex(a => a.Name)
+                .IsUnique();
+
+             //define required + unique email
+            entity.Property(a => a.Email)
+                .IsRequired();
+            entity.HasIndex(a => a.Email)
+                  .IsUnique();
         });
     }
 }
