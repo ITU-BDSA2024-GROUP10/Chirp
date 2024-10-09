@@ -27,7 +27,7 @@ public class ChirpDBContext : DbContext
             //define required fields
             entity.Property(c => c.Message)
                 .IsRequired()
-                .HasMaxLength(500);
+                .HasMaxLength(160);
             entity.Property(c => c.TimeStamp)
                 .IsRequired();
 
