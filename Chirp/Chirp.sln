@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "src\Core\Core.csproj", "{B55AD19B-195F-49B6-BC9D-8412B7CD262D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\Chirp.Razor\Chirp.Razor.csproj", "{891ABDAD-2E31-45FA-9876-08646B7AFC4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Web", "src\Chirp.Web\Chirp.Web.csproj", "{891ABDAD-2E31-45FA-9876-08646B7AFC4E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webApplication.Tests", "test\webApplication.Tests\webApplication.Tests.csproj", "{63B46FE4-2737-4642-AB8B-7CB144BA6FD7}"
 EndProject
