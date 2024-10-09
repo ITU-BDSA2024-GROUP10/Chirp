@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Web", "src\Chirp.Web\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webApplication.Tests", "test\webApplication.Tests\webApplication.Tests.csproj", "{63B46FE4-2737-4642-AB8B-7CB144BA6FD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{031A34BB-8758-45D1-B07D-421C5788EC43}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Infrastructure", "Chirp.Infrastructure\Chirp.Infrastructure.csproj", "{031A34BB-8758-45D1-B07D-421C5788EC43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
