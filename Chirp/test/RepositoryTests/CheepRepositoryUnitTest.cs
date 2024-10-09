@@ -1,6 +1,6 @@
 namespace RepositoryTests;
 
-public class UnitTest1
+public class CheepRepositoryUnitTest
 {
     [Fact]
     public void Test1()
