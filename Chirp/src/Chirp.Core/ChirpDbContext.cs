@@ -46,11 +46,17 @@ public class ChirpDBContext : DbContext
             entity.Property(a => a.Id)
                 .ValueGeneratedOnAdd();
 
-            //define required fields
+            //define required + unique name
             entity.Property(a => a.Name)
                 .IsRequired();
+            entity.HasIndex(a => a.Name)
+                .IsUnique();
+
+             //define required + unique email
             entity.Property(a => a.Email)
                 .IsRequired();
+            entity.HasIndex(a => a.Email)
+                  .IsUnique();
         });
     }
 }
