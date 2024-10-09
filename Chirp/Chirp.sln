@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBFacade", "src\DBFacade\DBFacade.csproj", "{B55AD19B-195F-49B6-BC9D-8412B7CD262D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "src\Core\Core.csproj", "{B55AD19B-195F-49B6-BC9D-8412B7CD262D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\Chirp.Razor\Chirp.Razor.csproj", "{891ABDAD-2E31-45FA-9876-08646B7AFC4E}"
 EndProject
