@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimpleDB;
 
@@ -10,14 +11,16 @@ using SimpleDB;
 namespace SimpleDB.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    partial class ChirpDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241007203813_UpdatingAttributeNames")]
+    partial class UpdatingAttributeNames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("Chirp.Razor.DataModels.Author", b =>
+            modelBuilder.Entity("Chirp.Web.DataModels.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,7 +39,7 @@ namespace SimpleDB.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("Chirp.Razor.DataModels.Cheep", b =>
+            modelBuilder.Entity("Chirp.Web.DataModels.Cheep", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,9 +62,9 @@ namespace SimpleDB.Migrations
                     b.ToTable("Cheeps");
                 });
 
-            modelBuilder.Entity("Chirp.Razor.DataModels.Cheep", b =>
+            modelBuilder.Entity("Chirp.Web.DataModels.Cheep", b =>
                 {
-                    b.HasOne("Chirp.Razor.DataModels.Author", "Author")
+                    b.HasOne("Chirp.Web.DataModels.Author", "Author")
                         .WithMany("Cheeps")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -70,7 +73,7 @@ namespace SimpleDB.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("Chirp.Razor.DataModels.Author", b =>
+            modelBuilder.Entity("Chirp.Web.DataModels.Author", b =>
                 {
                     b.Navigation("Cheeps");
                 });

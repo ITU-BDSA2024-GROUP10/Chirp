@@ -11,8 +11,8 @@ using SimpleDB;
 namespace SimpleDB.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    [Migration("20241007203813_UpdatingAttributeNames")]
-    partial class UpdatingAttributeNames
+    [Migration("20241007155810_IntialDBSchema")]
+    partial class IntialDBSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,7 @@ namespace SimpleDB.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("Chirp.Razor.DataModels.Author", b =>
+            modelBuilder.Entity("Chirp.Web.DataModels.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,7 +39,7 @@ namespace SimpleDB.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("Chirp.Razor.DataModels.Cheep", b =>
+            modelBuilder.Entity("Chirp.Web.DataModels.Cheep", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,7 +48,7 @@ namespace SimpleDB.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Message")
+                    b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -62,10 +62,10 @@ namespace SimpleDB.Migrations
                     b.ToTable("Cheeps");
                 });
 
-            modelBuilder.Entity("Chirp.Razor.DataModels.Cheep", b =>
+            modelBuilder.Entity("Chirp.Web.DataModels.Cheep", b =>
                 {
-                    b.HasOne("Chirp.Razor.DataModels.Author", "Author")
-                        .WithMany("Cheeps")
+                    b.HasOne("Chirp.Web.DataModels.Author", "Author")
+                        .WithMany("ListOfCheeps")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -73,9 +73,9 @@ namespace SimpleDB.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("Chirp.Razor.DataModels.Author", b =>
+            modelBuilder.Entity("Chirp.Web.DataModels.Author", b =>
                 {
-                    b.Navigation("Cheeps");
+                    b.Navigation("ListOfCheeps");
                 });
 #pragma warning restore 612, 618
         }
