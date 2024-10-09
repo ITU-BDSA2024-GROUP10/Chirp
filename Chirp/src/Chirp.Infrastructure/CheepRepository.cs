@@ -39,4 +39,9 @@ public class CheepRepository : ICheepRepository
         
         return cheeps.Select(cheep => new CheepDTO(cheep.Name, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
+    
+    public Task<bool> CreateCheep(CheepDTO cheep)
+    {
+        throw new NotImplementedException();
+    }
 }
