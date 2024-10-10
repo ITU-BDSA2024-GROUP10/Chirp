@@ -97,6 +97,21 @@ public class AuthorRepositoryUnitTest : IDisposable
         //Assert
         Assert.False(result);
     }
+
+    [Fact]
+    public async void AddAuthor_NameIsJohn_Doe_ReturnTrue()
+    {
+        //Arrange
+        var chirpContext = GetContext();
+        var author = new AuthorDTO("John Doe", "JohnDoe@gmail.com");
+
+        IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
+        
+        //Act
+        var result = await authorRepository.AddAuthor(author);
+        
+        //Assert
+        Assert.True(result);
     }
 
     public void Dispose()
