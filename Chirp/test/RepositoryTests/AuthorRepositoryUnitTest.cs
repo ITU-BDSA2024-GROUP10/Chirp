@@ -9,10 +9,17 @@ namespace RepositoryTests;
 
 public class AuthorRepositoryUnitTest
 {
+    private readonly SqliteConnection _connection;
     private Mock<IAuthorRepository> mockInitializer()
     {
         var mock = new Mock<IAuthorRepository>();
         return mock;
+    }
+
+    public AuthorRepositoryUnitTest()
+    {
+        _connection = new SqliteConnection("Filename=:memory:");
+        _connection.Open();
     }
 
     [Fact]
