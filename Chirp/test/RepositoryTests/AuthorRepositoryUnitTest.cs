@@ -114,6 +114,23 @@ public class AuthorRepositoryUnitTest : IDisposable
         Assert.True(result);
     }
 
+    [Fact]
+    public async void GetAuthorByEmail_EmailIsAnITUMail_ReturnAuthorDTOOfMail()
+    {
+        //Arrange
+        var chirpContext = GetContext();
+        var author = new Author { Name = "John Doe", Email = "jodoe@itu.dk" };
+
+        IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
+        
+        //Act
+        var result = await authorRepository.GetAuthorByEmail(author.Email);
+        
+        //Assert
+        Assert.Equal("John Doe", result.Name);
+        Assert.Equal("jodoe@itu.dk", result.Email);
+    }
+
     public void Dispose()
     {
         _connection.Close();
