@@ -42,13 +42,19 @@ public class AuthorRepositoryUnitTest
     public void AddAuthor_NameIsNullKeyword_ReturnIllegalArgument()
     {
         //Arrange
-        var repositoryMock = new Mock<IAuthorRepository>();
-        repositoryMock
-            .Setup(r => r.GetAuthorByName(null).Result.Name);
-
-        //act
+        var authorName = "null";
+        var authorEmail = "null@gmail.com";
+        var authorDTO = new AuthorDTO(authorName, authorEmail);
         
+        var authorRepoMock = new Mock<IAuthorRepository>();
+        authorRepoMock.Setup(repo => repo.AddAuthor(authorDTO)).ReturnsAsync(false);
+        
+        //act
+        var result = new AuthorServiceMock(authorRepoMock.Object);
+
         //Assert
+        authorRepoMock.Verify(r => r.AddAuthor(authorDTO));
+        Assert.Null(result);
     }
 
     [Fact]
