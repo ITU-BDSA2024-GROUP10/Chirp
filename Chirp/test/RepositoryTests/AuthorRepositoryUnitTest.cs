@@ -68,16 +68,19 @@ public class AuthorRepositoryUnitTest : IDisposable
     }
     
     [Fact]
-    public void AddAuthor_NameIsNullKeyword_ReturnIllegalArgument()
+    public async void AddAuthor_NameIsNullKeyword_ReturnFalse()
     {
         //Arrange
-        var repositoryMock = new Mock<IAuthorRepository>();
-        repositoryMock
-            .Setup(r => r.GetAuthorByName(null).Result.Name);
+        var chirpContext = GetContext();
+        var author = new AuthorDTO("null", "null@gmail.com");
 
-        //act
+        IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
+        
+        //Act
+        var result = await authorRepository.AddAuthor(author);
         
         //Assert
+        Assert.False(result); //Since the name isn't valid the operation was unsuccessful
     }
 
     [Fact]
