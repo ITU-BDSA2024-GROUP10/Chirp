@@ -10,11 +10,6 @@ namespace RepositoryTests;
 public class AuthorRepositoryUnitTest : IDisposable
 {
     private readonly SqliteConnection _connection;
-    private Mock<IAuthorRepository> mockInitializer()
-    {
-        var mock = new Mock<IAuthorRepository>();
-        return mock;
-    }
 
     public AuthorRepositoryUnitTest()
     {
