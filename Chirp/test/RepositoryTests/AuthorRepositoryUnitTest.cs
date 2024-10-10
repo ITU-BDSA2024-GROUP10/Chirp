@@ -7,7 +7,7 @@ using SimpleDB.Model;
 
 namespace RepositoryTests;
 
-public class AuthorRepositoryUnitTest
+public class AuthorRepositoryUnitTest : IDisposable
 {
     private readonly SqliteConnection _connection;
     private Mock<IAuthorRepository> mockInitializer()
@@ -84,5 +84,10 @@ public class AuthorRepositoryUnitTest
         //successful
         
         //AssertBool false
+    }
+
+    public void Dispose()
+    {
+        _connection.Close();
     }
 }
