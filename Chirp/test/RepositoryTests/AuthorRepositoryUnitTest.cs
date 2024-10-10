@@ -36,15 +36,19 @@ public class AuthorRepositoryUnitTest
     [Fact]
     public void GetAuthorByName_NameCantBeFound_ReturnNull()
     {
-        var authorName = "John Doe";
-        var repositoryMock = mockInitializer();
-        repositoryMock.Setup(repo => repo.GetAuthorByName(authorName)).Returns(() => null);
+        //arrange
+        var chirpContext = GetContext();
+        var author = new Author {Name = "John Doe", Email = "JohnDoe@gmail.com"};
 
-        //Act scenario where you want to find a name that isn't in the DB
-        var result = new AuthorServiceMock(repositoryMock.Object);
+        chirpContext.Authors.Add(author);
+        chirpContext.SaveChanges();
 
-        //Assert Message that informs the unsuccessful found
-        repositoryMock.Verify(r => r.GetAuthorByName(authorName));
+        IAuthorRepository authorRepo = new AuthorRepository(chirpContext);
+
+        //Act
+        var result = authorRepo.GetAuthorByName(author.Name);
+        
+        //Assert
         Assert.Null(result);
     }
 
