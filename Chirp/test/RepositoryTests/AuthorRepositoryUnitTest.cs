@@ -34,7 +34,7 @@ public class AuthorRepositoryUnitTest
     }
 
     [Fact]
-    public void GetAuthorByName_NameCantBeFound_ReturnErrorMessage()
+    public void GetAuthorByName_NameCantBeFound_ReturnNull()
     {
         var authorName = "John Doe";
         var repositoryMock = mockInitializer();
