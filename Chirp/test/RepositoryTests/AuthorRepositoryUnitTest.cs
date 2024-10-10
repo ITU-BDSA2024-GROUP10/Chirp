@@ -53,13 +53,23 @@ public class AuthorRepositoryUnitTest : IDisposable
     }
 
     [Fact]
-    public void GetAuthorByName_NameIsHelge_ReturnsAuthorDTOOfHelge()
+    public async void GetAuthorByName_NameIsHelge_ReturnsAuthorDTOOfHelge()
     {
         //Arrange an arbitrary author with name 'Helge' and create arbitrary database to put up
-        
+        var chirpContext = GetContext();
+        var author = new Author { Name = "Helge", Email = "Helge@gmail.com" };
+
+        chirpContext.Authors.Add(author);
+        chirpContext.SaveChanges();
+
+        IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
+
         //Act a scenario where the repository can get an author by the name of 'Helge'
-        
+        var result = await authorRepository.GetAuthorByName(author.Name);
+
         //Assert the value of the arbitrary author that was arranged
+        Assert.Equal("Helge", result.Name);
+        Assert.Equal("Helge@gmail.com", result.Email);
     }
     
     [Fact]
