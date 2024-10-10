@@ -22,6 +22,17 @@ public class AuthorRepositoryUnitTest
         _connection.Open();
     }
 
+    private ChirpDBContext GetContext()
+    {
+        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(_connection);
+
+        var context = new ChirpDBContext(builder.Options);
+        context.Database.EnsureDeleted(); //Ensures that any test runs on their own DB
+        context.Database.EnsureCreated(); // Applies the schema to the database
+
+        return context;
+    }
+
     [Fact]
     public void GetAuthorByName_NameCantBeFound_ReturnErrorMessage()
     {
