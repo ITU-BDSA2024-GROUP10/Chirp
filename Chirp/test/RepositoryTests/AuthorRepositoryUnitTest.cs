@@ -84,14 +84,19 @@ public class AuthorRepositoryUnitTest : IDisposable
     }
 
     [Fact]
-    public void AddAuthor_NameIsAnEmptyString_ReturnFalse()
+    public async void AddAuthor_NameIsAnEmptyString_ReturnFalse()
     {
-        //Arrange an arbitrary author with an empty string as name and make arbitrary DB
+        var chirpContext = GetContext();
+        var author = new AuthorDTO("", "@gmail.com");
+
+        IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
         
-        //Act a scenario where you want to hook up the name to the DB but will return false because the adding wasn't
-        //successful
+        //Act
+        var result = await authorRepository.AddAuthor(author);
         
-        //AssertBool false
+        //Assert
+        Assert.False(result);
+    }
     }
 
     public void Dispose()
