@@ -5,6 +5,12 @@ namespace RepositoryTests;
 
 public class AuthorRepositoryUnitTest
 {
+    private Mock<IAuthorRepository> mockInitializer()
+    {
+        var mock = new Mock<IAuthorRepository>();
+        return mock;
+    }
+
     [Fact]
     public void GetAuthorByName_NameCantBeFound_ReturnErrorMessage()
     {
