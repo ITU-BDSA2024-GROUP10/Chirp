@@ -16,11 +16,16 @@ public class AuthorRepositoryUnitTest
     [Fact]
     public void GetAuthorByName_NameCantBeFound_ReturnErrorMessage()
     {
-        //Arrange an arbitrary DB
-        
+        var authorName = "John Doe";
+        var repositoryMock = mockInitializer();
+        repositoryMock.Setup(repo => repo.GetAuthorByName(authorName)).Returns(() => null);
+
         //Act scenario where you want to find a name that isn't in the DB
-        
+        var result = new AuthorServiceMock(repositoryMock.Object);
+
         //Assert Message that informs the unsuccessful found
+        repositoryMock.Verify(r => r.GetAuthorByName(authorName));
+        Assert.Null(result);
     }
 
     [Fact]
