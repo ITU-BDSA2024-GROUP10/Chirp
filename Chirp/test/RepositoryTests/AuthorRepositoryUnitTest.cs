@@ -1,5 +1,7 @@
-﻿using Moq;
+﻿using Microsoft.EntityFrameworkCore;
+using Moq;
 using SimpleDB;
+using SimpleDB.Model;
 
 namespace RepositoryTests;
 
