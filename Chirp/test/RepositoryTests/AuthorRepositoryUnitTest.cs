@@ -24,4 +24,28 @@ public class AuthorRepositoryUnitTest
         
         //Assert the value of the arbitrary author that was arranged
     }
+    
+    [Fact]
+    public void AddAuthor_NameIsNullKeyword_ReturnIllegalArgument()
+    {
+        //Arrange
+        var repositoryMock = new Mock<IAuthorRepository>();
+        repositoryMock
+            .Setup(r => r.GetAuthorByName(null).Result.Name);
+
+        //act
+        
+        //Assert
+    }
+
+    [Fact]
+    public void AddAuthor_NameIsAnEmptyString_ReturnFalse()
+    {
+        //Arrange an arbitrary author with an empty string as name and make arbitrary DB
+        
+        //Act a scenario where you want to hook up the name to the DB but will return false because the adding wasn't
+        //successful
+        
+        //AssertBool false
+    }
 }
