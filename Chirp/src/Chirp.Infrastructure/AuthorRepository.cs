@@ -10,7 +10,7 @@ public class AuthorRepository : IAuthorRepository
     {
         this.context = context;
     } 
-    public async Task<AuthorDTO> GetAuthorByName(string name)
+    public async Task<AuthorDTO?> GetAuthorByName(string name)
     {
         throw new NotImplementedException();
     }
