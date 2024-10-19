@@ -48,6 +48,15 @@ public class CostumeWebApplicationFactory<TProgram, TDbContext>
 
         builder.UseEnvironment("Development");
     }
+    
+    public void ResetDB()
+    {
+        using var scope = Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+    }
+    
     public TDbContext GetDbContext()
     {
         var scope = Services.CreateScope();
