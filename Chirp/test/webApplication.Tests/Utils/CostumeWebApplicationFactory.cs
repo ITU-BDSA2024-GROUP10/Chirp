@@ -48,4 +48,9 @@ public class CostumeWebApplicationFactory<TProgram, TDbContext>
 
         builder.UseEnvironment("Development");
     }
+    public TDbContext GetDbContext()
+    {
+        var scope = Services.CreateScope();
+        return scope.ServiceProvider.GetRequiredService<TDbContext>();
+    }
 }
