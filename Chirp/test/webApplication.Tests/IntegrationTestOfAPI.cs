@@ -1,3 +1,4 @@
+using Chirp.Razor.DataModels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using SimpleDB;
@@ -25,18 +26,54 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
 
         Assert.Contains("Chirp!", content);
         Assert.Contains("Public Timeline", content);
-    }
+    }*/
 
     [Theory]
     [InlineData("Helge")]
     [InlineData("Adrian")]
     public async void CanSeePrivateTimeline(string author)
     {
-        var response = await _client.GetAsync($"/{author}");
+        //arrange
+        fixture.ResetDB();
+
+        var wantedAuthor = new Author { Name = author, Email = $"{author}@gmail.com" };
+        var otherAuthor = new Author { Name = "Mr. test", Email = "test@test.com" };
+        var wantedCheep = new Cheep
+        {
+            Author = wantedAuthor,
+            Message = "This a test, from the real author!",
+            TimeStamp = DateTime.Now
+        };
+        var otherCheep = new Cheep
+        {
+            Author = otherAuthor,
+            Message = "This a test, from the fake author!",
+            TimeStamp = DateTime.Now.AddHours(1)
+        };
+
+        await using (var context = fixture.GetDbContext())
+        {
+            context.Authors.Add(wantedAuthor);
+            context.Authors.Add(otherAuthor);
+            context.Cheeps.Add(wantedCheep);
+            context.Cheeps.Add(otherCheep);
+            context.SaveChanges();
+        }
+
+        //act
+        var response = await client.GetAsync($"/{author}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains("Chirp!", content);
-        Assert.Contains($"{author}'s Timeline", content);
-    }*/
+        //assert
+        Assert.Contains(wantedAuthor.Name, content);
+        Assert.Contains(wantedCheep.Message, content);
+        Assert.Contains(wantedCheep.TimeStamp.ToUniversalTime().ToString(), content);
+
+        Assert.DoesNotContain(otherAuthor.Name, content);
+        Assert.DoesNotContain(otherCheep.Message, content);
+        Assert.DoesNotContain(otherCheep.TimeStamp.ToUniversalTime().ToString(), content);
+
+        Assert.Contains($"{wantedAuthor.Name}'s Timeline", content);
+    }
 }
