@@ -9,9 +9,10 @@ namespace webApplication.Tests.Utils;
 
 //Adapted from microsofts test guide, for clarification:
 //https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
-public class CostumeWebApplicationFactory<TProgram> 
+public class CostumeWebApplicationFactory<TProgram, TDbContext> 
     : WebApplicationFactory<TProgram>
     where TProgram : class
+    where TDbContext : DbContext
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -19,7 +20,7 @@ public class CostumeWebApplicationFactory<TProgram>
         {
             var dbContextDescriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
-                     typeof(DbContextOptions<ApplicationDbContext>));
+                     typeof(DbContextOptions<TDbContext>));
 
             services.Remove(dbContextDescriptor);
 
@@ -38,7 +39,7 @@ public class CostumeWebApplicationFactory<TProgram>
                 return connection;
             });
 
-            services.AddDbContext<ApplicationDbContext>((container, options) =>
+            services.AddDbContext<TDbContext>((container, options) =>
             {
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
