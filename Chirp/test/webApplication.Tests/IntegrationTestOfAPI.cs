@@ -1,20 +1,22 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
+using SimpleDB;
+using webApplication.Tests.Utils;
 
 namespace webApplication.Tests;
 
-public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
+public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, ChirpDBContext>>
 {
-    /*private readonly WebApplicationFactory<Program> _fixture;
-    private readonly HttpClient _client;
+    private readonly CostumeWebApplicationFactory<Program, ChirpDBContext> fixture;
+    private readonly HttpClient client;
 
-    public TestAPI(WebApplicationFactory<Program> fixture)
+    public TestAPI(CostumeWebApplicationFactory<Program, ChirpDBContext> fixture)
     {
-        _fixture = fixture;
-        _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
+        this.fixture = fixture;
+        this.client = fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
     }
 
-    [Fact]
+    /*[Fact]
     public async void CanSeePublicTimeline()
     {
         var response = await _client.GetAsync("/");
