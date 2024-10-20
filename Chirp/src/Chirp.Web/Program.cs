@@ -59,3 +59,7 @@ app.UseRouting();
 app.MapRazorPages();
 
 app.Run();
+
+//for integration testing
+//source: https://stackoverflow.com/questions/55131379/integration-testing-asp-net-core-with-net-framework-cant-find-deps-json
+public partial class Program { }
