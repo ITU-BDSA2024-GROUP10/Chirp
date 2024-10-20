@@ -1,4 +1,5 @@
 ﻿using Chirp.Razor.DataModels;
+using Microsoft.EntityFrameworkCore;
 using SimpleDB.Model;
 
 namespace SimpleDB;
@@ -6,15 +7,18 @@ namespace SimpleDB;
 public class AuthorRepository : IAuthorRepository
 {
     private ChirpDBContext context;
+
     public AuthorRepository(ChirpDBContext context)
     {
         this.context = context;
-    } 
-    public async Task<AuthorDTO> GetAuthorByName(string name)
-    {
-        throw new NotImplementedException();
     }
-    
+
+    public async Task<AuthorDTO?> GetAuthorByName(string name) =>
+        await context.Authors
+            .Where(a => a.Name == name)
+            .Select(a => new AuthorDTO(a.Name, a.Email))
+            .FirstOrDefaultAsync();
+
     public async Task<AuthorDTO> GetAuthorByEmail(string email)
     {
         throw new NotImplementedException();
@@ -24,5 +28,4 @@ public class AuthorRepository : IAuthorRepository
     {
         throw new NotImplementedException();
     }
-    
 }
