@@ -21,7 +21,6 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<AuthorDTO> GetAuthorByEmail(string email)
     {
-        throw new NotImplementedException();
     }
 
     public Task<bool> AddAuthor(AuthorDTO author)
