@@ -32,5 +32,5 @@ jobs:
       if: always()
       uses: JacobDomagala/CompileResult@master
       with:
-        comment_title: WARNINGS AND ERRORS
+        comment_title: COMPILE RESULT
         compile_result_file: ${{runner.workspace}}/build/output.txt
