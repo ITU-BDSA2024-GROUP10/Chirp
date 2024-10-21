@@ -19,17 +19,15 @@ public class AuthorRepository : IAuthorRepository
             .Select(a => new AuthorDTO(a.Name, a.Email))
             .FirstOrDefaultAsync();
 
-    public async Task<AuthorDTO> GetAuthorByEmail(string email)
+    public async Task<AuthorDTO?> GetAuthorByEmail(string email)
     {
         var query = context.Authors
             .Where(author => author.Email == email)
-            .Select(author => new {author.Name, author.Email});
-            
+            .Select(author => new {author.Name, author.Email})
+            .FirstOrDefaultAsync();
         
-        
-        var authors = await query.ToListAsync();
-        
-        return authors.Select(author => new AuthorDTO(author.Name, author.Email)).FirstOrDefault();
+        var author = await query;
+        return author == null ? null : new AuthorDTO(author.Name, author.Email);
     }
 
     public Task<bool> AddAuthor(AuthorDTO author)
