@@ -18,6 +18,7 @@ jobs:
         dotnet-version: 8.x
     
     - name: Build
+      working-directory: Chirp/
       run: |
         dotnet restore
         dotnet build --configuration Release --output build > build/output.txt 2>&1
