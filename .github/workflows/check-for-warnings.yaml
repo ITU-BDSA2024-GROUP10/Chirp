@@ -28,6 +28,10 @@ jobs:
       run: |
         dotnet build $GITHUB_WORKSPACE/Chirp/ --output ${{runner.workspace}}/build 2> >(tee "output.txt")
     
+    - name: debug - output.txt
+      shell: bash
+      run: cat ${{runner.workspace}}/build/output.txt
+    
     - name: Post PR comment for warnings/errors
       if: always()
       uses: JacobDomagala/CompileResult@master
