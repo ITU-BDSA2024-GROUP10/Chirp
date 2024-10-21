@@ -9,4 +9,7 @@ namespace RepositoryTests;
 public class AuthorRepositoryUnitTest
 {
     
+    [Fact]
+    public async void GetAuthorByEmailTest()
+    }
 }
