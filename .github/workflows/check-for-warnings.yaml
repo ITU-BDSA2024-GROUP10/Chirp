@@ -3,6 +3,7 @@
 #In colabriation with, chat-gpt
 
 name: Check for warnings
+permissions: write-all
 
 on: [pull_request]
 
