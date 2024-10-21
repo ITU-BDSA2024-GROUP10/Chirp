@@ -1,4 +1,3 @@
-﻿namespace RepositoryTests;
 ﻿using Chirp.Razor.DataModels;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +7,6 @@ namespace RepositoryTests;
 
 public class AuthorRepositoryUnitTest
 {
-    
     [Fact]
     public async void GetAuthorByEmailTest()
     {
