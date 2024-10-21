@@ -22,10 +22,11 @@ jobs:
       run: mkdir -p ${{runner.workspace}}/build
     
     - name: Build
-      working-directory: Chirp/
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
       run: |
-        dotnet restore
-        dotnet build --configuration Release --output build > build/output.txt 2>&1
+        dotnet build $GITHUB_WORKSPACE --output ${{runner.workspace}}/build 2> >(tee "output.txt")
+
     
     - name: Post PR comment for warnings/errors
       if: always()
