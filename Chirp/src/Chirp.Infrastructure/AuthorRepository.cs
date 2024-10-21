@@ -23,11 +23,8 @@ public class AuthorRepository : IAuthorRepository
     {
         var query = context.Authors
             .Where(author => author.Email == email)
-            .Select(author => new {author.Name, author.Email});
-            
-        
-        
-        var authors = await query.ToListAsync();
+            .Select(author => new {author.Name, author.Email})
+            .FirstOrDefaultAsync();
         
         var author = await query;
         return author == null ? null : new AuthorDTO(author.Name, author.Email);
