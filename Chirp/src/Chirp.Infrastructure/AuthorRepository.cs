@@ -19,7 +19,7 @@ public class AuthorRepository : IAuthorRepository
             .Select(a => new AuthorDTO(a.Name, a.Email))
             .FirstOrDefaultAsync();
 
-    public async Task<AuthorDTO> GetAuthorByEmail(string email)
+    public async Task<AuthorDTO?> GetAuthorByEmail(string email)
     {
         var query = context.Authors
             .Where(author => author.Email == email)
