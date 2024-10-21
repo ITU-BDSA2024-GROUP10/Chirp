@@ -21,7 +21,15 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<AuthorDTO> GetAuthorByEmail(string email)
     {
-        throw new NotImplementedException();
+        var query = context.Authors
+            .Where(author => author.Email == email)
+            .Select(author => new {author.Name, author.Email});
+            
+        
+        
+        var authors = await query.ToListAsync();
+        
+        return authors.Select(author => new AuthorDTO(author.Name, author.Email)).FirstOrDefault();
     }
 
     public Task<bool> AddAuthor(AuthorDTO author)
