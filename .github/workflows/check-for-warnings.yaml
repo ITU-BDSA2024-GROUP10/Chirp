@@ -16,6 +16,10 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.x
+
+    - name: setup Build Directory
+      shell: bash
+      run: mkdir -p ${{runner.workspace}}/build
     
     - name: Build
       working-directory: Chirp/
