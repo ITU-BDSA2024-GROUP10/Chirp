@@ -113,5 +113,10 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
 
             await context.SaveChangesAsync();
         }
+        
+        var response = await client.GetAsync($"/?page={page}");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        
     }
 }
