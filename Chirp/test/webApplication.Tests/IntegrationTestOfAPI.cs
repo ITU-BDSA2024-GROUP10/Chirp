@@ -98,6 +98,11 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
         var response = await client.GetAsync($"/");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
+        
+        Assert.Contains(wantedAuthor.Name, content);
+        Assert.Contains(wantedCheep.Message, content);
+        Assert.Contains(wantedCheep.TimeStamp.ToUniversalTime().ToString(), content);
+        
     }
     
     [Theory]
