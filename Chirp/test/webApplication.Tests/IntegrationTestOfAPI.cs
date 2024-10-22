@@ -105,5 +105,13 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
                 TimeStamp = DateTime.Now.AddHours(i)
             });
         }
+
+        await using (var context = fixture.GetDbContext())
+        {
+            context.Authors.Add(author);
+            context.Cheeps.AddRange(cheepslist);
+
+            await context.SaveChangesAsync();
+        }
     }
 }
