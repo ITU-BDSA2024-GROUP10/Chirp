@@ -80,6 +80,7 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
     [Fact]
     public async void CanSeePublicTimeline()
     {
+        fixture.ResetDB();
         
     }
     
