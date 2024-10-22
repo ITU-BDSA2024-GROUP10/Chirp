@@ -4,14 +4,9 @@ using SimpleDB.DTO;
 
 namespace Chirp.Infrastructure;
 
-public class AuthorRepository : IAuthorRepository
+public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
 {
-    private readonly ChirpDBContext context;
-
-    public AuthorRepository(ChirpDBContext context)
-    {
-        this.context = context;
-    }
+    private readonly ChirpDBContext context = context;
 
     public async Task<AuthorDTO?> GetAuthorByName(string name) =>
         await context.Authors
