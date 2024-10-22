@@ -23,7 +23,7 @@ public class RazorPageIntegrationTest(RazorWebApplicationFactory<Program> factor
         }
 
         var serviceMock = new Mock<ICheepService>();
-        serviceMock.Setup(x => x.GetCheepsByPage(It.IsAny<int>(), It.IsAny<int>())).Returns(cheeps);
+        serviceMock.Setup(service => service.GetCheepsByPage(It.IsAny<int>(), It.IsAny<int>())).Returns(cheeps);
         
         var client = factory.GetClientFromCheepServiceMock(serviceMock);
 
@@ -42,5 +42,27 @@ public class RazorPageIntegrationTest(RazorWebApplicationFactory<Program> factor
             Assert.Contains(cheep.Message, content);
             Assert.Contains(DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString(CultureInfo.CurrentCulture), content);
         }
+    }
+
+    [Fact]
+    public async void Dont_Display_Cheeps_Public_Timeline()
+    {
+        // Arrange
+        var serviceMock = new Mock<ICheepService>();
+        serviceMock.Setup(service => service.GetCheepsByPage(It.IsAny<int>(), It.IsAny<int>())).Returns(new List<CheepDTO>());
+        
+        var client = factory.GetClientFromCheepServiceMock(serviceMock);
+        
+        // Act
+        var response = await client.GetAsync("/");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        
+        // Assert
+        Assert.Contains("Chirp!", content);
+        Assert.Contains("Public Timeline", content);
+        Assert.Contains("<em>There are no cheeps so far.</em>", content);
+        Assert.DoesNotContain("<li>", content);
+        Assert.DoesNotContain("<a href=", content);
     }
 }
