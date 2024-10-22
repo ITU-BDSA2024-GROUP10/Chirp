@@ -34,6 +34,6 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<bool> AddAuthor(AuthorDTO author)
     {
-        throw new NotImplementedException();
+        
     }
 }
