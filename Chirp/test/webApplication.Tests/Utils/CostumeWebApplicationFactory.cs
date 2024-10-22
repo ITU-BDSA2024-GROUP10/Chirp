@@ -20,14 +20,12 @@ public class CostumeWebApplicationFactory<TProgram, TDbContext>
         {
             var dbContextDescriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
-                     typeof(DbContextOptions<TDbContext>));
-
+                     typeof(DbContextOptions<TDbContext>)) ?? throw new ServiceDescriptorNotFoundException($"Service descriptor for {typeof(DbContextOptions<TDbContext>)} not found.");
             services.Remove(dbContextDescriptor);
 
             var dbConnectionDescriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
-                     typeof(DbConnection));
-
+                     typeof(DbConnection)) ?? throw new ServiceDescriptorNotFoundException($"Service descriptor for {typeof(DbConnection)} not found.");
             services.Remove(dbConnectionDescriptor);
 
             // Create open SqliteConnection so EF won't automatically close it.
