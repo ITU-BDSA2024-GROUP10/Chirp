@@ -124,4 +124,23 @@ public class AuthorRepositoryUnitTest : IDisposable
     {
         _connection.Close();
     }
+
+    [Fact]
+    public async void GetAuthorByEmail_EmailIsNotThere_ReturnNull()
+    {
+        //Arrange
+        var chirpContext = GetContext();
+        var author = new AuthorDTO("John Doe", "jodoe@itu.dk");
+        var author2 = new Author { Name = "Abra Cabrera", Email = "AbraCabrera@gmail.com" };
+
+        IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
+        await authorRepository.AddAuthor(author);
+        
+        //Act
+        var result = await authorRepository.GetAuthorByEmail(author2.Email);
+        
+        //Assert
+        Assert.Null(result);
+
+    }
 }
