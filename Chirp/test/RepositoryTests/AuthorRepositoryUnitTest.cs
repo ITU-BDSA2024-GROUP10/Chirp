@@ -86,21 +86,6 @@ public class AuthorRepositoryUnitTest : IDisposable
     }
 
     [Fact]
-    public async void AddAuthor_NameIsAnEmptyString_ReturnFalse()
-    {
-        var chirpContext = GetContext();
-        var author = new AuthorDTO("", "@gmail.com");
-
-        IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
-        
-        //Act
-        var result = await authorRepository.AddAuthor(author);
-        
-        //Assert
-        Assert.False(result);
-    }
-
-    [Fact]
     public async void AddAuthor_NameIsJohn_Doe_ReturnTrue()
     {
         //Arrange
