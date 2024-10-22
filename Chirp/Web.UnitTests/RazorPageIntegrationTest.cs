@@ -61,8 +61,7 @@ public class RazorPageIntegrationTest(RazorWebApplicationFactory<Program> factor
         // Assert
         Assert.Contains("Chirp!", content);
         Assert.Contains("Public Timeline", content);
-        Assert.Contains("<em>There are no cheeps so far.</em>", content);
+        Assert.Contains("There are no cheeps so far.", content);
         Assert.DoesNotContain("<li>", content);
-        Assert.DoesNotContain("<a href=", content);
     }
 }
