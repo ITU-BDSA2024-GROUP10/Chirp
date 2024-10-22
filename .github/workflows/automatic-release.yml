@@ -3,6 +3,9 @@ name: Automatic release on tag creation
 permissions: write-all
 
 on:
+  create:
+    tags:
+      - 'v*.*.*'
   push:
     tags:
       - 'v*.*.*'
