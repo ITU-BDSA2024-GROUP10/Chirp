@@ -88,6 +88,12 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
             Message = "This a test, from the real author!",
             TimeStamp = DateTime.Now
         };
+        await using (var context = fixture.GetDbContext())
+        {
+            context.Authors.Add(wantedAuthor);
+            context.Cheeps.Add(wantedCheep);
+            await context.SaveChangesAsync();
+        }
         
     }
     
