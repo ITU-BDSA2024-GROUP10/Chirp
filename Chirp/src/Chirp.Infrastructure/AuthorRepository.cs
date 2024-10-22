@@ -32,8 +32,23 @@ public class AuthorRepository : IAuthorRepository
         return authors.Select(author => new AuthorDTO(author.Name, author.Email)).FirstOrDefault();
     }
 
-    public Task<bool> AddAuthor(AuthorDTO author)
+    public async Task<bool> AddAuthor(AuthorDTO author)
     {
-        throw new NotImplementedException();
+        var newAuthor = new Author
+        {
+            Name = author.Name,
+            Email = author.Email
+        };
+
+        try
+        {
+            context.Authors.Add(newAuthor);
+            await context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
     }
 }
