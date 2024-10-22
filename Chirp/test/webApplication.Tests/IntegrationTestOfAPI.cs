@@ -86,7 +86,7 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
-    public async void CanSeePublicTimelineTest(int page)
+    public async void PaginationChangesDisplayedCheepsTest(int page)
     {
         fixture.ResetDB();
     }
