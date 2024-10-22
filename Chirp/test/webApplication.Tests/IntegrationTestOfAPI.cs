@@ -118,5 +118,8 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         
+        cheepslist.Reverse();
+        var expectedCheeps = cheepslist.Skip((page - 1) * 32).Take(32).ToList();
+        cheepslist.RemoveAll(c => expectedCheeps.Contains(c));
     }
 }
