@@ -26,4 +26,4 @@ jobs:
   
     - name: Build solution and check for warnings
       working-directory: Chirp
-      run: dotnet dotnet build --no-incremental /WarnAsError
+      run: dotnet build --no-incremental /WarnAsError
