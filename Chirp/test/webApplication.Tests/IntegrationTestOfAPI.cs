@@ -89,5 +89,12 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
     public async void PaginationChangesDisplayedCheepsTest(int page)
     {
         fixture.ResetDB();
+        var cheepslist = new List<Cheep>();
+        var author = new Author
+        {
+            Name = "Sir Page",
+            Email = "Page1@gmail.com",
+        };
+
     }
 }
