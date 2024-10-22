@@ -76,6 +76,12 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
 
         Assert.Contains($"{wantedAuthor.Name}'s Timeline", content);
     }
+
+    [Fact]
+    public async void CanSeePublicTimeline()
+    {
+        
+    }
     
     [Theory]
     [InlineData(1)]
