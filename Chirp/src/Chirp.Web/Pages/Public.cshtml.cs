@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SimpleDB.Model;
+using SimpleDB.DTO;
 
 namespace Chirp.Web.Pages;
 

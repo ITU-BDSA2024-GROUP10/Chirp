@@ -1,12 +1,12 @@
-﻿using Chirp.Razor.DataModels;
-using Microsoft.EntityFrameworkCore;
-using SimpleDB.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using SimpleDB;
+using SimpleDB.DTO;
 
-namespace SimpleDB;
+namespace Chirp.Infrastructure;
 
 public class AuthorRepository : IAuthorRepository
 {
-    private ChirpDBContext context;
+    private readonly ChirpDBContext context;
 
     public AuthorRepository(ChirpDBContext context)
     {

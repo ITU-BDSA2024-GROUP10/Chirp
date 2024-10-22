@@ -1,4 +1,4 @@
-namespace Chirp.Razor.DataModels;
+namespace SimpleDB.Model;
 
 public class Author
 {

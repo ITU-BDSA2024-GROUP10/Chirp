@@ -1,5 +1,5 @@
-﻿using Chirp.Razor.DataModels;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SimpleDB.Model;
 
 namespace SimpleDB;
 

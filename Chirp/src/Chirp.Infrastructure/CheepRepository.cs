@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SimpleDB.Model;
+using SimpleDB;
+using SimpleDB.DTO;
 
-namespace SimpleDB;
+namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository
 {

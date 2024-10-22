@@ -1,5 +1,7 @@
-using SimpleDB;
-using SimpleDB.Model;
+using Chirp.Infrastructure;
+using SimpleDB.DTO;
+
+namespace Chirp.Web;
 
 public interface ICheepService
 {

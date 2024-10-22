@@ -1,6 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
-
-namespace Chirp.Razor.DataModels;
+namespace SimpleDB.Model;
 
 public class Cheep
 {

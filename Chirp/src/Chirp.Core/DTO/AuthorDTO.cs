@@ -1,4 +1,4 @@
-﻿namespace SimpleDB.Model;
+﻿namespace SimpleDB.DTO;
 
 public class AuthorDTO
 {
