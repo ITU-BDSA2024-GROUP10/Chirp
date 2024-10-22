@@ -39,6 +39,16 @@ public class AuthorRepository : IAuthorRepository
             Name = author.Name,
             Email = author.Email
         };
-        
+
+        try
+        {
+            context.Authors.Add(newAuthor);
+            await context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
     }
 }
