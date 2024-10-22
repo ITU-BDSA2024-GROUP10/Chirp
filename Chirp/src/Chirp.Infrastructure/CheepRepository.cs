@@ -4,15 +4,10 @@ using SimpleDB.DTO;
 
 namespace Chirp.Infrastructure;
 
-public class CheepRepository : ICheepRepository
+public class CheepRepository(ChirpDBContext context) : ICheepRepository
 {
-    private ChirpDBContext context;
-    
-    public CheepRepository(ChirpDBContext context)
-    {
-        this.context = context;
-    }
-    
+    private readonly ChirpDBContext context = context;
+
     public async Task<IEnumerable<CheepDTO>> GetCheepsByPage(int page, int pageSize)
     {
         var query = context.Cheeps
