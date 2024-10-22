@@ -34,6 +34,11 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<bool> AddAuthor(AuthorDTO author)
     {
+        var newAuthor = new Author
+        {
+            Name = author.Name,
+            Email = author.Email
+        };
         
     }
 }
