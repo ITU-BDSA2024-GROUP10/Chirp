@@ -1,8 +1,5 @@
-using Chirp.Web;
 using Microsoft.EntityFrameworkCore;
 using SimpleDB;
-using SimpleDB.Model;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
