@@ -128,5 +128,12 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
             Assert.Contains(cheep.TimeStamp.ToUniversalTime().ToString(), content);
             Assert.Contains(cheep.Author.Name, content);
         }
+        foreach (var cheep in cheepslist)
+        {
+            Assert.DoesNotContain(cheep.Message, content);
+            Assert.DoesNotContain(cheep.TimeStamp.ToUniversalTime().ToString(), content);
+        }
+        
+
     }
 }
