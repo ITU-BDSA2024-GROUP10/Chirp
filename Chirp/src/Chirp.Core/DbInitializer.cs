@@ -1,7 +1,7 @@
 using SimpleDB;
 using SimpleDB.Model;
 
-namespace Chirp.Core;
+namespace SimpleDB;
 
 public static class DbInitializer
 {
