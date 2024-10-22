@@ -29,7 +29,7 @@ public class AuthorRepository : IAuthorRepository
         
         var authors = await query.ToListAsync();
         
-        return authors.Select(author => new AuthorDTO(author.Name, author.Email)).FirstOrDefault();
+        return authors.Select(author => new AuthorDTO(author.Name, author.Email)).First();
     }
 
     public Task<bool> AddAuthor(AuthorDTO author)
