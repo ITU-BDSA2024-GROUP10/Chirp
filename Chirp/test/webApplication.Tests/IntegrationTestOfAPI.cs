@@ -121,5 +121,12 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
         cheepslist.Reverse();
         var expectedCheeps = cheepslist.Skip((page - 1) * 32).Take(32).ToList();
         cheepslist.RemoveAll(c => expectedCheeps.Contains(c));
+
+        foreach (var cheep in expectedCheeps)
+        {
+            Assert.Contains(cheep.Message, content);
+            Assert.Contains(cheep.TimeStamp.ToUniversalTime().ToString(), content);
+            Assert.Contains(cheep.Author.Name, content);
+        }
     }
 }
