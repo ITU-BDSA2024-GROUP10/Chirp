@@ -4,15 +4,10 @@ using SimpleDB.DTO;
 
 namespace Chirp.Web.Pages;
 
-public class PublicModel : PageModel
+public class PublicModel(ICheepService service) : PageModel
 {
-    private readonly ICheepService _service;
+    private readonly ICheepService _service = service;
     public required List<CheepDTO> Cheeps { get; set; }
-
-    public PublicModel(ICheepService service)
-    {
-        _service = service;
-    }
 
     public ActionResult OnGet([FromQuery] int page)
     {
