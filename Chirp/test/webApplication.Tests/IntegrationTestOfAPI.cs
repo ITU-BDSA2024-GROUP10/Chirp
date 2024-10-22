@@ -1,7 +1,6 @@
-using Chirp.Razor.DataModels;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using SimpleDB;
+using SimpleDB.Model;
 using webApplication.Tests.Utils;
 
 namespace webApplication.Tests;
