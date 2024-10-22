@@ -1,6 +1,8 @@
 using SimpleDB;
 using SimpleDB.Model;
 
+namespace Chirp.Core;
+
 public static class DbInitializer
 {
     public static void SeedDatabase(ChirpDBContext chirpContext)

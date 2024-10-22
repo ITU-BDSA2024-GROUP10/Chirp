@@ -1,3 +1,4 @@
+using Chirp.Core;
 using Chirp.Infrastructure;
 using Chirp.Web;
 using Microsoft.EntityFrameworkCore;
