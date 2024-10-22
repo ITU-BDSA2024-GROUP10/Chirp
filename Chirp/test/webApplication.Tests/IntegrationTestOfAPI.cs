@@ -81,6 +81,13 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
     public async void CanSeePublicTimeline()
     {
         fixture.ResetDB();
+        var wantedAuthor = new Author { Name = "Wanted",  Email = "wanted@gmail.com"};
+        var wantedCheep = new Cheep
+        {
+            Author = wantedAuthor,
+            Message = "This a test, from the real author!",
+            TimeStamp = DateTime.Now
+        };
         
     }
     
