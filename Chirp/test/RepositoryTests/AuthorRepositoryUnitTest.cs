@@ -29,7 +29,7 @@ public class AuthorRepositoryUnitTest : IDisposable
     }
 
     [Fact]
-    public void GetAuthorByName_NameCantBeFound_ReturnNull()
+    public async void GetAuthorByName_NameCantBeFound_ReturnNull()
     {
         //arrange
         var chirpContext = GetContext();
@@ -40,8 +40,10 @@ public class AuthorRepositoryUnitTest : IDisposable
 
         IAuthorRepository authorRepo = new AuthorRepository(chirpContext);
 
+        var newAuthor = new Author { Name = "Abra Cabrera", Email = "AbraCabrera@gmail.com" };
+
         //Act
-        var result = authorRepo.GetAuthorByName(author.Name);
+        var result = await authorRepo.GetAuthorByName(newAuthor.Name);
         
         //Assert
         Assert.Null(result);
@@ -112,6 +114,7 @@ public class AuthorRepositoryUnitTest : IDisposable
         
         //Assert
         Assert.True(result);
+        Assert.True(checkSuccession);
     }
 
     [Fact]
