@@ -23,4 +23,10 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\src\Chirp.Web\Chirp.Web.csproj" />
+      <ProjectReference Include="..\Test.Utils\Test.Utils.csproj" />
+    </ItemGroup>
+
 </Project>

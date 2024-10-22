@@ -12,4 +12,11 @@ public class CheepDTO
         Message = message;
         UnixTimestamp = unixTimestamp;
     }
+    
+    public CheepDTO(string author, string message, DateTime dateTimeTimestamp)
+    {
+        Author = author;
+        Message = message;
+        UnixTimestamp = new DateTimeOffset(dateTimeTimestamp).ToUnixTimeSeconds();
+    }
 }

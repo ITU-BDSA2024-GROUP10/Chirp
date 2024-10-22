@@ -1,8 +1,5 @@
-using Chirp.Web;
 using Microsoft.EntityFrameworkCore;
 using SimpleDB;
-using SimpleDB.Model;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +37,7 @@ using (var scope = app.Services.CreateScope())
     using var context = scope.ServiceProvider.GetService<ChirpDBContext>();
 
     // Execute the migration from code.
-    context.Database.Migrate();
+    context?.Database.Migrate();
 }
 
 // Seed the database with some initial data
@@ -59,3 +56,7 @@ app.UseRouting();
 app.MapRazorPages();
 
 app.Run();
+
+//for integration testing
+//source: https://stackoverflow.com/questions/55131379/integration-testing-asp-net-core-with-net-framework-cant-find-deps-json
+public partial class Program { }

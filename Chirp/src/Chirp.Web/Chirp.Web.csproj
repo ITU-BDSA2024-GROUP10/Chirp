@@ -4,6 +4,7 @@
     <TargetFramework>net$(NETCoreAppMaximumVersion)</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
   
   <ItemGroup>
