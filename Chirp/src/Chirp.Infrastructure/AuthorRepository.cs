@@ -32,7 +32,7 @@ public class AuthorRepository : IAuthorRepository
         return authors.Select(author => new AuthorDTO(author.Name, author.Email)).FirstOrDefault();
     }
 
-    public Task<bool> AddAuthor(AuthorDTO author)
+    public async Task<bool> AddAuthor(AuthorDTO author)
     {
         throw new NotImplementedException();
     }
