@@ -96,5 +96,14 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
             Email = "Page1@gmail.com",
         };
 
+        for (int i = 1; i <= 64; i++)
+        {
+            cheepslist.Add(new Cheep
+            {
+                Author = author,
+                Message = "Message " + i + " Cheep cheep",
+                TimeStamp = DateTime.Now.AddHours(i)
+            });
+        }
     }
 }
