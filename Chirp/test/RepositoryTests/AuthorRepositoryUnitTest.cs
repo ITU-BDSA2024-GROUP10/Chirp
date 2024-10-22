@@ -96,11 +96,19 @@ public class AuthorRepositoryUnitTest : IDisposable
         
         //Act
         var result = await authorRepository.AddAuthor(author);
-        var checkSuccession = await authorRepository.GetAuthorByName(author.Name) == author;
+        var checkSuccession = chirpContext.Authors.Where(a => a.Email == author.Email).Select(a => new Author
+        {
+            Id = a.Id,
+            Name = a.Name,
+            Email = a.Email
+        }).FirstOrDefault();
         
         //Assert
         Assert.True(result);
-        Assert.True(checkSuccession);
+        Assert.NotNull(checkSuccession);
+        Assert.Equal(author.Email, checkSuccession.Email);
+        Assert.Equal(author.Name, checkSuccession.Name);
+        Assert.Equal(1, checkSuccession.Id);
     }
 
     [Fact]
