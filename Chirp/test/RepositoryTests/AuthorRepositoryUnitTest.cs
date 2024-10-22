@@ -96,6 +96,7 @@ public class AuthorRepositoryUnitTest : IDisposable
         
         //Act
         var result = await authorRepository.AddAuthor(author);
+        var checkSuccession = await authorRepository.GetAuthorByName(author.Name) == author;
         
         //Assert
         Assert.True(result);
