@@ -1,6 +1,8 @@
-﻿namespace Chirp.Razor.DataModels;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class ApplicationUser
+namespace Chirp.Razor.DataModels;
+
+public class ApplicationUser : IdentityUser
 {
     
 }
