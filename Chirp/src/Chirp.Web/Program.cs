@@ -16,6 +16,8 @@ if (!Directory.Exists(dir))
 // Load database connection via configuration
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDefaultIdentity<ChirpDBContext>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ChirpDBContext>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
