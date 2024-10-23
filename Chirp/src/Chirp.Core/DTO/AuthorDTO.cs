@@ -1,4 +1,4 @@
-﻿namespace SimpleDB.DTO;
+﻿namespace Chirp.Core.DTO;
 
 public class AuthorDTO(string name, string email)
 {

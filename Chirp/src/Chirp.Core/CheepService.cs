@@ -1,7 +1,6 @@
-using Chirp.Infrastructure;
-using SimpleDB.DTO;
+using Chirp.Core.DTO;
 
-namespace Chirp.Web;
+namespace Chirp.Core;
 
 public interface ICheepService
 {

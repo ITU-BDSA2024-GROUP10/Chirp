@@ -1,10 +1,11 @@
-﻿using Chirp.Infrastructure;
+﻿using Chirp.Core;
+using Chirp.Core.DTO;
+using Chirp.Infrastructure;
+using Chirp.Infrastructure.Model;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using SimpleDB;
-using SimpleDB.DTO;
-using SimpleDB.Model;
 
 namespace RepositoryTests;
 

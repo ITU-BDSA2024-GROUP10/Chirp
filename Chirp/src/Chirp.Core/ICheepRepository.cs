@@ -1,6 +1,6 @@
-﻿using SimpleDB.DTO;
+﻿using Chirp.Core.DTO;
 
-namespace Chirp.Infrastructure;
+namespace Chirp.Core;
 
 public interface ICheepRepository
 {

@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SimpleDB.Model;
+﻿using Chirp.Infrastructure.Model;
+using Microsoft.EntityFrameworkCore;
 
-namespace SimpleDB;
+namespace Chirp.Infrastructure;
 
 public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : DbContext(options)
 {

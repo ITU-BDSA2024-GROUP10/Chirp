@@ -1,4 +1,4 @@
-﻿namespace SimpleDB.DTO;
+﻿namespace Chirp.Core.DTO;
 
 public class CheepDTO(string author, string message, long unixTimestamp)
 {

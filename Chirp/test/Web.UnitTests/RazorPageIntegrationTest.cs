@@ -1,9 +1,11 @@
 ﻿using System.Globalization;
+using Chirp.Core;
+using Chirp.Core.DTO;
 using Chirp.Web;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Moq;
-using SimpleDB.DTO;
 using Web.UnitTests.Utils;
+using Program = Chirp.Web.Program;
 
 namespace Web.UnitTests;
 

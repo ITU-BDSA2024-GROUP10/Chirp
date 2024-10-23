@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Chirp.Core;
+using Chirp.Core.DTO;
+using Microsoft.EntityFrameworkCore;
 using SimpleDB;
-using SimpleDB.DTO;
 
 namespace Chirp.Infrastructure;
 

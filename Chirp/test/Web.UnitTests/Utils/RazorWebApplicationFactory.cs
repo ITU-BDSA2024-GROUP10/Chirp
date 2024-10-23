@@ -1,4 +1,5 @@
-﻿using Chirp.Web;
+﻿using Chirp.Core;
+using Chirp.Web;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;

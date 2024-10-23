@@ -1,7 +1,6 @@
+using Chirp.Core;
 using Chirp.Infrastructure;
-using Chirp.Web;
 using Microsoft.EntityFrameworkCore;
-using SimpleDB;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,4 +67,7 @@ app.Run();
 
 //for integration testing
 //source: https://stackoverflow.com/questions/55131379/integration-testing-asp-net-core-with-net-framework-cant-find-deps-json
-public partial class Program { }
+namespace Chirp.Web
+{
+    public partial class Program { }
+}
