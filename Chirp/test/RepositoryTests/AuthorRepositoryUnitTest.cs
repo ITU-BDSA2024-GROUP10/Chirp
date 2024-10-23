@@ -74,7 +74,7 @@ public class AuthorRepositoryUnitTest : IDisposable
     {
         //Arrange
         var chirpContext = GetContext();
-        var author = new AuthorDTO("null", "null@gmail.com");
+        var author = new AuthorDTO(null, "null@gmail.com");
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
         
