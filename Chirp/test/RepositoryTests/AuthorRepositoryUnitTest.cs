@@ -1,9 +1,9 @@
-﻿using Chirp.Razor.DataModels;
+﻿using Chirp.Core;
+using Chirp.Core.DTO;
+using Chirp.Infrastructure;
+using Chirp.Infrastructure.Model;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Moq;
-using SimpleDB;
-using SimpleDB.Model;
 
 namespace RepositoryTests;
 
@@ -33,7 +33,7 @@ public class AuthorRepositoryUnitTest : IDisposable
     {
         //arrange
         var chirpContext = GetContext();
-        var author = new Author {Name = "John Doe", Email = "JohnDoe@gmail.com"};
+        var author = new Author { Name = "John Doe", Email = "JohnDoe@gmail.com" };
 
         chirpContext.Authors.Add(author);
         chirpContext.SaveChanges();
@@ -44,7 +44,7 @@ public class AuthorRepositoryUnitTest : IDisposable
 
         //Act
         var result = await authorRepo.GetAuthorByName(newAuthor.Name);
-        
+
         //Assert
         Assert.Null(result);
     }
@@ -57,7 +57,7 @@ public class AuthorRepositoryUnitTest : IDisposable
         var author = new Author { Name = "Helge", Email = "Helge@gmail.com" };
 
         chirpContext.Authors.Add(author);
-        chirpContext.SaveChanges();
+        await chirpContext.SaveChangesAsync();
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
 
@@ -65,22 +65,23 @@ public class AuthorRepositoryUnitTest : IDisposable
         var result = await authorRepository.GetAuthorByName(author.Name);
 
         //Assert the value of the arbitrary author that was arranged
+        Assert.NotNull(result);
         Assert.Equal("Helge", result.Name);
         Assert.Equal("Helge@gmail.com", result.Email);
     }
-    
+
     [Fact]
     public async void AddAuthor_NameIsNullKeyword_ReturnFalse()
     {
         //Arrange
         var chirpContext = GetContext();
-        var author = new AuthorDTO(null, "null@gmail.com");
+        var author = new AuthorDTO(null!, "null@gmail.com");
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
-        
+
         //Act
         var result = await authorRepository.AddAuthor(author);
-        
+
         //Assert
         Assert.False(result); //Since the name isn't valid the operation was unsuccessful
     }
@@ -93,7 +94,7 @@ public class AuthorRepositoryUnitTest : IDisposable
         var author = new AuthorDTO("John Doe", "JohnDoe@gmail.com");
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
-        
+
         //Act
         var result = await authorRepository.AddAuthor(author);
         var checkSuccession = chirpContext.Authors.Where(a => a.Email == author.Email).Select(a => new Author
@@ -102,7 +103,7 @@ public class AuthorRepositoryUnitTest : IDisposable
             Name = a.Name,
             Email = a.Email
         }).FirstOrDefault();
-        
+
         //Assert
         Assert.True(result);
         Assert.NotNull(checkSuccession);
@@ -123,8 +124,9 @@ public class AuthorRepositoryUnitTest : IDisposable
         chirpContext.SaveChanges();
         //Act
         var result = await authorRepository.GetAuthorByEmail(author.Email);
-        
+
         //Assert
+        Assert.NotNull(result);
         Assert.Equal(author.Name, result.Name);
         Assert.Equal(author.Email, result.Email);
     }
@@ -144,12 +146,11 @@ public class AuthorRepositoryUnitTest : IDisposable
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
         await authorRepository.AddAuthor(author);
-        
+
         //Act
         var result = await authorRepository.GetAuthorByEmail(author2.Email);
-        
+
         //Assert
         Assert.Null(result);
-
     }
 }
