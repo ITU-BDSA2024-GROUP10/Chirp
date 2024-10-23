@@ -44,7 +44,7 @@ jobs:
           echo "Current latest tag is $LATEST_TAG"
       
       - name: release for all platforms
-        working-directory: Chirp/src/Chirp.Razor/
+        working-directory: Chirp/src/Chirp.Web/
         run: |
           dotnet publish --runtime linux-x64 -p:PublishSingleFile=true --self-contained true
           dotnet publish --runtime win-x64 -p:PublishSingleFile=true --self-contained true
@@ -52,7 +52,7 @@ jobs:
           
       # Create ZIP files
       - name: Zip the output
-        working-directory: Chirp/src/Chirp.Razor/bin/Release/net8.0/
+        working-directory: Chirp/src/Chirp.Web/bin/Release/net8.0/
         run: |
           zip -r chirp-${{ env.LATEST_TAG }}-linux-x64.zip linux-x64/publish/Chirp.Web
           zip -r chirp-${{ env.LATEST_TAG }}-win-x64.zip win-x64/publish/Chirp.Web.exe
@@ -65,8 +65,8 @@ jobs:
           tag_name: ${{ env.LATEST_TAG }}
           name: Release ${{ env.LATEST_TAG }}  # Set release name
           files: |
-            Chirp/src/Chirp.Razor/bin/Release/net8.0/chirp-${{ env.LATEST_TAG }}-linux-x64.zip
-            Chirp/src/Chirp.Razor/bin/Release/net8.0/chirp-${{ env.LATEST_TAG }}-win-x64.zip
-            Chirp/src/Chirp.Razor/bin/Release/net8.0/chirp-${{ env.LATEST_TAG }}-osx-x64.zip
+            Chirp/src/Chirp.Web/bin/Release/net8.0/chirp-${{ env.LATEST_TAG }}-linux-x64.zip
+            Chirp/src/Chirp.Web/bin/Release/net8.0/chirp-${{ env.LATEST_TAG }}-win-x64.zip
+            Chirp/src/Chirp.Web/bin/Release/net8.0/chirp-${{ env.LATEST_TAG }}-osx-x64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
