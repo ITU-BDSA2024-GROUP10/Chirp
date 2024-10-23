@@ -20,7 +20,7 @@
                             <a href="/@cheep.Author">@cheep.Author</a>
                         </strong>
                         @cheep.Message
-                        <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString(CultureInfo.CurrentCulture)</small>
+                        <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss")</small>
                     </p>
                 </li>
             }

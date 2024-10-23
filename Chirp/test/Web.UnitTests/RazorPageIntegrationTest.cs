@@ -43,7 +43,7 @@ public class RazorPageIntegrationTest(RazorWebApplicationFactory<Program> factor
             Assert.Contains($"<a href=\"/{cheep.Author}\">{cheep.Author}</a>", content);
             Assert.Contains(cheep.Message, content);
             Assert.Contains(
-                DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString(CultureInfo.CurrentCulture),
+                DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss"),
                 content);
         }
     }
