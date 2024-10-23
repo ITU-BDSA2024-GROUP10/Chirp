@@ -1,6 +1,7 @@
-using System;
-using Chirp.Razor.DataModels;
 using SimpleDB;
+using SimpleDB.Model;
+
+namespace SimpleDB;
 
 public static class DbInitializer
 {

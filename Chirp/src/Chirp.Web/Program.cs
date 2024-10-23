@@ -1,8 +1,7 @@
+using Chirp.Infrastructure;
 using Chirp.Web;
 using Microsoft.EntityFrameworkCore;
 using SimpleDB;
-using SimpleDB.Model;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,12 +34,19 @@ if (!app.Environment.IsDevelopment())
 // Create a disposable service scope
 using (var scope = app.Services.CreateScope())
 {
-    // From the scope, get an instance of our database context.
-    // Through the `using` keyword, we make sure to dispose it after we are done.
-    using var context = scope.ServiceProvider.GetService<ChirpDBContext>();
+    // ChirpDBContext critical to our app so use GetRequiredService to enforce its presence
+    var context = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
 
-    // Execute the migration from code.
-    context.Database.Migrate();
+    // Execute the migration from code
+    try
+    {
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine($"Database migration failed: {ex.Message}");
+        throw; // rethrow since this migration is critical
+    }
 }
 
 // Seed the database with some initial data

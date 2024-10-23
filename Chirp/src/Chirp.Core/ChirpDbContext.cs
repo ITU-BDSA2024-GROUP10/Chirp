@@ -1,16 +1,12 @@
-﻿using Chirp.Razor.DataModels;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SimpleDB.Model;
 
 namespace SimpleDB;
 
-public class ChirpDBContext : DbContext
+public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : DbContext(options)
 {
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
-
-    public ChirpDBContext(DbContextOptions<ChirpDBContext> options) : base(options)
-    {
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

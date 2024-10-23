@@ -1,7 +1,6 @@
-﻿using Chirp.Razor.DataModels;
-using SimpleDB.Model;
+﻿using SimpleDB.DTO;
 
-namespace SimpleDB;
+namespace Chirp.Infrastructure;
 
 public interface IAuthorRepository
 {

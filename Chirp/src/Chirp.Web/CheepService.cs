@@ -1,5 +1,7 @@
-using SimpleDB;
-using SimpleDB.Model;
+using Chirp.Infrastructure;
+using SimpleDB.DTO;
+
+namespace Chirp.Web;
 
 public interface ICheepService
 {
@@ -7,15 +9,10 @@ public interface ICheepService
     public List<CheepDTO> GetCheepsFromAuthorByPage(string author, int page, int pageSize);
 }
 
-public class CheepService : ICheepService
+public class CheepService(ICheepRepository db) : ICheepService
 {
-    private ICheepRepository db;
-    
-    public CheepService(ICheepRepository db)
-    {
-        this.db = db;
-    }
-    
+    private readonly ICheepRepository db = db;
+
     public List<CheepDTO> GetCheepsByPage(int page, int pageSize)
     {
         return db.GetCheepsByPage(page, pageSize).Result.ToList();
@@ -29,7 +26,7 @@ public class CheepService : ICheepService
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
     {
         // Unix timestamp is seconds past epoch
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        DateTime dateTime = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         dateTime = dateTime.AddSeconds(unixTimeStamp);
         return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
