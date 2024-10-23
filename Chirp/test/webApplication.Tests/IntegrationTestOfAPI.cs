@@ -70,11 +70,11 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
         //assert
         Assert.Contains(wantedAuthor.Name, content);
         Assert.Contains(wantedCheep.Message, content);
-        Assert.Contains(wantedCheep.TimeStamp.ToUniversalTime().ToString(CultureInfo.CurrentCulture), content);
+        Assert.Contains(wantedCheep.TimeStamp.ToUniversalTime().ToString("dd/MM/yy H:mm:ss"), content);
 
         Assert.DoesNotContain(otherAuthor.Name, content);
         Assert.DoesNotContain(otherCheep.Message, content);
-        Assert.DoesNotContain(otherCheep.TimeStamp.ToUniversalTime().ToString(CultureInfo.CurrentCulture), content);
+        Assert.DoesNotContain(otherCheep.TimeStamp.ToUniversalTime().ToString("dd/MM/yy H:mm:ss"), content);
 
         Assert.Contains($"{wantedAuthor.Name}'s Timeline", content);
     }
@@ -103,7 +103,7 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
 
         Assert.Contains(wantedAuthor.Name, content);
         Assert.Contains(wantedCheep.Message, content);
-        Assert.Contains(wantedCheep.TimeStamp.ToUniversalTime().ToString(CultureInfo.CurrentCulture), content);
+        Assert.Contains(wantedCheep.TimeStamp.ToUniversalTime().ToString("dd/MM/yy H:mm:ss"), content);
     }
 
     [Theory]
@@ -148,14 +148,14 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
         foreach (var cheep in expectedCheeps)
         {
             Assert.Contains(cheep.Message, content);
-            Assert.Contains(cheep.TimeStamp.ToUniversalTime().ToString(CultureInfo.CurrentCulture), content);
+            Assert.Contains(cheep.TimeStamp.ToUniversalTime().ToString("dd/MM/yy H:mm:ss"), content);
             Assert.Contains(cheep.Author.Name, content);
         }
 
         foreach (var cheep in cheepslist)
         {
             Assert.DoesNotContain(cheep.Message, content);
-            Assert.DoesNotContain(cheep.TimeStamp.ToUniversalTime().ToString(CultureInfo.CurrentCulture), content);
+            Assert.DoesNotContain(cheep.TimeStamp.ToUniversalTime().ToString("dd/MM/yy H:mm:ss"), content);
         }
     }
 }
