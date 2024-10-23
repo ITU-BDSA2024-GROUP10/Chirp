@@ -10,8 +10,6 @@ public interface ICheepService
 
 public class CheepService(ICheepRepository db) : ICheepService
 {
-    private readonly ICheepRepository db = db;
-
     public List<CheepDTO> GetCheepsByPage(int page, int pageSize)
     {
         return db.GetCheepsByPage(page, pageSize).Result.ToList();
