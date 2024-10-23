@@ -57,7 +57,7 @@ public class AuthorRepositoryUnitTest : IDisposable
         var author = new Author { Name = "Helge", Email = "Helge@gmail.com" };
 
         chirpContext.Authors.Add(author);
-        chirpContext.SaveChanges();
+        await chirpContext.SaveChangesAsync();
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
 
@@ -65,6 +65,7 @@ public class AuthorRepositoryUnitTest : IDisposable
         var result = await authorRepository.GetAuthorByName(author.Name);
 
         //Assert the value of the arbitrary author that was arranged
+        Assert.NotNull(result);
         Assert.Equal("Helge", result.Name);
         Assert.Equal("Helge@gmail.com", result.Email);
     }
@@ -74,7 +75,7 @@ public class AuthorRepositoryUnitTest : IDisposable
     {
         //Arrange
         var chirpContext = GetContext();
-        var author = new AuthorDTO(null, "null@gmail.com");
+        var author = new AuthorDTO(null!, "null@gmail.com");
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
 
