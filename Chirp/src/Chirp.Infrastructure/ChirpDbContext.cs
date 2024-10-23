@@ -48,11 +48,11 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : DbContex
             entity.HasIndex(a => a.Name)
                 .IsUnique();
 
-             //define required + unique email
+            //define required + unique email
             entity.Property(a => a.Email)
                 .IsRequired();
             entity.HasIndex(a => a.Email)
-                  .IsUnique();
+                .IsUnique();
         });
     }
 }

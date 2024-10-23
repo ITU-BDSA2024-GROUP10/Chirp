@@ -2,7 +2,6 @@ using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
 using Chirp.Web;
 using Microsoft.AspNetCore.Mvc.Testing;
-using SimpleDB;
 using webApplication.Tests.Utils;
 
 namespace webApplication.Tests;
@@ -15,7 +14,8 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
     public TestAPI(CostumeWebApplicationFactory<Program, ChirpDBContext> fixture)
     {
         this.fixture = fixture;
-        this.client = fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
+        client = fixture.CreateClient(new WebApplicationFactoryClientOptions
+            { AllowAutoRedirect = true, HandleCookies = true });
     }
 
     /*[Fact]
@@ -82,7 +82,7 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
     public async void CanSeePublicTimeline()
     {
         fixture.ResetDB();
-        var wantedAuthor = new Author { Name = "Wanted",  Email = "wanted@gmail.com"};
+        var wantedAuthor = new Author { Name = "Wanted", Email = "wanted@gmail.com" };
         var wantedCheep = new Cheep
         {
             Author = wantedAuthor,
@@ -95,17 +95,16 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
             context.Cheeps.Add(wantedCheep);
             await context.SaveChangesAsync();
         }
-        
+
         var response = await client.GetAsync($"/");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
-        
+
         Assert.Contains(wantedAuthor.Name, content);
         Assert.Contains(wantedCheep.Message, content);
         Assert.Contains(wantedCheep.TimeStamp.ToUniversalTime().ToString(), content);
-        
     }
-    
+
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
@@ -136,11 +135,11 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
 
             await context.SaveChangesAsync();
         }
-        
+
         var response = await client.GetAsync($"/?page={page}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
-        
+
         cheepslist.Reverse();
         var expectedCheeps = cheepslist.Skip((page - 1) * 32).Take(32).ToList();
         cheepslist.RemoveAll(c => expectedCheeps.Contains(c));
@@ -151,12 +150,11 @@ public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, Chirp
             Assert.Contains(cheep.TimeStamp.ToUniversalTime().ToString(), content);
             Assert.Contains(cheep.Author.Name, content);
         }
+
         foreach (var cheep in cheepslist)
         {
             Assert.DoesNotContain(cheep.Message, content);
             Assert.DoesNotContain(cheep.TimeStamp.ToUniversalTime().ToString(), content);
         }
-        
-
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System.Globalization;
 using Chirp.Core;
 using Chirp.Core.DTO;
-using Chirp.Web;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Moq;
 using Web.UnitTests.Utils;
 using Program = Chirp.Web.Program;
@@ -28,7 +26,7 @@ public class RazorPageIntegrationTest(RazorWebApplicationFactory<Program> factor
 
         var serviceMock = new Mock<ICheepService>();
         serviceMock.Setup(service => service.GetCheepsByPage(It.IsAny<int>(), It.IsAny<int>())).Returns(cheeps);
-        
+
         var client = factory.GetClientFromCheepServiceMock(serviceMock);
 
         // Act
@@ -44,7 +42,9 @@ public class RazorPageIntegrationTest(RazorWebApplicationFactory<Program> factor
         {
             Assert.Contains($"<a href=\"/{cheep.Author}\">{cheep.Author}</a>", content);
             Assert.Contains(cheep.Message, content);
-            Assert.Contains(DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString(CultureInfo.CurrentCulture), content);
+            Assert.Contains(
+                DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString(CultureInfo.CurrentCulture),
+                content);
         }
     }
 
@@ -53,15 +53,16 @@ public class RazorPageIntegrationTest(RazorWebApplicationFactory<Program> factor
     {
         // Arrange
         var serviceMock = new Mock<ICheepService>();
-        serviceMock.Setup(service => service.GetCheepsByPage(It.IsAny<int>(), It.IsAny<int>())).Returns(new List<CheepDTO>());
-        
+        serviceMock.Setup(service => service.GetCheepsByPage(It.IsAny<int>(), It.IsAny<int>()))
+            .Returns(new List<CheepDTO>());
+
         var client = factory.GetClientFromCheepServiceMock(serviceMock);
-        
+
         // Act
         var response = await client.GetAsync("/");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
-        
+
         // Assert
         Assert.Contains("Chirp!", content);
         Assert.Contains("Public Timeline", content);

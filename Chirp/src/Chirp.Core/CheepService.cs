@@ -14,7 +14,7 @@ public class CheepService(ICheepRepository db) : ICheepService
     {
         return db.GetCheepsByPage(page, pageSize).Result.ToList();
     }
-    
+
     public List<CheepDTO> GetCheepsFromAuthorByPage(string author, int page, int pageSize)
     {
         return db.GetCheepsFromAuthorByPage(author, page, pageSize).Result.ToList();
@@ -27,5 +27,4 @@ public class CheepService(ICheepRepository db) : ICheepService
         dateTime = dateTime.AddSeconds(unixTimeStamp);
         return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
-
 }
