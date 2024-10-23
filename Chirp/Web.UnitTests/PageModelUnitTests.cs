@@ -1,6 +1,8 @@
+using Chirp.Web;
 using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
+using SimpleDB.DTO;
 using SimpleDB.Model;
 
 namespace Web.UnitTests;

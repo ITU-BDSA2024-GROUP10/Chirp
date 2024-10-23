@@ -1,8 +1,9 @@
-﻿using Chirp.Razor.DataModels;
+﻿using Chirp.Infrastructure;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using SimpleDB;
+using SimpleDB.DTO;
 using SimpleDB.Model;
 
 namespace RepositoryTests;
