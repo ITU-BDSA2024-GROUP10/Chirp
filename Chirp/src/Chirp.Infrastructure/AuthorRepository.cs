@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimpleDB;
 using SimpleDB.DTO;
+using SimpleDB.Model;
 
 namespace Chirp.Infrastructure;
 
@@ -14,7 +15,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
             .Select(a => new AuthorDTO(a.Name, a.Email))
             .FirstOrDefaultAsync();
 
-    public async Task<AuthorDTO> GetAuthorByEmail(string email)
+    public async Task<AuthorDTO?> GetAuthorByEmail(string email)
     {
         var query = context.Authors
             .Where(author => author.Email == email)
@@ -24,7 +25,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         
         var authors = await query.ToListAsync();
         
-        return authors.Select(author => new AuthorDTO(author.Name, author.Email)).First();
+        return authors.Select(author => new AuthorDTO(author.Name, author.Email)).FirstOrDefault();
     }
 
     public async Task<bool> AddAuthor(AuthorDTO author)
