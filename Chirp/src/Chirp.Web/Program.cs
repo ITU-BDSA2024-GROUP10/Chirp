@@ -1,4 +1,6 @@
+using Chirp.Razor.DataModels;
 using Chirp.Web;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SimpleDB;
 using SimpleDB.Model;
@@ -16,7 +18,7 @@ if (!Directory.Exists(dir))
 // Load database connection via configuration
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
-builder.Services.AddDefaultIdentity<ChirpDBContext>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ChirpDBContext>();
 
 // Add services to the container.
