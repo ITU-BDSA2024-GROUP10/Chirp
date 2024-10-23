@@ -126,6 +126,7 @@ public class AuthorRepositoryUnitTest : IDisposable
         var result = await authorRepository.GetAuthorByEmail(author.Email);
 
         //Assert
+        Assert.NotNull(result);
         Assert.Equal(author.Name, result.Name);
         Assert.Equal(author.Email, result.Email);
     }
