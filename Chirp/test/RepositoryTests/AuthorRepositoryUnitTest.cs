@@ -119,13 +119,14 @@ public class AuthorRepositoryUnitTest : IDisposable
         var author = new Author { Name = "John Doe", Email = "jodoe@itu.dk" };
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
-        
+        chirpContext.Add(author);
+        chirpContext.SaveChanges();
         //Act
         var result = await authorRepository.GetAuthorByEmail(author.Email);
         
         //Assert
-        Assert.Equal("John Doe", result.Name);
-        Assert.Equal("jodoe@itu.dk", result.Email);
+        Assert.Equal(author.Name, result.Name);
+        Assert.Equal(author.Email, result.Email);
     }
 
     public void Dispose()
