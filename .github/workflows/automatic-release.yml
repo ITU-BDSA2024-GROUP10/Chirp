@@ -4,6 +4,7 @@ permissions: write-all
 
 on:
   create:
+    ref_type: tag
     tags:
       - 'v*.*.*'
   push:
