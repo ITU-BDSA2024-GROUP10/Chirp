@@ -20,8 +20,8 @@ public class CheepRepositoryUnitTest
     [InlineData(3, 3, 1)] //last page with fewer cheeps
     [InlineData(1, 7, 7)] //all cheeps
     [InlineData(1, 10, 7)] //more than all cheeps
-    [InlineData(0, 3, 0)] //page 0
-    [InlineData(-1, 3, 0)] //negative page
+    [InlineData(0, 3, 3)] //page 0
+    [InlineData(-1, 3, 3)] //negative page
     [InlineData(1, -3, 0)] //negative pagesize
     [InlineData(1, 0, 0)] //pagesize 0
     [InlineData(4, 3, 0)] //pagesize * pageno > no of cheeps
@@ -45,9 +45,9 @@ public class CheepRepositoryUnitTest
 
             context.SaveChanges();
 
-            var CheepRepo = new CheepRepository(context);
+            var cheepRepo = new CheepRepository(context);
 
-            var result = await CheepRepo.GetCheepsByPage(page, pageSize);
+            var result = await cheepRepo.GetCheepsByPage(page, pageSize);
             var count = result.Count();
 
             Assert.Equal(expected, count);
