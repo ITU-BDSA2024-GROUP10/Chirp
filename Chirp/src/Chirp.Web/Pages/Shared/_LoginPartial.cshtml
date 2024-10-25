@@ -9,7 +9,7 @@
         <div>
             <a href="/@(User.Claims.FirstOrDefault(c => c.Type == "UserName")?.Value)">my timeline</a> |
             <a href="/">public timeline</a> |
-            <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" >logout [@(User.Identity.Name)]</a>
+            <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" >logout [@(User.Claims.FirstOrDefault(c => c.Type == "UserName")?.Value)]</a>
         </div>
     }
     else
