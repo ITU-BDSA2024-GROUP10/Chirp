@@ -22,7 +22,7 @@ public static class DbInitializer
             var a9 = new Author() { Id = "9", Name = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>() };
             var a10 = new Author() { Id = "10", Name = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>() };
 
-            var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 };
+            var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10};
 
             var c1 = new Cheep() { Id = 1, Author = a10, Message = "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.", TimeStamp = DateTime.Parse("2023-08-01 13:14:37") };
             var c2 = new Cheep() { Id = 2, Author = a10, Message = "And then, as he listened to all that''s left o'' twenty-one people.", TimeStamp = DateTime.Parse("2023-08-01 13:15:21") };
