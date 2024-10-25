@@ -38,22 +38,19 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
         //define author entity constraints
         modelBuilder.Entity<Author>(entity =>
         {
-            //define auto increment key
-            entity.HasKey(a => a.Id);
-            entity.Property(a => a.Id)
-                .ValueGeneratedOnAdd();
-
             //define required + unique name
             entity.Property(a => a.Name)
                 .IsRequired();
             entity.HasIndex(a => a.Name)
                 .IsUnique();
-
-            //define required + unique email
-            entity.Property(a => a.Email)
-                .IsRequired();
-            entity.HasIndex(a => a.Email)
-                .IsUnique();
+               // Define relationship with ApplicationUser
+            entity.HasOne(a => a.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<Author>(a => a.ApplicationUserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         });
+
+        
     }
 }
