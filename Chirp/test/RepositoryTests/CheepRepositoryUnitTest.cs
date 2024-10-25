@@ -100,8 +100,10 @@ public class CheepRepositoryUnitTest
             var CheepRepo = new CheepRepository(context);
 
             var result = await CheepRepo.GetCheepsByPage(2, 3);
+            
+            Assert.NotNull(result);
+            
             var resultList = result.ToList();
-
             for (int i = 0; i < 3; i++) {
                 var expectedCheep = cheeps.ElementAt(i+3);
                 var singleCheep = resultList.ElementAt(i);
@@ -131,6 +133,7 @@ public class CheepRepositoryUnitTest
 
             var result = await CheepRepo.GetCheepsByPage(page, pageSize);
 
+            Assert.NotNull(result);
             Assert.Empty(result.ToList());
         }
     }
@@ -157,6 +160,8 @@ public class CheepRepositoryUnitTest
             var CheepRepo = new CheepRepository(context);
 
             var result = await CheepRepo.GetCheepsByPage(1, 1);
+            
+            Assert.NotNull(result);
             var resultList = result.ToList();
 
             var expected = new CheepDTO("Bill", "test", ((DateTimeOffset)ts).ToUnixTimeSeconds());
@@ -174,7 +179,8 @@ public class CheepRepositoryUnitTest
     #endregion    
     
     #region get by author
-
+    
+    [Fact]
     public async Task GetCheepsFromAuthorByPage_ReturnsCorrectCheepWhenMultipleAuthorsInDB() {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
