@@ -7,7 +7,7 @@ namespace Chirp.Infrastructure;
 
 public static class DbInitializer
 {
-    public static void SeedDatabase(ChirpDBContext chirpContext)
+    public static async void SeedDatabase(ChirpDBContext chirpContext, IServiceProvider serviceProvider)
     {
         if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
         {
