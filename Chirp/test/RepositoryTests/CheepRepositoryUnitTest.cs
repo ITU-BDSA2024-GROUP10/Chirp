@@ -1,12 +1,8 @@
-using System.Net;
-using System.Security.Principal;
 using Chirp.Core.DTO;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 
 namespace RepositoryTests;
 
@@ -22,10 +18,9 @@ public class CheepRepositoryUnitTest
     [InlineData(1, 10, 7)] //more than all cheeps
     [InlineData(0, 3, 3)] //page 0
     [InlineData(-1, 3, 3)] //negative page
-    [InlineData(1, -3, 0)] //negative pagesize
     [InlineData(1, 0, 0)] //pagesize 0
     [InlineData(4, 3, 0)] //pagesize * pageno > no of cheeps
-    public async Task GetCheepsByPage_ReturnsCorrectNumberOfCheeps(int page, int pageSize, int expected)
+    public async Task GetCheepsByPage_ReturnsCorrectNumberOfCheeps(int page, int pageSize, int ?expected)
     {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
@@ -48,9 +43,32 @@ public class CheepRepositoryUnitTest
             var cheepRepo = new CheepRepository(context);
 
             var result = await cheepRepo.GetCheepsByPage(page, pageSize);
-            var count = result.Count();
 
-            Assert.Equal(expected, count);
+            Assert.NotNull(result);
+            Assert.Equal(expected, result.Count());
+        }
+    }
+    
+    [Fact]
+    public async Task GetCheepsByPage_NegativePageSize_ReturnsNull() {
+        var connection = new SqliteConnection("DataSource=:memory:");
+        connection.Open();
+
+        var options = new DbContextOptionsBuilder<ChirpDBContext>()
+            .UseSqlite(connection)
+            .Options;
+
+        using (var context = new ChirpDBContext(options)) {
+            context.Database.EnsureCreated();
+            
+            context.Cheeps.Add(new Cheep {Author = new Author {Name = "mr. test", Email = "test"}, Message = "test", TimeStamp = DateTime.Now});
+            context.SaveChanges();
+            
+            var cheepRepo = new CheepRepository(context);
+
+            var result = await cheepRepo.GetCheepsByPage(1, -1);
+
+            Assert.Null(result);
         }
     }
     
