@@ -58,7 +58,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ChirpDBContext>();
-    DbInitializer.SeedDatabase(context);
+    DbInitializer.SeedDatabase(context, services);
 }
 
 app.UseHttpsRedirection();
