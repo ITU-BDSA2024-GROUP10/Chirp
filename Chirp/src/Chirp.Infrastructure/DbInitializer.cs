@@ -1,4 +1,7 @@
+using System.Security.Claims;
 using Chirp.Infrastructure.Model;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Chirp.Infrastructure;
 
