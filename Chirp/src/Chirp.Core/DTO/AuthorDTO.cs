@@ -1,12 +1,7 @@
-﻿namespace SimpleDB.Model;
+﻿namespace Chirp.Core.DTO;
 
-public class AuthorDTO
+public class AuthorDTO(string name, string email)
 {
-    public string Name { get; set; }
-    public string Email { get; set; }
-
-    public AuthorDTO(string name, string email) {
-        Name = name;
-        Email = email;
-    }
+    public string Name { get; set; } = name;
+    public string Email { get; set; } = email;
 }

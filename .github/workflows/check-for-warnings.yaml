@@ -1,0 +1,29 @@
+# Resources:
+  # Rebuild project:
+    # https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build#options
+  # Treat warnings as errors:
+    # https://stackoverflow.com/questions/68407432/how-to-fetch-warnings-from-the-dotnet-build-command
+
+name: Check for warnings
+permissions: write-all
+
+on: [pull_request]
+
+jobs:
+  check_for_warnings:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.x
+  
+    - name: Restore dependencies
+      working-directory: Chirp
+      run: dotnet restore
+  
+    - name: Build solution and check for warnings
+      working-directory: Chirp
+      run: dotnet build --no-incremental /WarnAsError

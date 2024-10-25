@@ -1,28 +1,49 @@
-﻿using Chirp.Razor.DataModels;
-using SimpleDB.Model;
+﻿using Chirp.Core;
+using Chirp.Core.DTO;
+using Chirp.Infrastructure.Model;
+using Microsoft.EntityFrameworkCore;
 
-namespace SimpleDB;
+namespace Chirp.Infrastructure;
 
-public class AuthorRepository : IAuthorRepository
+public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
 {
-    private ChirpDBContext context;
-    public AuthorRepository(ChirpDBContext context)
+    private readonly ChirpDBContext context = context;
+
+    public async Task<AuthorDTO?> GetAuthorByName(string name) =>
+        await context.Authors
+            .Where(a => a.Name == name)
+            .Select(a => new AuthorDTO(a.Name, a.Email))
+            .FirstOrDefaultAsync();
+
+    public async Task<AuthorDTO?> GetAuthorByEmail(string email)
     {
-        this.context = context;
-    } 
-    public async Task<AuthorDTO> GetAuthorByName(string name)
-    {
-        throw new NotImplementedException();
-    }
-    
-    public async Task<AuthorDTO> GetAuthorByEmail(string email)
-    {
-        throw new NotImplementedException();
+        var query = context.Authors
+            .Where(author => author.Email == email)
+            .Select(author => new { author.Name, author.Email });
+
+
+        var authors = await query.ToListAsync();
+
+        return authors.Select(author => new AuthorDTO(author.Name, author.Email)).FirstOrDefault();
     }
 
-    public Task<bool> AddAuthor(AuthorDTO author)
+    public async Task<bool> AddAuthor(AuthorDTO author)
     {
-        throw new NotImplementedException();
+        var newAuthor = new Author
+        {
+            Name = author.Name,
+            Email = author.Email
+        };
+
+        try
+        {
+            context.Authors.Add(newAuthor);
+            await context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
-    
 }

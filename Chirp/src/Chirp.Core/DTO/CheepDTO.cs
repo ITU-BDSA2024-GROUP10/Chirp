@@ -1,15 +1,8 @@
-﻿namespace SimpleDB.Model;
+﻿namespace Chirp.Core.DTO;
 
-public class CheepDTO
+public class CheepDTO(string author, string message, long unixTimestamp)
 {
-    public string Author { get; set; }
-    public string Message { get; set; }
-    public long UnixTimestamp { get; set; }
-    
-    public CheepDTO(string author, string message, long unixTimestamp)
-    {
-        Author = author;
-        Message = message;
-        UnixTimestamp = unixTimestamp;
-    }
+    public string Author { get; set; } = author;
+    public string Message { get; set; } = message;
+    public long UnixTimestamp { get; set; } = unixTimestamp;
 }

@@ -1,0 +1,23 @@
+@using Chirp.Infrastructure.Model
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<div class=navigation>
+    @if (User.Identity!.IsAuthenticated)
+    {
+        <div>
+            <a href="/@(User.Identity.Name)">my timeline</a> |
+            <a href="/">public timeline</a> |
+            <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" >logout [@(User.Identity.Name)]</a>
+        </div>
+    }
+    else
+    {
+        <div>
+            <a href="/">public timeline</a> |
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">register</a> |
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">login</a>
+        </div>
+    }
+</div>

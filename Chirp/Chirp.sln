@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Infrastructure", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryTests", "test\RepositoryTests\RepositoryTests.csproj", "{D797C3C7-4140-4DC1-A742-9D8252CDA88C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.UnitTests", "test\Web.UnitTests\Web.UnitTests.csproj", "{9CACC74F-9F27-46E1-9470-5A1901FDBDEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{D797C3C7-4140-4DC1-A742-9D8252CDA88C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D797C3C7-4140-4DC1-A742-9D8252CDA88C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D797C3C7-4140-4DC1-A742-9D8252CDA88C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CACC74F-9F27-46E1-9470-5A1901FDBDEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CACC74F-9F27-46E1-9470-5A1901FDBDEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CACC74F-9F27-46E1-9470-5A1901FDBDEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CACC74F-9F27-46E1-9470-5A1901FDBDEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

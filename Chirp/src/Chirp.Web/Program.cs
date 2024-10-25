@@ -1,8 +1,9 @@
-using Chirp.Web;
+using Chirp.Core;
+using Chirp.Infrastructure;
+using Chirp.Infrastructure.Model;
 using Microsoft.EntityFrameworkCore;
-using SimpleDB;
-using SimpleDB.Model;
-using Microsoft.EntityFrameworkCore;
+using Chirp.Web.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,8 @@ if (!Directory.Exists(dir))
 // Load database connection via configuration
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
-
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ChirpDBContext>();
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepService, CheepService>();
@@ -35,12 +37,19 @@ if (!app.Environment.IsDevelopment())
 // Create a disposable service scope
 using (var scope = app.Services.CreateScope())
 {
-    // From the scope, get an instance of our database context.
-    // Through the `using` keyword, we make sure to dispose it after we are done.
-    using var context = scope.ServiceProvider.GetService<ChirpDBContext>();
+    // ChirpDBContext critical to our app so use GetRequiredService to enforce its presence
+    var context = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
 
-    // Execute the migration from code.
-    context.Database.Migrate();
+    // Execute the migration from code
+    try
+    {
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine($"Database migration failed: {ex.Message}");
+        throw; // rethrow since this migration is critical
+    }
 }
 
 // Seed the database with some initial data
@@ -53,9 +62,18 @@ using (var scope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+
+//for integration testing
+//source: https://stackoverflow.com/questions/55131379/integration-testing-asp-net-core-with-net-framework-cant-find-deps-json
+namespace Chirp.Web
+{
+    public partial class Program
+    {
+    }
+}

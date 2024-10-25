@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+## idea specific files
+**/.idea
+
 # User-specific files
 *.rsuser
 *.suo
@@ -479,3 +482,5 @@ $RECYCLE.BIN/
 .idea/.idea.Chirp.dir/.idea/workspace.xml
 Chirp/src/.idea/workspace.xml
 /Chirp/src/Chirp.Razor/database
+/Chirp/src/Chirp.Web/database
+Chirp/.idea/workspace.xml

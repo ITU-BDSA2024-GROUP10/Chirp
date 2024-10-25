@@ -1,18 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Chirp.Core;
+using Chirp.Core.DTO;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SimpleDB.Model;
 
 namespace Chirp.Web.Pages;
 
-public class UserTimelineModel : PageModel
+public class UserTimelineModel(ICheepService service) : PageModel
 {
-    private readonly ICheepService _service;
-    public List<CheepDTO> Cheeps { get; set; }
-
-    public UserTimelineModel(ICheepService service)
-    {
-        _service = service;
-    }
+    private readonly ICheepService _service = service;
+    public required List<CheepDTO> Cheeps { get; set; }
 
     public ActionResult OnGet(string author, [FromQuery] int page)
     {
