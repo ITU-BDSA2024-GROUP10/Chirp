@@ -29,11 +29,9 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
 
     public async Task<bool> AddAuthor(AuthorDTO author)
     {
-        var newAuthor = new Author(author.Name, author.Email);
-
         try
         {
-            context.Authors.Add(newAuthor);
+            context.Authors.Add(Author.CreateAuthor(author));
             await context.SaveChangesAsync();
             return true;
         }
