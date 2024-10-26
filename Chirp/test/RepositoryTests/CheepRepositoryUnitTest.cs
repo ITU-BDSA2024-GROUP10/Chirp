@@ -84,8 +84,8 @@ public class CheepRepositoryUnitTest
         using (var context = new ChirpDBContext(options)) {
             context.Database.EnsureCreated();
 
-            Author AuthorA = new Author {Id = 1, Name = "Bill", Email = "Bill@email.com", Cheeps = []};
-            Author AuthorB = new Author {Id = 2, Name = "Amy", Email = "Amy@email.com", Cheeps = []};
+            Author AuthorA = new Author {Name = "Bill", Email = "Bill@email.com", Cheeps = []};
+            Author AuthorB = new Author {Name = "Amy", Email = "Amy@email.com", Cheeps = []};
             int authTotal = 0;
             var rand = new Random();
 

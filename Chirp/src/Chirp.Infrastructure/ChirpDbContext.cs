@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
 
-public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : IdentityDbContext<ApplicationUser>(options)
+public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : IdentityDbContext<Author>(options)
 {
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
@@ -38,22 +38,17 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
         //define author entity constraints
         modelBuilder.Entity<Author>(entity =>
         {
-            //define auto increment key
-            entity.HasKey(a => a.Id);
-            entity.Property(a => a.Id)
-                .ValueGeneratedOnAdd();
-
             //define required + unique name
             entity.Property(a => a.Name)
                 .IsRequired();
-            entity.HasIndex(a => a.Name)
-                .IsUnique();
-
-            //define required + unique email
             entity.Property(a => a.Email)
                 .IsRequired();
+            entity.HasIndex(a => a.Name)
+                .IsUnique();
             entity.HasIndex(a => a.Email)
                 .IsUnique();
         });
+
+        
     }
 }
