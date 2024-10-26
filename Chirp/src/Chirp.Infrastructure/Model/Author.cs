@@ -1,16 +1,18 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace Chirp.Infrastructure.Model;
 
-public class Author : ApplicationUser
+public class Author : IdentityUser
 {
-    public string? ApplicationUserId { get; set; }
-    public ApplicationUser? ApplicationUser { get; set; }
+    public string Name { get; set; }
     public List<Cheep> Cheeps { get; set; } = [];
+    
     public Author() 
     {
         
     }
     
-    public Author(int id, string name, string email)
+    public Author(string name, string email)
     {
         Name = name;
     }

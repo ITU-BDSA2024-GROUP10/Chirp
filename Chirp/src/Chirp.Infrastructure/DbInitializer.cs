@@ -22,7 +22,7 @@ public static class DbInitializer
             var a9 = new Author() { Id = "9", Name = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>() };
             var a10 = new Author() { Id = "10", Name = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>() };
 
-            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<Author>>();
             var a11 = new Author {UserName = "ropf@itu.dk", Email = "ropf@itu.dk", Cheeps = new List<Cheep>(), Name = "Helge"};
             var a12 = new Author {UserName = "adho@itu.dk", Email = "adho@itu.dk", Cheeps = new List<Cheep>(), Name = "Adrian"};
             a11.EmailConfirmed = true;

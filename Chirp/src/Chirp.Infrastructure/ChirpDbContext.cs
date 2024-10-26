@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
 
-public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : IdentityDbContext<ApplicationUser>(options)
+public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : IdentityDbContext<Author>(options)
 {
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
@@ -41,14 +41,12 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
             //define required + unique name
             entity.Property(a => a.Name)
                 .IsRequired();
+            entity.Property(a => a.Email)
+                .IsRequired();
             entity.HasIndex(a => a.Name)
                 .IsUnique();
-               // Define relationship with ApplicationUser
-            entity.HasOne(a => a.ApplicationUser)
-                .WithOne()
-                .HasForeignKey<Author>(a => a.ApplicationUserId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasIndex(a => a.Email)
+                .IsUnique();
         });
 
         
