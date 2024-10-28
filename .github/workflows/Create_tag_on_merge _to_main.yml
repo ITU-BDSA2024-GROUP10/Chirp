@@ -80,6 +80,10 @@ jobs:
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
           echo "Calculated new version: $NEW_VERSION"
 
+      - name: Cancel Workflow
+        if: env.SKIP_RELEASE == 'true'
+        run: exit 78
+      
       # Create a new Git tag with the calculated version
       - name: Create Git Tag
         if: env.SKIP_RELEASE != 'true'
