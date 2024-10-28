@@ -6,11 +6,15 @@ name: Build and deploy ASP.Net Core app to Azure Web App - bdsa2024group10chirpr
 on:
   release:
     types: [published]
+  workflow_run:
+    workflows: ['Automatic release on tag creation']
+    types: [completed]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     defaults:
       run:
