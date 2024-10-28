@@ -36,8 +36,10 @@ builder.Services.AddAuthentication(/*options =>
     {
         o.Scope.Add("user:email");
         o.Scope.Add("read:user");
-        o.ClientId = builder.Configuration["authentication:github:clientId"];
-        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"];
+        o.ClientId = builder.Configuration["authentication:github:clientId"] 
+                     ?? throw new InvalidOperationException("github:clientId secret not found");
+        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"] 
+                         ?? throw new InvalidOperationException("github:clientSecret secret not found");
         o.CallbackPath = "/signin-github";
     });
 
