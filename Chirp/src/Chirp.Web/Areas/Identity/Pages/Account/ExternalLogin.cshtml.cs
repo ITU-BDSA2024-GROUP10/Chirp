@@ -98,6 +98,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 {
                     _output += "Email, ";
                 }
+
                 if (DisplayName == null)
                 {
                     _output += "Display Name, ";
@@ -105,7 +106,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
                 return _output.Trim();
             }
-            
+
             public bool isComplete()
             {
                 return Email != null && DisplayName != null;
@@ -200,6 +201,9 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
+                        var claim = new Claim("UserName", user.Name);
+                        await _userManager.AddClaimAsync(user, claim);
+                        
                         var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
