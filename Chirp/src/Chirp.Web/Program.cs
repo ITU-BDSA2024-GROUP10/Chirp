@@ -35,6 +35,7 @@ builder.Services.AddAuthentication(/*options =>
     .AddGitHub(o =>
     {
         o.Scope.Add("user:email");
+        o.Scope.Add("read:user");
         o.ClientId = builder.Configuration["authentication:github:clientId"];
         o.ClientSecret = builder.Configuration["authentication:github:clientSecret"];
         o.CallbackPath = "/signin-github";
