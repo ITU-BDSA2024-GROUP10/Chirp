@@ -24,12 +24,13 @@ builder.Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireCon
     .AddEntityFrameworkStores<ChirpDBContext>();
 
 // Add authentication service
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(/*options =>
     {
         options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        //options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = "GitHub";
-    })
+    }*/)
     .AddCookie()
     .AddGitHub(o =>
     {
@@ -85,7 +86,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseSession();
+//app.UseSession();
 
 app.MapRazorPages();
 
