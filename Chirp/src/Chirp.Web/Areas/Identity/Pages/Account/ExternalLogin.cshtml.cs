@@ -168,6 +168,12 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 {
                     Input.DisplayName = info.Principal.FindFirstValue(ClaimTypes.Name);
                 }
+                
+                // If all the needed information is already provided, skip the form and create the user
+                if (Input.isComplete())
+                {
+                    return await OnPostConfirmationAsync("~/");
+                }
 
                 return Page();
             }
