@@ -19,7 +19,7 @@
         <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             @{
-                if (Model.Input.Email == null)
+                if (string.IsNullOrEmpty(Model.Input.Email))
                 {
                     <div class="form-floating mb-3">
                         <input asp-for="Input.Email" class="form-control" autocomplete="email" placeholder="Please enter your email."/>
@@ -28,7 +28,7 @@
                     </div>
                 }
 
-                if (Model.Input.DisplayName == null)
+                if (string.IsNullOrEmpty(Model.Input.DisplayName))
                 {
                     <div class="form-floating mb-3">
                         <input asp-for="Input.DisplayName" class="form-control" placeholder="Please enter your display name"/>
