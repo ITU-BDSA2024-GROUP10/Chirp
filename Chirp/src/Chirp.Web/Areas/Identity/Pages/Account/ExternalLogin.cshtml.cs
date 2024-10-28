@@ -162,11 +162,13 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
                 {
                     Input.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                    TempData["Email"] = Input.Email;
                 }
 
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
                 {
                     Input.DisplayName = info.Principal.FindFirstValue(ClaimTypes.Name);
+                    TempData["DisplayName"] = Input.DisplayName;
                 }
                 
                 // If all the needed information is already provided, skip the form and create the user
@@ -194,12 +196,14 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.Name = Input.DisplayName;
+                user.Name = (Input.DisplayName ?? TempData["DisplayName"].ToString()) ?? throw new InvalidOperationException();
+                var email = Input.Email ?? TempData["Email"].ToString();
+                
+                await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
+                await _emailStore.SetEmailAsync(user, email, CancellationToken.None);
+
                 user.EmailConfirmed = true;
                 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
