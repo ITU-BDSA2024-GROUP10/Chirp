@@ -1,8 +1,10 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
 #nullable disable
 
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text;
@@ -82,11 +84,34 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [DisplayName]
+            [Display(Name = "Display Name")]
+            public string DisplayName { get; set; }
+
+            public string getNeededInfo()
+            {
+                string _output = "";
+                if (Email == null)
+                {
+                    _output += "Email, ";
+                }
+                if (DisplayName == null)
+                {
+                    _output += "Display Name, ";
+                }
+
+                return _output.Trim();
+            }
+            
+            public bool isComplete()
+            {
+                return Email != null && DisplayName != null;
+            }
         }
-        
+
         public IActionResult OnGet() => RedirectToPage("./Login");
 
         public IActionResult OnPost(string provider, string returnUrl = null)
@@ -105,6 +130,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 ErrorMessage = $"Error from external provider: {remoteError}";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
+
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
@@ -113,12 +139,15 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey,
+                isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
             {
-                _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
+                _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name,
+                    info.LoginProvider);
                 return LocalRedirect(returnUrl);
             }
+
             if (result.IsLockedOut)
             {
                 return RedirectToPage("./Lockout");
@@ -128,13 +157,17 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
                 ProviderDisplayName = info.ProviderDisplayName;
+                Input = new InputModel();
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
                 {
-                    Input = new InputModel
-                    {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                    };
+                    Input.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
                 }
+
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
+                {
+                    Input.DisplayName = info.Principal.FindFirstValue(ClaimTypes.Name);
+                }
+
                 return Page();
             }
         }
@@ -153,6 +186,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+                user.Name = Input.DisplayName;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -187,6 +222,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -207,8 +243,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             catch
             {
                 throw new InvalidOperationException($"Can't create an instance of '{nameof(Author)}'. " +
-                    $"Ensure that '{nameof(Author)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the external login page in /Areas/Identity/Pages/Account/ExternalLogin.cshtml");
+                                                    $"Ensure that '{nameof(Author)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                                                    $"override the external login page in /Areas/Identity/Pages/Account/ExternalLogin.cshtml");
             }
         }
 
@@ -218,6 +254,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
+
             return (IUserEmailStore<Author>)_userStore;
         }
     }
