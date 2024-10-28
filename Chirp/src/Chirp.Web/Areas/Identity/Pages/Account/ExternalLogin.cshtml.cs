@@ -189,7 +189,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 var user = CreateUser();
 
                 user.Name = Input.DisplayName;
-
+                user.EmailConfirmed = true;
+                
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
@@ -204,7 +205,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         var claim = new Claim("UserName", user.Name);
                         await _userManager.AddClaimAsync(user, claim);
                         
-                        var userId = await _userManager.GetUserIdAsync(user);
+                        /*var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                         var callbackUrl = Url.Page(
@@ -220,7 +221,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)
                         {
                             return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
-                        }
+                        }*/
 
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
                         return LocalRedirect(returnUrl);
