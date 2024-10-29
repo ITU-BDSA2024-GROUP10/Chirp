@@ -40,4 +40,7 @@ jobs:
       run: dotnet restore Chirp/
       
     - name: Test
-      run: dotnet test --verbosity normal Chirp/
+      run: |
+          export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
+          export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+          dotnet test --no-build --verbosity normal Chirp/
