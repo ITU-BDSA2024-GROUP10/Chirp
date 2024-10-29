@@ -41,7 +41,8 @@ jobs:
       
     - name: Test
       working-directory: Chirp/
-      run: |
-          export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
-          export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
-          dotnet test --verbosity normal
+      env:
+        GitHub__ClientId: ${{ secrets.GITHUBCLIENTID }}
+        GitHub__ClientSecret: ${{ secrets.GITHUBCLIENTSECRET }}
+      run: dotnet test --verbosity normal
+
