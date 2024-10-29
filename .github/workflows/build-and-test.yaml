@@ -41,6 +41,7 @@ jobs:
       
     - name: Test
       run: |
-          export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
-          export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+          dotnet user-secrets init
+          dotnet user-secrets set "authentication:github:clientId" "${{ secrets.GITHUBCLIENTID }}"
+          dotnet user-secrets set "authentication:github:clientSecret" "${{ secrets.GITHUBCLIENTSECRET }}"
           dotnet test --verbosity normal Chirp/
