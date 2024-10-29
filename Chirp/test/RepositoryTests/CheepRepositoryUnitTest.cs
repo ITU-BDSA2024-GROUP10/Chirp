@@ -180,8 +180,8 @@ public class CheepRepositoryUnitTest : IDisposable
         for (int i = 0; i < 5; i++)
         {
             var author = new Author { Name = $"name{i}", Email = $"{i}@mail.com", Cheeps = [] };
-            var cheep = new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now };
             authors.Add(author);
+            var cheep = new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now };
             cheeps.Add(cheep);
         }
 
