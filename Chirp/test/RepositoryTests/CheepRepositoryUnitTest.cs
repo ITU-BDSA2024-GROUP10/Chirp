@@ -1,13 +1,38 @@
+using Chirp.Core;
 using Chirp.Core.DTO;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 namespace RepositoryTests;
 
-public class CheepRepositoryUnitTest
+public class CheepRepositoryUnitTest : IDisposable
 {
+    private readonly SqliteConnection _connection;
+
+    public CheepRepositoryUnitTest()
+    {
+        _connection = new SqliteConnection("Filename=:memory:");
+        _connection.Open();
+    }
+
+    public void Dispose()
+    {
+        _connection.Close();
+    }
+
+    private ChirpDBContext GetContext()
+    {
+        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(_connection);
+
+        var context = new ChirpDBContext(builder.Options);
+        context.Database.EnsureDeleted(); //Ensures that any test runs on their own DB
+        context.Database.EnsureCreated(); // Applies the schema to the database
+
+        return context;
+    }
+
     #region get cheeps
 
     [Theory]
@@ -20,7 +45,7 @@ public class CheepRepositoryUnitTest
     [InlineData(-1, 3, 3)] //negative page
     [InlineData(1, 0, 0)] //pagesize 0
     [InlineData(4, 3, 0)] //pagesize * pageno > no of cheeps
-    public async Task GetCheepsByPage_ReturnsCorrectNumberOfCheeps(int page, int pageSize, int ?expected)
+    public async Task GetCheepsByPage_ReturnsCorrectNumberOfCheeps(int page, int pageSize, int? expected)
     {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
@@ -29,13 +54,15 @@ public class CheepRepositoryUnitTest
             .UseSqlite(connection)
             .Options;
 
-        using (var context = new ChirpDBContext(options)) {
+        using (var context = new ChirpDBContext(options))
+        {
             context.Database.EnsureCreated();
 
-            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = []};
+            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = [] };
 
-            for (int i = 0; i < 7; i++) {
-                context.Cheeps.Add(new Cheep {Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now});
+            for (int i = 0; i < 7; i++)
+            {
+                context.Cheeps.Add(new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now });
             }
 
             context.SaveChanges();
@@ -48,9 +75,10 @@ public class CheepRepositoryUnitTest
             Assert.Equal(expected, result.Count());
         }
     }
-    
+
     [Fact]
-    public async Task GetCheepsByPage_NegativePageSize_ReturnsNull() {
+    public async Task GetCheepsByPage_NegativePageSize_ReturnsNull()
+    {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
 
@@ -58,12 +86,16 @@ public class CheepRepositoryUnitTest
             .UseSqlite(connection)
             .Options;
 
-        using (var context = new ChirpDBContext(options)) {
+        using (var context = new ChirpDBContext(options))
+        {
             context.Database.EnsureCreated();
-            
-            context.Cheeps.Add(new Cheep {Author = new Author {Name = "mr. test", Email = "test"}, Message = "test", TimeStamp = DateTime.Now});
+
+            context.Cheeps.Add(new Cheep
+            {
+                Author = new Author { Name = "mr. test", Email = "test" }, Message = "test", TimeStamp = DateTime.Now
+            });
             context.SaveChanges();
-            
+
             var cheepRepo = new CheepRepository(context);
 
             var result = await cheepRepo.GetCheepsByPage(1, -1);
@@ -71,9 +103,10 @@ public class CheepRepositoryUnitTest
             Assert.Null(result);
         }
     }
-    
+
     [Fact]
-    public async Task GetCheepsByPage_ReturnsCorrectCheepsFromMiddlePages() {
+    public async Task GetCheepsByPage_ReturnsCorrectCheepsFromMiddlePages()
+    {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
 
@@ -81,14 +114,16 @@ public class CheepRepositoryUnitTest
             .UseSqlite(connection)
             .Options;
 
-        using (var context = new ChirpDBContext(options)) {
+        using (var context = new ChirpDBContext(options))
+        {
             context.Database.EnsureCreated();
 
-            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = []};
+            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = [] };
             List<Cheep> cheeps = [];
 
-            for (int i = 0; i < 7; i++) {
-                cheeps.Add(new Cheep {Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now});
+            for (int i = 0; i < 7; i++)
+            {
+                cheeps.Add(new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now });
             }
 
             cheeps.Reverse();
@@ -100,12 +135,13 @@ public class CheepRepositoryUnitTest
             var CheepRepo = new CheepRepository(context);
 
             var result = await CheepRepo.GetCheepsByPage(2, 3);
-            
+
             Assert.NotNull(result);
-            
+
             var resultList = result.ToList();
-            for (int i = 0; i < 3; i++) {
-                var expectedCheep = cheeps.ElementAt(i+3);
+            for (int i = 0; i < 3; i++)
+            {
+                var expectedCheep = cheeps.ElementAt(i + 3);
                 var singleCheep = resultList.ElementAt(i);
 
                 Assert.Equal(expectedCheep.Author.Name, singleCheep.Author);
@@ -114,9 +150,9 @@ public class CheepRepositoryUnitTest
             }
         }
     }
-    
+
     [Theory]
-    [InlineData(3,3)]
+    [InlineData(3, 3)]
     public async Task GetCheepsByPage_ReturnsNoCheepsForEmptyRepository(int page, int pageSize)
     {
         var connection = new SqliteConnection("DataSource=:memory:");
@@ -126,7 +162,8 @@ public class CheepRepositoryUnitTest
             .UseSqlite(connection)
             .Options;
 
-        using (var context = new ChirpDBContext(options)) {
+        using (var context = new ChirpDBContext(options))
+        {
             context.Database.EnsureCreated();
 
             var CheepRepo = new CheepRepository(context);
@@ -137,7 +174,7 @@ public class CheepRepositoryUnitTest
             Assert.Empty(result.ToList());
         }
     }
-    
+
     [Fact]
     public async Task GetCheepsByPage_ReturnsCorrectSingleCheep()
     {
@@ -148,19 +185,20 @@ public class CheepRepositoryUnitTest
             .UseSqlite(connection)
             .Options;
 
-        using (var context = new ChirpDBContext(options)) {
+        using (var context = new ChirpDBContext(options))
+        {
             context.Database.EnsureCreated();
 
-            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = []};
+            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = [] };
             var ts = new DateTime(2000, 01, 01);
-            context.Cheeps.Add(new Cheep { Id = 1, Author = author, Message = "test", TimeStamp = ts});
+            context.Cheeps.Add(new Cheep { Id = 1, Author = author, Message = "test", TimeStamp = ts });
 
             context.SaveChanges();
 
             var CheepRepo = new CheepRepository(context);
 
             var result = await CheepRepo.GetCheepsByPage(1, 1);
-            
+
             Assert.NotNull(result);
             var resultList = result.ToList();
 
@@ -176,12 +214,13 @@ public class CheepRepositoryUnitTest
         }
     }
 
-    #endregion    
-    
+    #endregion
+
     #region get by author
-    
+
     [Fact]
-    public async Task GetCheepsFromAuthorByPage_ReturnsCorrectCheepWhenMultipleAuthorsInDB() {
+    public async Task GetCheepsFromAuthorByPage_ReturnsCorrectCheepWhenMultipleAuthorsInDB()
+    {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
 
@@ -189,14 +228,17 @@ public class CheepRepositoryUnitTest
             .UseSqlite(connection)
             .Options;
 
-        using (var context = new ChirpDBContext(options)) {
+        using (var context = new ChirpDBContext(options))
+        {
             context.Database.EnsureCreated();
 
-            List<Author> authors = []; List<Cheep> cheeps = [];
+            List<Author> authors = [];
+            List<Cheep> cheeps = [];
 
-            for (int i = 0; i < 5; i++) {
-                authors.Add(new Author { Name = $"name{i}", Email = $"{i}@mail.com", Cheeps = []});
-                cheeps.Add(new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now});
+            for (int i = 0; i < 5; i++)
+            {
+                authors.Add(new Author { Name = $"name{i}", Email = $"{i}@mail.com", Cheeps = [] });
+                cheeps.Add(new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now });
             }
 
             context.Authors.AddRange(authors);
@@ -204,7 +246,8 @@ public class CheepRepositoryUnitTest
             context.SaveChanges();
 
             var CheepRepo = new CheepRepository(context);
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++)
+            {
                 var result = await CheepRepo.GetCheepsFromAuthorByPage(authors[i].Name, 1, 1);
                 var resultDTO = result.ToList().ElementAt(0);
 
@@ -216,7 +259,8 @@ public class CheepRepositoryUnitTest
     }
 
     [Fact]
-    public async Task GetCheepsFromAuthorByPage_ReturnsNoCheepsForNonexistentAuthor() {
+    public async Task GetCheepsFromAuthorByPage_ReturnsNoCheepsForNonexistentAuthor()
+    {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
 
@@ -224,14 +268,17 @@ public class CheepRepositoryUnitTest
             .UseSqlite(connection)
             .Options;
 
-        using (var context = new ChirpDBContext(options)) {
+        using (var context = new ChirpDBContext(options))
+        {
             context.Database.EnsureCreated();
 
-            List<Author> authors = []; List<Cheep> cheeps = [];
+            List<Author> authors = [];
+            List<Cheep> cheeps = [];
 
-            for (int i = 0; i < 5; i++) {
-                authors.Add(new Author { Name = $"name{i}", Email = $"{i}@mail.com", Cheeps = []});
-                cheeps.Add(new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now});
+            for (int i = 0; i < 5; i++)
+            {
+                authors.Add(new Author { Name = $"name{i}", Email = $"{i}@mail.com", Cheeps = [] });
+                cheeps.Add(new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now });
             }
 
             context.Authors.AddRange(authors);
@@ -300,4 +347,29 @@ public class CheepRepositoryUnitTest
     }
 
     #endregion
-}   
+
+    [Fact]
+    public async Task CreateCheep()
+    {
+        //arrange
+        var chirpContext = GetContext();
+        var author = new Author { Name = "John Doe", Email = "JohnDoe@gmail.com" };
+        chirpContext.Authors.Add(author);
+        chirpContext.SaveChanges();
+
+        var unixTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var newCheep = new CheepDTO("John Doe", "message", unixTimestamp);
+
+        ICheepRepository repo = new CheepRepository(chirpContext);
+
+        //act
+        var result = await repo.CreateCheep(newCheep);
+
+        //Assert
+        Assert.True(result);
+        Assert.Equal(1, chirpContext.Cheeps.Count());
+        var cheep = chirpContext.Cheeps.FirstOrDefault();
+        Assert.NotNull(cheep);
+        Assert.Equal(newCheep.Message, cheep.Message);
+    }
+}
