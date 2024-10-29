@@ -8,8 +8,10 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
 {
     private readonly ChirpDBContext context = context;
 
-    public async Task<IEnumerable<CheepDTO>> GetCheepsByPage(int page, int pageSize)
+    public async Task<IEnumerable<CheepDTO>?> GetCheepsByPage(int page, int pageSize)
     {
+        if (pageSize < 0) return null;
+            
         var query = context.Cheeps
             .Select(cheep => new { cheep.Author.Name, cheep.Message, cheep.TimeStamp })
             .OrderByDescending(cheep => cheep.TimeStamp)

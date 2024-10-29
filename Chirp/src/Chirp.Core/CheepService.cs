@@ -12,7 +12,11 @@ public class CheepService(ICheepRepository db) : ICheepService
 {
     public List<CheepDTO> GetCheepsByPage(int page, int pageSize)
     {
-        return db.GetCheepsByPage(page, pageSize).Result.ToList();
+        ArgumentOutOfRangeException.ThrowIfNegative(pageSize);
+
+        var result = db.GetCheepsByPage(page, pageSize).Result ?? throw new ArgumentNullException(nameof(db.GetCheepsByPage));
+        
+        return result.ToList();
     }
 
     public List<CheepDTO> GetCheepsFromAuthorByPage(string author, int page, int pageSize)
