@@ -172,40 +172,34 @@ public class CheepRepositoryUnitTest : IDisposable
     [Fact]
     public async Task GetCheepsFromAuthorByPage_ReturnsCorrectCheepWhenMultipleAuthorsInDB()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        //arrange
+        var chirpContext = GetContext();
+        List<Author> authors = [];
+        List<Cheep> cheeps = [];
 
-        var options = new DbContextOptionsBuilder<ChirpDBContext>()
-            .UseSqlite(connection)
-            .Options;
-
-        using (var context = new ChirpDBContext(options))
+        for (int i = 0; i < 5; i++)
         {
-            context.Database.EnsureCreated();
+            var author = new Author { Name = $"name{i}", Email = $"{i}@mail.com", Cheeps = [] };
+            var cheep = new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now };
+            authors.Add(author);
+            cheeps.Add(cheep);
+        }
 
-            List<Author> authors = [];
-            List<Cheep> cheeps = [];
+        chirpContext.Authors.AddRange(authors);
+        chirpContext.Cheeps.AddRange(cheeps);
+        await chirpContext.SaveChangesAsync();
 
-            for (int i = 0; i < 5; i++)
-            {
-                authors.Add(new Author { Name = $"name{i}", Email = $"{i}@mail.com", Cheeps = [] });
-                cheeps.Add(new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now });
-            }
+        var cheepRepo = new CheepRepository(chirpContext);
+        for (int i = 0; i < 5; i++)
+        {
+            //act
+            var result = await cheepRepo.GetCheepsFromAuthorByPage(authors[i].Name, 1, 1);
+            var resultDTO = result.ToList().ElementAt(0);
 
-            context.Authors.AddRange(authors);
-            context.Cheeps.AddRange(cheeps);
-            context.SaveChanges();
-
-            var CheepRepo = new CheepRepository(context);
-            for (int i = 0; i < 5; i++)
-            {
-                var result = await CheepRepo.GetCheepsFromAuthorByPage(authors[i].Name, 1, 1);
-                var resultDTO = result.ToList().ElementAt(0);
-
-                Assert.Equal(cheeps[i].Author.Name, resultDTO.Author);
-                Assert.Equal(cheeps[i].Message, resultDTO.Message);
-                Assert.Equal(((DateTimeOffset)cheeps[i].TimeStamp).ToUnixTimeSeconds(), resultDTO.UnixTimestamp);
-            }
+            //arrange
+            Assert.Equal(cheeps[i].Author.Name, resultDTO.Author);
+            Assert.Equal(cheeps[i].Message, resultDTO.Message);
+            Assert.Equal(((DateTimeOffset)cheeps[i].TimeStamp).ToUnixTimeSeconds(), resultDTO.UnixTimestamp);
         }
     }
 
