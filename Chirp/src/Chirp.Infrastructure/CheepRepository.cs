@@ -1,5 +1,6 @@
 ﻿using Chirp.Core;
 using Chirp.Core.DTO;
+using Chirp.Infrastructure.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
@@ -37,8 +38,15 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             new CheepDTO(cheep.Name, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
 
-    public Task<bool> CreateCheep(CheepDTO cheep)
+    public async Task<bool> CreateCheep(CheepDTO cheep)
     {
-        throw new NotImplementedException();
+        var author = await context.Authors
+            .Where(a => a.Name == cheep.Author)
+            .FirstOrDefaultAsync();
+        if (author == null) return false;
+        var cheep2 = new Cheep {Author = author, Message = cheep.Message, TimeStamp = DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime};
+        context.Cheeps.Add(cheep2);
+        await context.SaveChangesAsync();
+        return true;
     }
 }
