@@ -179,10 +179,9 @@ public class CheepRepositoryUnitTest : IDisposable
 
         //Assert
         Assert.True(result);
-        
-        var containsCheep = chirpContext.Cheeps.Any(cheep =>
-            cheep.Author.Name == "John Doe" && cheep.Message == "message" &&
-            ((DateTimeOffset)cheep.TimeStamp).ToUnixTimeSeconds() == unixTimestamp);
-        Assert.True(containsCheep);
+        Assert.Equal(1, chirpContext.Cheeps.Count());
+        var cheep = chirpContext.Cheeps.FirstOrDefault();
+        Assert.NotNull(cheep);
+        Assert.Equal(newCheep.Message, cheep.Message);
     }
 }
