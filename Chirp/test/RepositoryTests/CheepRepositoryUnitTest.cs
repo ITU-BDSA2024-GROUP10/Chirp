@@ -32,7 +32,7 @@ public class CheepRepositoryUnitTest
         using (var context = new ChirpDBContext(options)) {
             context.Database.EnsureCreated();
 
-            var author = new Author { Id = 1, Name = "Bill", Email = "Bill@email", Cheeps = []};
+            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = []};
 
             for (int i = 0; i < 7; i++) {
                 context.Cheeps.Add(new Cheep {Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now});
@@ -84,7 +84,7 @@ public class CheepRepositoryUnitTest
         using (var context = new ChirpDBContext(options)) {
             context.Database.EnsureCreated();
 
-            var author = new Author { Id = 1, Name = "Bill", Email = "Bill@email", Cheeps = []};
+            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = []};
             List<Cheep> cheeps = [];
 
             for (int i = 0; i < 7; i++) {
@@ -151,7 +151,7 @@ public class CheepRepositoryUnitTest
         using (var context = new ChirpDBContext(options)) {
             context.Database.EnsureCreated();
 
-            var author = new Author { Id = 1, Name = "Bill", Email = "Bill@email.com", Cheeps = []};
+            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = []};
             var ts = new DateTime(2000, 01, 01);
             context.Cheeps.Add(new Cheep { Id = 1, Author = author, Message = "test", TimeStamp = ts});
 
@@ -259,8 +259,8 @@ public class CheepRepositoryUnitTest
         {
             context.Database.EnsureCreated();
 
-            Author AuthorA = new Author { Id = 1, Name = "Bill", Email = "Bill@email.com", Cheeps = [] };
-            Author AuthorB = new Author { Id = 2, Name = "Amy", Email = "Amy@email.com", Cheeps = [] };
+            Author AuthorA = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = [] };
+            Author AuthorB = new Author { Id = "2", Name = "Amy", Email = "Amy@email.com", Cheeps = [] };
 
             int authTotal = 0;
             var rand = new Random();
