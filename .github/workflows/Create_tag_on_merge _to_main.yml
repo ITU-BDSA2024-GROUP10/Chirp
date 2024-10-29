@@ -31,7 +31,10 @@ jobs:
         run: dotnet build --no-restore Chirp/
       
       - name: Test
-        run: dotnet test --no-build --verbosity normal Chirp/
+        run: |
+          export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
+          export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+          dotnet test --verbosity normal Chirp/
 
        # Get the latest tag from the repository
       - name: Get latest tag
@@ -80,6 +83,10 @@ jobs:
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
           echo "Calculated new version: $NEW_VERSION"
 
+      - name: Cancel Workflow
+        if: env.SKIP_RELEASE == 'true'
+        run: exit 78
+      
       # Create a new Git tag with the calculated version
       - name: Create Git Tag
         if: env.SKIP_RELEASE != 'true'

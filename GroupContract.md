@@ -8,6 +8,22 @@ Rasmus \<rarl@itu.dk>\
 Mathias \<mlao@itu.dk>
 
 ## Naming Conventions
+### Code
+#### Using
+We use "using () {}" \
+And not "using;"
+
+#### Variabels
+We use _ in front of private varibels and propeties. \
+private string _exampel;
+
+#### Constructors
+When possibel we use primary constructors \
+public class Exampel (int _variabel) \
+{ \
+  public int variabel { get; } = _variabel; \
+}
+
 ### Branches
 #### Title 
 small-characters-with-dashes
