@@ -1,6 +1,7 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using ChirpDBContext = Chirp.Infrastructure.ChirpDBContext;
@@ -14,11 +15,38 @@ if (!Directory.Exists(dir))
     Directory.CreateDirectory(dir);
 }
 
+builder.Configuration.AddEnvironmentVariables();
+
 // Load database connection via configuration
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
+
+// add identity service
 builder.Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ChirpDBContext>();
+
+// Add authentication service
+builder.Services.AddAuthentication(/*options =>
+    {
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        //options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = "GitHub";
+    }*/)
+    .AddCookie()
+    .AddGitHub(o =>
+    {
+        o.Scope.Add("user:email");
+        o.Scope.Add("read:user");
+        o.ClientId = builder.Configuration["authentication:github:clientId"] 
+                     ?? Environment.GetEnvironmentVariable("authentication_github_clientId")
+                     ?? throw new InvalidOperationException("github:clientId secret not found");
+        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"] 
+                         ?? Environment.GetEnvironmentVariable("authentication_github_clientSecret")
+                         ?? throw new InvalidOperationException("github:clientSecret secret not found");
+        o.CallbackPath = "/signin-github";
+    });
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepService, CheepService>();
@@ -63,8 +91,11 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
+//app.UseSession();
+
 app.MapRazorPages();
 
 app.Run();
