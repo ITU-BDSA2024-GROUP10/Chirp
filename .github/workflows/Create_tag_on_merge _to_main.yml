@@ -31,7 +31,10 @@ jobs:
         run: dotnet build --no-restore Chirp/
       
       - name: Test
-        run: dotnet test --no-build --verbosity normal Chirp/
+        run: |
+          export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
+          export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+          dotnet test --no-build --verbosity normal Chirp/
 
        # Get the latest tag from the repository
       - name: Get latest tag
