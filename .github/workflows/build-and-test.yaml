@@ -40,8 +40,8 @@ jobs:
       run: dotnet restore Chirp/
       
     - name: Test
+      working-directory: Chirp/
       run: |
-          dotnet user-secrets init --project .\src\Chirp.Web\
-          dotnet user-secrets set "authentication:github:clientId" "${{ secrets.GITHUBCLIENTID }}" --project .\src\Chirp.Web\
-          dotnet user-secrets set "authentication:github:clientSecret" "${{ secrets.GITHUBCLIENTSECRET }}" --project .\src\Chirp.Web\
-          dotnet test --verbosity normal Chirp/
+          export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
+          export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+          dotnet test --verbosity normal
