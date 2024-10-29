@@ -288,15 +288,15 @@ public class CheepRepositoryUnitTest : IDisposable
         var chirpContext = GetContext();
         var author = new Author { Name = "John Doe", Email = "JohnDoe@gmail.com" };
         chirpContext.Authors.Add(author);
-        chirpContext.SaveChanges();
+        await chirpContext.SaveChangesAsync();
 
         var unixTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         var newCheep = new CheepDTO("John Doe", "message", unixTimestamp);
 
-        ICheepRepository repo = new CheepRepository(chirpContext);
+        var cheepRepo = new CheepRepository(chirpContext);
 
         //act
-        var result = await repo.CreateCheep(newCheep);
+        var result = await cheepRepo.CreateCheep(newCheep);
 
         //Assert
         Assert.True(result);
