@@ -88,47 +88,35 @@ public class CheepRepositoryUnitTest : IDisposable
     [Fact]
     public async Task GetCheepsByPage_ReturnsCorrectCheepsFromMiddlePages()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
-
-        var options = new DbContextOptionsBuilder<ChirpDBContext>()
-            .UseSqlite(connection)
-            .Options;
-
-        using (var context = new ChirpDBContext(options))
+        //arrange
+        var chirpContext = GetContext();
+        var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = [] };
+        List<Cheep> cheeps = [];
+        for (int i = 0; i < 7; i++)
         {
-            context.Database.EnsureCreated();
+            var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now };
+            cheeps.Add(cheep);
+        }
+        cheeps.Reverse();
+        chirpContext.Cheeps.AddRange(cheeps);
+        await chirpContext.SaveChangesAsync();
+        var cheepRepo = new CheepRepository(chirpContext);
 
-            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = [] };
-            List<Cheep> cheeps = [];
+        //act
+        var result = await cheepRepo.GetCheepsByPage(2, 3);
 
-            for (int i = 0; i < 7; i++)
-            {
-                cheeps.Add(new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now });
-            }
+        //assert
+        Assert.NotNull(result);
 
-            cheeps.Reverse();
-            context.Cheeps.AddRange(cheeps);
+        var resultList = result.ToList();
+        for (int i = 0; i < 3; i++)
+        {
+            var expectedCheep = cheeps.ElementAt(i + 3);
+            var singleCheep = resultList.ElementAt(i);
 
-
-            context.SaveChanges();
-
-            var CheepRepo = new CheepRepository(context);
-
-            var result = await CheepRepo.GetCheepsByPage(2, 3);
-
-            Assert.NotNull(result);
-
-            var resultList = result.ToList();
-            for (int i = 0; i < 3; i++)
-            {
-                var expectedCheep = cheeps.ElementAt(i + 3);
-                var singleCheep = resultList.ElementAt(i);
-
-                Assert.Equal(expectedCheep.Author.Name, singleCheep.Author);
-                Assert.Equal(expectedCheep.Message, singleCheep.Message);
-                Assert.Equal(((DateTimeOffset)expectedCheep.TimeStamp).ToUnixTimeSeconds(), singleCheep.UnixTimestamp);
-            }
+            Assert.Equal(expectedCheep.Author.Name, singleCheep.Author);
+            Assert.Equal(expectedCheep.Message, singleCheep.Message);
+            Assert.Equal(((DateTimeOffset)expectedCheep.TimeStamp).ToUnixTimeSeconds(), singleCheep.UnixTimestamp);
         }
     }
 
