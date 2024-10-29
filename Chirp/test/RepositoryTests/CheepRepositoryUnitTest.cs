@@ -206,35 +206,30 @@ public class CheepRepositoryUnitTest : IDisposable
     [Fact]
     public async Task GetCheepsFromAuthorByPage_ReturnsNoCheepsForNonexistentAuthor()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        //arrange
+        var chirpContext = GetContext();
+        List<Author> authors = [];
+        List<Cheep> cheeps = [];
 
-        var options = new DbContextOptionsBuilder<ChirpDBContext>()
-            .UseSqlite(connection)
-            .Options;
-
-        using (var context = new ChirpDBContext(options))
+        for (int i = 0; i < 5; i++)
         {
-            context.Database.EnsureCreated();
-
-            List<Author> authors = [];
-            List<Cheep> cheeps = [];
-
-            for (int i = 0; i < 5; i++)
-            {
-                authors.Add(new Author { Name = $"name{i}", Email = $"{i}@mail.com", Cheeps = [] });
-                cheeps.Add(new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now });
-            }
-
-            context.Authors.AddRange(authors);
-            context.Cheeps.AddRange(cheeps);
-            context.SaveChanges();
-
-            var CheepRepo = new CheepRepository(context);
-
-            var result = await CheepRepo.GetCheepsFromAuthorByPage("Bill", 1, 5);
-            Assert.Empty(result.ToList());
+            var author = new Author { Name = $"name{i}", Email = $"{i}@mail.com" };
+            authors.Add(author);
+            var cheep = new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now };
+            cheeps.Add(cheep);
         }
+
+        chirpContext.Authors.AddRange(authors);
+        chirpContext.Cheeps.AddRange(cheeps);
+        await chirpContext.SaveChangesAsync();
+
+        var cheepRepo = new CheepRepository(chirpContext);
+
+        //act
+        var result = await cheepRepo.GetCheepsFromAuthorByPage("Bill", 1, 5);
+
+        //assert
+        Assert.Empty(result.ToList());
     }
 
     [Fact]
