@@ -60,17 +60,17 @@ jobs:
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
           
           # Check which label is present and increment the version accordingly
-          if echo "$PR_LABELS" | grep -q "\bbreaking\b"; then
+          if echo "$PR_LABELS" | grep -q "^breaking$"; then
             NOT_ALLOWED_LABELS="refactor|test|workflow"
             MAJOR=$((MAJOR + 1))
             MINOR=0
             PATCH=0
           # feature
-          elif echo "$PR_LABELS" | grep -q "\bfeature\b"; then
+          elif echo "$PR_LABELS" | grep -q "^feature$"; then
             MINOR=$((MINOR + 1))
             PATCH=0
           # bug
-          elif echo "$PR_LABELS" | grep -q "\bbug\b"; then
+          elif echo "$PR_LABELS" | grep -q "^bug$"; then
             PATCH=$((PATCH + 1))
           else
             echo "No release related label detected. Skipping release process."
