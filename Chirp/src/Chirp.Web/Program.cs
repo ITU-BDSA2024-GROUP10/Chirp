@@ -15,6 +15,8 @@ if (!Directory.Exists(dir))
     Directory.CreateDirectory(dir);
 }
 
+builder.Configuration.AddEnvironmentVariables();
+
 // Load database connection via configuration
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(connectionString));
