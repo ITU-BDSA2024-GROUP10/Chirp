@@ -235,55 +235,48 @@ public class CheepRepositoryUnitTest : IDisposable
     [Fact]
     public async Task GetCheepsFromAuthorByPage_ReturnsAllCheepsFromAuthorForLargeNumberOfCheepsOnMultiplePages()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        //arrange
+        var chirpContext = GetContext();
+        var authorA = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = [] };
+        var authorB = new Author { Id = "2", Name = "Amy", Email = "Amy@email.com", Cheeps = [] };
 
-        var options = new DbContextOptionsBuilder<ChirpDBContext>()
-            .UseSqlite(connection)
-            .Options;
+        var authTotal = 0;
+        var rand = new Random();
 
-        using (var context = new ChirpDBContext(options))
+        for (int i = 0; i < 100; i++)
         {
-            context.Database.EnsureCreated();
-
-            Author AuthorA = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = [] };
-            Author AuthorB = new Author { Id = "2", Name = "Amy", Email = "Amy@email.com", Cheeps = [] };
-
-            int authTotal = 0;
-            var rand = new Random();
-
-            for (int i = 0; i < 100; i++)
+            int r = rand.Next(2);
+            if (r == 1)
             {
-                int r = rand.Next(2);
-                if (r == 1)
-                {
-                    context.Cheeps.Add(new Cheep { Author = AuthorB, Message = "", TimeStamp = DateTime.Now });
-                }
-                else
-                {
-                    context.Cheeps.Add(new Cheep { Author = AuthorA, Message = "", TimeStamp = DateTime.Now });
-                    authTotal++;
-                }
+                var cheep = new Cheep { Author = authorB, Message = "", TimeStamp = DateTime.Now };
+                chirpContext.Cheeps.Add(cheep);
             }
-
-            context.SaveChanges();
-
-            var CheepRepo = new CheepRepository(context);
-
-            int pageNo = 1;
-            int totalCount = 0;
-            while (true)
+            else
             {
-                var result = await CheepRepo.GetCheepsFromAuthorByPage("Bill", pageNo, 20);
-                var count = result.ToList().Count;
-                if (count == 0)
-                    break;
-                totalCount += count;
-                pageNo++;
+                var cheep = new Cheep { Author = authorA, Message = "", TimeStamp = DateTime.Now };
+                chirpContext.Cheeps.Add(cheep);
+                authTotal++;
             }
-
-            Assert.Equal(authTotal, totalCount);
         }
+
+        await chirpContext.SaveChangesAsync();
+        var cheepRepo = new CheepRepository(chirpContext);
+
+        //act
+        int pageNo = 1;
+        int totalCount = 0;
+        while (true)
+        {
+            var result = await cheepRepo.GetCheepsFromAuthorByPage("Bill", pageNo, 20);
+            var count = result.ToList().Count;
+            if (count == 0)
+                break;
+            totalCount += count;
+            pageNo++;
+        }
+
+        //assert
+        Assert.Equal(authTotal, totalCount);
     }
 
     #endregion
