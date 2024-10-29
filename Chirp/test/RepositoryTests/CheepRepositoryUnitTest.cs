@@ -47,33 +47,24 @@ public class CheepRepositoryUnitTest : IDisposable
     [InlineData(4, 3, 0)] //pagesize * pageno > no of cheeps
     public async Task GetCheepsByPage_ReturnsCorrectNumberOfCheeps(int page, int pageSize, int? expected)
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
-
-        var options = new DbContextOptionsBuilder<ChirpDBContext>()
-            .UseSqlite(connection)
-            .Options;
-
-        using (var context = new ChirpDBContext(options))
+        //arrange
+        var chirpContext = GetContext();
+        var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = [] };
+        for (int i = 0; i < 7; i++)
         {
-            context.Database.EnsureCreated();
-
-            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = [] };
-
-            for (int i = 0; i < 7; i++)
-            {
-                context.Cheeps.Add(new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now });
-            }
-
-            context.SaveChanges();
-
-            var cheepRepo = new CheepRepository(context);
-
-            var result = await cheepRepo.GetCheepsByPage(page, pageSize);
-
-            Assert.NotNull(result);
-            Assert.Equal(expected, result.Count());
+            var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now };
+            chirpContext.Cheeps.Add(cheep);
         }
+
+        await chirpContext.SaveChangesAsync();
+        var cheepRepo = new CheepRepository(chirpContext);
+
+        //act
+        var result = await cheepRepo.GetCheepsByPage(page, pageSize);
+
+        //assert
+        Assert.NotNull(result);
+        Assert.Equal(expected, result.Count());
     }
 
     [Fact]
