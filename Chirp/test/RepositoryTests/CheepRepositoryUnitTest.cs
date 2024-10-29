@@ -97,6 +97,7 @@ public class CheepRepositoryUnitTest : IDisposable
             var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now };
             cheeps.Add(cheep);
         }
+
         cheeps.Reverse();
         chirpContext.Cheeps.AddRange(cheeps);
         await chirpContext.SaveChangesAsync();
@@ -124,24 +125,16 @@ public class CheepRepositoryUnitTest : IDisposable
     [InlineData(3, 3)]
     public async Task GetCheepsByPage_ReturnsNoCheepsForEmptyRepository(int page, int pageSize)
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
-
-        var options = new DbContextOptionsBuilder<ChirpDBContext>()
-            .UseSqlite(connection)
-            .Options;
-
-        using (var context = new ChirpDBContext(options))
-        {
-            context.Database.EnsureCreated();
-
-            var CheepRepo = new CheepRepository(context);
-
-            var result = await CheepRepo.GetCheepsByPage(page, pageSize);
-
-            Assert.NotNull(result);
-            Assert.Empty(result.ToList());
-        }
+        //arrange
+        var chirpContext = GetContext();
+        var cheepRepo = new CheepRepository(chirpContext);
+        
+        //act
+        var result = await cheepRepo.GetCheepsByPage(page, pageSize);
+        
+        //assert
+        Assert.NotNull(result);
+        Assert.Empty(result.ToList());
     }
 
     [Fact]
