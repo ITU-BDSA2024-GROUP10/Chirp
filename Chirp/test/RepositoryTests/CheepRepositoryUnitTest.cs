@@ -128,10 +128,10 @@ public class CheepRepositoryUnitTest : IDisposable
         //arrange
         var chirpContext = GetContext();
         var cheepRepo = new CheepRepository(chirpContext);
-        
+
         //act
         var result = await cheepRepo.GetCheepsByPage(page, pageSize);
-        
+
         //assert
         Assert.NotNull(result);
         Assert.Empty(result.ToList());
@@ -140,40 +140,29 @@ public class CheepRepositoryUnitTest : IDisposable
     [Fact]
     public async Task GetCheepsByPage_ReturnsCorrectSingleCheep()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        //arrange
+        var chirpContext = GetContext();
+        var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = [] };
+        var timeStamp = new DateTime(2000, 01, 01);
+        var cheep = new Cheep { Author = author, Message = "test", TimeStamp = timeStamp };
+        chirpContext.Cheeps.Add(cheep);
+        await chirpContext.SaveChangesAsync();
+        var cheepRepo = new CheepRepository(chirpContext);
 
-        var options = new DbContextOptionsBuilder<ChirpDBContext>()
-            .UseSqlite(connection)
-            .Options;
+        //act
+        var result = await cheepRepo.GetCheepsByPage(1, 1);
 
-        using (var context = new ChirpDBContext(options))
-        {
-            context.Database.EnsureCreated();
+        //assert
+        Assert.NotNull(result);
 
-            var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = [] };
-            var ts = new DateTime(2000, 01, 01);
-            context.Cheeps.Add(new Cheep { Id = 1, Author = author, Message = "test", TimeStamp = ts });
+        var resultList = result.ToList();
+        var expected = new CheepDTO("Bill", "test", ((DateTimeOffset)timeStamp).ToUnixTimeSeconds());
+        Assert.Single(resultList);
 
-            context.SaveChanges();
-
-            var CheepRepo = new CheepRepository(context);
-
-            var result = await CheepRepo.GetCheepsByPage(1, 1);
-
-            Assert.NotNull(result);
-            var resultList = result.ToList();
-
-            var expected = new CheepDTO("Bill", "test", ((DateTimeOffset)ts).ToUnixTimeSeconds());
-
-            Assert.Single(resultList);
-
-            var singleCheep = resultList.ElementAt(0);
-
-            Assert.Equal(expected.Author, singleCheep.Author);
-            Assert.Equal(expected.Message, singleCheep.Message);
-            Assert.Equal(expected.UnixTimestamp, singleCheep.UnixTimestamp);
-        }
+        var singleCheep = resultList.ElementAt(0);
+        Assert.Equal(expected.Author, singleCheep.Author);
+        Assert.Equal(expected.Message, singleCheep.Message);
+        Assert.Equal(expected.UnixTimestamp, singleCheep.UnixTimestamp);
     }
 
     #endregion
