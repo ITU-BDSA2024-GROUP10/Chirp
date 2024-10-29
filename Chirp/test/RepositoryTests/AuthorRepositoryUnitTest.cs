@@ -109,7 +109,6 @@ public class AuthorRepositoryUnitTest : IDisposable
         Assert.NotNull(checkSuccession);
         Assert.Equal(author.Email, checkSuccession.Email);
         Assert.Equal(author.Name, checkSuccession.Name);
-        Assert.Equal(1, checkSuccession.Id);
     }
 
     [Fact]

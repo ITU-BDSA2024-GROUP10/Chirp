@@ -3,21 +3,24 @@ using System;
 using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace SimpleDB.Migrations
+namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    partial class ChirpDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241025111030_UserInheritance")]
+    partial class UserInheritance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
-            modelBuilder.Entity("Chirp.Infrastructure.Model.Author", b =>
+            modelBuilder.Entity("Chirp.Infrastructure.Model.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -29,8 +32,12 @@ namespace SimpleDB.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Discriminator")
                         .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
@@ -76,12 +83,6 @@ namespace SimpleDB.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -90,6 +91,10 @@ namespace SimpleDB.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Chirp.Infrastructure.Model.Cheep", b =>
@@ -249,6 +254,23 @@ namespace SimpleDB.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Chirp.Infrastructure.Model.Author", b =>
+                {
+                    b.HasBaseType("Chirp.Infrastructure.Model.ApplicationUser");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique();
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasDiscriminator().HasValue("Author");
+                });
+
             modelBuilder.Entity("Chirp.Infrastructure.Model.Cheep", b =>
                 {
                     b.HasOne("Chirp.Infrastructure.Model.Author", "Author")
@@ -271,7 +293,7 @@ namespace SimpleDB.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Chirp.Infrastructure.Model.Author", null)
+                    b.HasOne("Chirp.Infrastructure.Model.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -280,7 +302,7 @@ namespace SimpleDB.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Chirp.Infrastructure.Model.Author", null)
+                    b.HasOne("Chirp.Infrastructure.Model.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -295,7 +317,7 @@ namespace SimpleDB.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Chirp.Infrastructure.Model.Author", null)
+                    b.HasOne("Chirp.Infrastructure.Model.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -304,11 +326,22 @@ namespace SimpleDB.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Chirp.Infrastructure.Model.Author", null)
+                    b.HasOne("Chirp.Infrastructure.Model.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Chirp.Infrastructure.Model.Author", b =>
+                {
+                    b.HasOne("Chirp.Infrastructure.Model.ApplicationUser", "ApplicationUser")
+                        .WithOne()
+                        .HasForeignKey("Chirp.Infrastructure.Model.Author", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Chirp.Infrastructure.Model.Author", b =>

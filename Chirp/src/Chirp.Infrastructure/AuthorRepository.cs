@@ -12,7 +12,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
     public async Task<AuthorDTO?> GetAuthorByName(string name) =>
         await context.Authors
             .Where(a => a.Name == name)
-            .Select(a => new AuthorDTO(a.Name, a.Email))
+            .Select(a => new AuthorDTO(a.Name, a.Email!))
             .FirstOrDefaultAsync();
 
     public async Task<AuthorDTO?> GetAuthorByEmail(string email)
@@ -24,20 +24,14 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
 
         var authors = await query.ToListAsync();
 
-        return authors.Select(author => new AuthorDTO(author.Name, author.Email)).FirstOrDefault();
+        return authors.Select(author => new AuthorDTO(author.Name, author.Email ?? string.Empty)).FirstOrDefault();
     }
 
     public async Task<bool> AddAuthor(AuthorDTO author)
     {
-        var newAuthor = new Author
-        {
-            Name = author.Name,
-            Email = author.Email
-        };
-
         try
         {
-            context.Authors.Add(newAuthor);
+            context.Authors.Add(Author.CreateAuthor(author));
             await context.SaveChangesAsync();
             return true;
         }
