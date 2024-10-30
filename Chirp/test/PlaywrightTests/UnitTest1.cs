@@ -1,10 +1,14 @@
 using System.Text.RegularExpressions;
+using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 
 namespace PlaywrightTests;
 
+[Parallelizable(ParallelScope.Self)]
+[TestFixture]
 public class Tests : PageTest
 {
+    private const string BaseUrl = "https://bdsa2024group10chirpremotedb-h3c8bne5cahweegw.northeurope-01.azurewebsites.net/";
     [SetUp]
     public void Setup()
     {
@@ -13,7 +17,7 @@ public class Tests : PageTest
     [Test]
     public async Task HasTitle()
     {
-        await Page.GotoAsync("https://bdsa2024group10chirpremotedb-h3c8bne5cahweegw.northeurope-01.azurewebsites.net/");
+        await Page.GotoAsync(BaseUrl);
 
         // Expect a title "to contain" a substring.
         await Expect(Page).ToHaveTitleAsync(new Regex("Chirp!"));
