@@ -8,21 +8,22 @@ namespace PlaywrightTests;
 [TestFixture]
 public class Tests : PageTest
 {
-    private const string BaseUrl = "https://bdsa2024group10chirpremotedb-h3c8bne5cahweegw.northeurope-01.azurewebsites.net/";
+    private const string BaseUrl = "http://localhost:5273";
+
     [SetUp]
     public void Setup()
     {
+        // StartServer
     }
 
     [Test]
     public async Task HasTitle()
     {
-        await Page.GotoAsync(BaseUrl);
-
+        await Page.GotoAsync("/");
         // Expect a title "to contain" a substring.
         await Expect(Page).ToHaveTitleAsync(new Regex("Chirp!"));
     }
-    
+
     [Test]
     public async Task HasRegisterLink()
     {
@@ -50,7 +51,7 @@ public class Tests : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Password123");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        
+
         //assert
         await Expect(Page.GetByText("Passwords must have at least")).ToBeVisibleAsync();
     }
@@ -81,7 +82,7 @@ public class Tests : PageTest
         await Page.GetByRole(AriaRole.Heading, new() { Name = "Mathias's Timeline" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "logout [Mathias]" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
-        
+
         //assert
         await Expect(Page.GetByText("You have successfully logged")).ToBeVisibleAsync();
     }
