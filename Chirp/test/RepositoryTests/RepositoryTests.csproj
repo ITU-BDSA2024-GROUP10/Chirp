@@ -26,8 +26,4 @@
       <ProjectReference Include="..\..\src\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Utils\" />
-    </ItemGroup>
-
 </Project>
