@@ -4,35 +4,19 @@ using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using RepositoryTests.Utils;
 
 namespace RepositoryTests;
 
-public class AuthorRepositoryUnitTest : IDisposable
+public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
+    : IClassFixture<InMemoryDBFixture<ChirpDBContext>> 
 {
-    private readonly SqliteConnection _connection;
-
-    public AuthorRepositoryUnitTest()
-    {
-        _connection = new SqliteConnection("Filename=:memory:");
-        _connection.Open();
-    }
-
-    private ChirpDBContext GetContext()
-    {
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(_connection);
-
-        var context = new ChirpDBContext(builder.Options);
-        context.Database.EnsureDeleted(); //Ensures that any test runs on their own DB
-        context.Database.EnsureCreated(); // Applies the schema to the database
-
-        return context;
-    }
 
     [Fact]
     public async void GetAuthorByName_NameCantBeFound_ReturnNull()
     {
         //arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var author = new Author { Name = "John Doe", Email = "JohnDoe@gmail.com" };
 
         chirpContext.Authors.Add(author);
@@ -53,7 +37,7 @@ public class AuthorRepositoryUnitTest : IDisposable
     public async void GetAuthorByName_NameIsHelge_ReturnsAuthorDTOOfHelge()
     {
         //Arrange an arbitrary author with name 'Helge' and create arbitrary database to put up
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var author = new Author { Name = "Helge", Email = "Helge@gmail.com" };
 
         chirpContext.Authors.Add(author);
@@ -74,7 +58,7 @@ public class AuthorRepositoryUnitTest : IDisposable
     public async void AddAuthor_NameIsNullKeyword_ReturnFalse()
     {
         //Arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var author = new AuthorDTO(null!, "null@gmail.com");
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
@@ -90,7 +74,7 @@ public class AuthorRepositoryUnitTest : IDisposable
     public async void AddAuthor_NameIsJohn_Doe_ReturnTrue()
     {
         //Arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var author = new AuthorDTO("John Doe", "JohnDoe@gmail.com");
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
@@ -115,7 +99,7 @@ public class AuthorRepositoryUnitTest : IDisposable
     public async void GetAuthorByEmail_EmailIsAnITUMail_ReturnAuthorDTOOfMail()
     {
         //Arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var author = new Author { Name = "John Doe", Email = "jodoe@itu.dk" };
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
@@ -130,16 +114,11 @@ public class AuthorRepositoryUnitTest : IDisposable
         Assert.Equal(author.Email, result.Email);
     }
 
-    public void Dispose()
-    {
-        _connection.Close();
-    }
-
     [Fact]
     public async void GetAuthorByEmail_EmailIsNotThere_ReturnNull()
     {
         //Arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var author = new AuthorDTO("John Doe", "jodoe@itu.dk");
         var author2 = new Author { Name = "Abra Cabrera", Email = "AbraCabrera@gmail.com" };
 

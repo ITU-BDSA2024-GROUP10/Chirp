@@ -4,34 +4,13 @@ using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using RepositoryTests.Utils;
 
 namespace RepositoryTests;
 
-public class CheepRepositoryUnitTest : IDisposable
+public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
+    : IClassFixture<InMemoryDBFixture<ChirpDBContext>>
 {
-    private readonly SqliteConnection _connection;
-
-    public CheepRepositoryUnitTest()
-    {
-        _connection = new SqliteConnection("Filename=:memory:");
-        _connection.Open();
-    }
-
-    public void Dispose()
-    {
-        _connection.Close();
-    }
-
-    private ChirpDBContext GetContext()
-    {
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(_connection);
-
-        var context = new ChirpDBContext(builder.Options);
-        context.Database.EnsureDeleted(); //Ensures that any test runs on their own DB
-        context.Database.EnsureCreated(); // Applies the schema to the database
-
-        return context;
-    }
 
     #region get cheeps
 
@@ -48,7 +27,7 @@ public class CheepRepositoryUnitTest : IDisposable
     public async Task GetCheepsByPage_ReturnsCorrectNumberOfCheeps(int page, int pageSize, int? expected)
     {
         //arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = [] };
         for (int i = 0; i < 7; i++)
         {
@@ -71,7 +50,7 @@ public class CheepRepositoryUnitTest : IDisposable
     public async Task GetCheepsByPage_NegativePageSize_ReturnsNull()
     {
         //arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var author = new Author { Name = "mr. test", Email = "test@test.test" };
         var cheep = new Cheep { Author = author, Message = "test", TimeStamp = DateTime.Now };
         chirpContext.Cheeps.Add(cheep);
@@ -89,7 +68,7 @@ public class CheepRepositoryUnitTest : IDisposable
     public async Task GetCheepsByPage_ReturnsCorrectCheepsFromMiddlePages()
     {
         //arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = [] };
         List<Cheep> cheeps = [];
         for (int i = 0; i < 7; i++)
@@ -126,7 +105,7 @@ public class CheepRepositoryUnitTest : IDisposable
     public async Task GetCheepsByPage_ReturnsNoCheepsForEmptyRepository(int page, int pageSize)
     {
         //arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var cheepRepo = new CheepRepository(chirpContext);
 
         //act
@@ -141,7 +120,7 @@ public class CheepRepositoryUnitTest : IDisposable
     public async Task GetCheepsByPage_ReturnsCorrectSingleCheep()
     {
         //arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = [] };
         var timeStamp = new DateTime(2000, 01, 01);
         var cheep = new Cheep { Author = author, Message = "test", TimeStamp = timeStamp };
@@ -173,7 +152,7 @@ public class CheepRepositoryUnitTest : IDisposable
     public async Task GetCheepsFromAuthorByPage_ReturnsCorrectCheepWhenMultipleAuthorsInDB()
     {
         //arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         List<Author> authors = [];
         List<Cheep> cheeps = [];
 
@@ -207,7 +186,7 @@ public class CheepRepositoryUnitTest : IDisposable
     public async Task GetCheepsFromAuthorByPage_ReturnsNoCheepsForNonexistentAuthor()
     {
         //arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         List<Author> authors = [];
         List<Cheep> cheeps = [];
 
@@ -236,7 +215,7 @@ public class CheepRepositoryUnitTest : IDisposable
     public async Task GetCheepsFromAuthorByPage_ReturnsAllCheepsFromAuthorForLargeNumberOfCheepsOnMultiplePages()
     {
         //arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var authorA = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = [] };
         var authorB = new Author { Id = "2", Name = "Amy", Email = "Amy@email.com", Cheeps = [] };
 
@@ -285,7 +264,7 @@ public class CheepRepositoryUnitTest : IDisposable
     public async Task CreateCheep()
     {
         //arrange
-        var chirpContext = GetContext();
+        var chirpContext = _fixture.GetContext();
         var author = new Author { Name = "John Doe", Email = "JohnDoe@gmail.com" };
         chirpContext.Authors.Add(author);
         await chirpContext.SaveChangesAsync();
