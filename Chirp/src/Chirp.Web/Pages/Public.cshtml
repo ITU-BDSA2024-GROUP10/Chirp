@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using System.Globalization
+@using Chirp.Web.Pages.BindingModels
 @model Chirp.Web.Pages.PublicModel
 @{
     ViewData["Title"] = "Chirp!";
@@ -8,6 +9,8 @@
 
 <div>
     <h2> Public Timeline </h2>
+
+    @await Component.InvokeAsync("SubmitCheep", new { messageModel = new MessageModel()})
 
     @if (Model.Cheeps.Any())
     {
