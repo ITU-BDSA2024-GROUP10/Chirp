@@ -7,7 +7,7 @@ namespace PlaywrightTests;
 
 [Parallelizable(ParallelScope.Self)]
 [TestFixture]
-public class Tests : PageTest
+public class EndToEndTests : PageTest
 {
     private const string BaseUrl = "http://localhost:5273/";
     private CustomWebApplicationFactory _factory;
