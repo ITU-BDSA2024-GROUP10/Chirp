@@ -1,46 +1,23 @@
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Playwright;
-using Microsoft.Playwright.NUnit;
 
 namespace PlaywrightTests;
 
 [Parallelizable(ParallelScope.Self)]
 [TestFixture]
-public class EndToEndTests : PageTest
+public class EndToEndTests : PageTestWithCustomWebApplicationFactory
 {
-    private const string BaseUrl = "http://localhost:5273/";
-    private CustomWebApplicationFactory _factory;
-    private HttpClient _client;
-
-    [OneTimeSetUp]
-    public void OneTimeSetUp() => _factory = new CustomWebApplicationFactory();
-
-    [SetUp]
-    public void Setup()
-    {
-        _client = _factory.WithWebHostBuilder(builder => builder.UseUrls(BaseUrl)).CreateClient();
-        _factory.ResetDB();
-    }
-
-    [OneTimeTearDown]
-    public async Task OneTimeTearDown()
-    {
-        _client.Dispose();
-        await _factory.DisposeAsync();
-    }
-
     [Test]
     public async Task HasTitle()
     {
-        await Page.GotoAsync(BaseUrl);
+        await Page.GotoAsync("/");
         await Expect(Page).ToHaveTitleAsync(new Regex("Chirp!"));
     }
 
     [Test]
     public async Task HasRegisterLink()
     {
-        await Page.GotoAsync(BaseUrl);
+        await Page.GotoAsync("/");
 
         // Click the get started link.
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
@@ -54,7 +31,7 @@ public class EndToEndTests : PageTest
     public async Task PasswordMustHaveNonAlphanumericCharacters()
     {
         //act
-        await Page.GotoAsync(BaseUrl + "Identity/Account/Register");
+        await Page.GotoAsync("/Identity/Account/Register");
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync("Mathias");
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
@@ -72,7 +49,7 @@ public class EndToEndTests : PageTest
     [Test]
     public async Task EndToEnd_RegisterLoginAndLogout()
     {
-        await Page.GotoAsync(BaseUrl);
+        await Page.GotoAsync("/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync("Mathias");
