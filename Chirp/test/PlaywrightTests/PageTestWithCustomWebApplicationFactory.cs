@@ -9,7 +9,7 @@ public class PageTestWithCustomWebApplicationFactory : PageTest
     private const string BaseUrl = "http://localhost:5273/";
     private CustomWebApplicationFactory _factory;
     private HttpClient _client;
-    
+
     public override BrowserNewContextOptions ContextOptions()
     {
         return new BrowserNewContextOptions()

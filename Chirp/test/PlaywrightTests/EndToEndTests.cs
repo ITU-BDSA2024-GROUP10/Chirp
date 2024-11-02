@@ -7,7 +7,6 @@ namespace PlaywrightTests;
 [TestFixture]
 public class EndToEndTests : PageTestWithCustomWebApplicationFactory
 {
-
     [Test]
     public async Task EndToEnd_RegisterLoginAndLogout()
     {

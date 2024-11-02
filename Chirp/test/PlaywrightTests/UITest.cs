@@ -8,21 +8,22 @@ public class UITest : PageTestWithCustomWebApplicationFactory
     [Test]
     public async Task HasTitle()
     {
+        //act
         await Page.GotoAsync("/");
+        
+        //assert
         await Expect(Page).ToHaveTitleAsync(new Regex("Chirp!"));
     }
 
     [Test]
     public async Task HasRegisterLink()
     {
+        //act
         await Page.GotoAsync("/");
-
-        // Click the get started link.
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
-
+        
+        //assert
         await Expect(Page).ToHaveTitleAsync(new Regex("Register"));
-        // Expects page to have a heading with the name of Installation.
-        //await Expect(Page.GetByRole(AriaRole.Form, new() { Name = "Installation" })).ToBeVisibleAsync();
     }
 
     [Test]
