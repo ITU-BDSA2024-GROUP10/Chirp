@@ -5,6 +5,7 @@ namespace PlaywrightTests;
 
 public class UITest : PageTestWithCustomWebApplicationFactory
 {
+    [Test]
     public async Task HasTitle()
     {
         await Page.GotoAsync("/");
