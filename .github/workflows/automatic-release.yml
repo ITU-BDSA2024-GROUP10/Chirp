@@ -33,6 +33,10 @@ jobs:
       
       - name: Build
         run: dotnet build --no-restore Chirp/
+  
+      - name: Install playwright
+        working-directory: Chirp/test/PlaywrightTests/bin/Debug/net8.0/
+        run: pwsh playwright.ps1 install --with-deps
       
       - name: Test
         working-directory: Chirp/
