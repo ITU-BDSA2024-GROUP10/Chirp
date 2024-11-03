@@ -1,3 +1,5 @@
+using FluentValidation;
+
 namespace Chirp.Infrastructure.Model;
 
 public class Cheep
@@ -18,5 +20,13 @@ public class Cheep
         Message = message;
         TimeStamp = timeStamp;
         Author = author;
+    }
+
+    public class CheepValidator : AbstractValidator<Cheep>
+    {
+        public CheepValidator()
+        {
+            RuleFor(x => x.Message).MaximumLength(160);
+        }
     }
 }
