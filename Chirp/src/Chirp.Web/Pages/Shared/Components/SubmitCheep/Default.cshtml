@@ -1,0 +1,10 @@
+@model Chirp.Web.Pages.BindingModels.MessageModel
+
+<div class="cheepbox">
+    <h3>What's on your mind @(User.Claims.FirstOrDefault(c => c.Type == "UserName")?.Value)?</h3>
+    <form method="post" asp-page="SubmitCheep">
+        <input style="float: left" type="text" asp-for="Message">
+        <span asp-validation-for="Message"></span>
+        <input type="submit" value="Share">
+    </form>
+</div>

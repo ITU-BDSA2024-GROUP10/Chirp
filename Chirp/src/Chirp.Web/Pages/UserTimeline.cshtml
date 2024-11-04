@@ -1,5 +1,6 @@
 ﻿@page "/{author}"
 @using System.Globalization
+@using Chirp.Web.Pages.BindingModels
 @model Chirp.Web.Pages.UserTimelineModel
 @{
     ViewData["Title"] = "Chirp!";
@@ -9,6 +10,8 @@
 
 <div>
     <h2> @routeName's Timeline </h2>
+
+    @await Component.InvokeAsync("SubmitCheep", new { messageModel = new MessageModel()})
 
     @if (Model.Cheeps.Any())
     {
