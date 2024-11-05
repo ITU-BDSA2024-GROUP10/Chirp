@@ -26,7 +26,7 @@ builder.Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireCon
     .AddEntityFrameworkStores<ChirpDBContext>();
 
 // Add authentication service
-builder.Services.AddAuthentication(/*options =>
+builder.Services.AddAuthentication( /*options =>
     {
         options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -38,10 +38,10 @@ builder.Services.AddAuthentication(/*options =>
     {
         o.Scope.Add("user:email");
         o.Scope.Add("read:user");
-        o.ClientId = builder.Configuration["authentication:github:clientId"] 
+        o.ClientId = builder.Configuration["authentication:github:clientId"]
                      ?? Environment.GetEnvironmentVariable("authentication_github_clientId")
                      ?? throw new InvalidOperationException("github:clientId secret not found");
-        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"] 
+        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"]
                          ?? Environment.GetEnvironmentVariable("authentication_github_clientSecret")
                          ?? throw new InvalidOperationException("github:clientSecret secret not found");
         o.CallbackPath = "/signin-github";
@@ -81,11 +81,14 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Seed the database with some initial data
-using (var scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ChirpDBContext>();
-    DbInitializer.SeedDatabase(context, services);
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<ChirpDBContext>();
+        DbInitializer.SeedDatabase(context, services);
+    }
 }
 
 app.UseHttpsRedirection();
