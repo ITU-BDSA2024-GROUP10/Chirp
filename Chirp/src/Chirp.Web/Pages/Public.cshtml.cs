@@ -11,7 +11,14 @@ public class PublicModel(ICheepService service) : PageModel
 
     public ActionResult OnGet([FromQuery] int page)
     {
+        if (page < 1)
+        {
+            var returnUrl = Url.Content("~/?page=1");
+            return LocalRedirect(returnUrl);
+        }
+        
         Cheeps = service.GetCheepsByPage(page, 32);
+        
         return Page();
     }
 }
