@@ -58,4 +58,18 @@ public class UITest : PageTestWithCustomWebApplicationFactory
         //assert
         await Expect(Page).ToHaveURLAsync($"{BaseUrl}{expectedEndpoint}");
     }
+    
+    [Test]
+    [TestCase("test?page=1", "-5")]
+    [TestCase("test?page=1", "0")]
+    [TestCase("test?page=2", "2")]
+    [TestCase("test?page=1", null)]
+    public async Task PaginationOfUserTimeline(string expectedEndpoint, string page)
+    {
+        //act
+        await Page.GotoAsync($"/test?page={page}");
+        
+        //assert
+        await Expect(Page).ToHaveURLAsync($"{BaseUrl}{expectedEndpoint}");
+    }
 }
