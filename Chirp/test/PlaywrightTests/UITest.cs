@@ -44,4 +44,18 @@ public class UITest : PageTestWithCustomWebApplicationFactory
         //assert
         await Expect(Page.GetByText("Passwords must have at least")).ToBeVisibleAsync();
     }
+    
+    [Test]
+    [TestCase("?page=1", "-5")]
+    [TestCase("?page=1", "0")]
+    [TestCase("?page=2", "2")]
+    [TestCase("?page=1", null)]
+    public async Task PaginationOfPublicTimeline(string expectedEndpoint, string page)
+    {
+        //act
+        await Page.GotoAsync($"/?page={page}");
+        
+        //assert
+        await Expect(Page).ToHaveURLAsync($"{BaseUrl}{expectedEndpoint}");
+    }
 }
