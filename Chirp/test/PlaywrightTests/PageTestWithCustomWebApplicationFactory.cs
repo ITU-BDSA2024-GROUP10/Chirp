@@ -6,7 +6,7 @@ namespace PlaywrightTests;
 
 public class PageTestWithCustomWebApplicationFactory : PageTest
 {
-    private const string BaseUrl = "http://localhost:5273/";
+    public const string BaseUrl = "http://localhost:5273/";
     private CustomWebApplicationFactory _factory;
     private HttpClient _client;
 
