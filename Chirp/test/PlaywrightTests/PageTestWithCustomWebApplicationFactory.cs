@@ -29,6 +29,9 @@ public class PageTestWithCustomWebApplicationFactory : PageTest
         _client = _factory.WithWebHostBuilder(builder => builder.UseUrls(BaseUrl)).CreateClient();
         _factory.ResetDB();
     }
+    
+    [TearDown]
+    public void TearDown() => _client.Dispose();
 
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
