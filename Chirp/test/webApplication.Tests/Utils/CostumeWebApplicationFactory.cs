@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace webApplication.Tests.Utils;
@@ -45,6 +46,16 @@ public class CostumeWebApplicationFactory<TProgram, TDbContext>
             });
         });
 
+        builder.ConfigureAppConfiguration((_, config) =>
+        {
+            var testConfiguration = new Dictionary<string, string>
+            {
+                ["authentication:github:clientId"] = "test-client-id",
+                ["authentication:github:clientSecret"] = "test-client-secret"
+            };
+            config.AddInMemoryCollection(testConfiguration!);
+        });
+        
         builder.UseEnvironment("Testing");
     }
     
