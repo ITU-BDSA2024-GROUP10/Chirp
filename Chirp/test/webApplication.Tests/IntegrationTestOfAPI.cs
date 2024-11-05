@@ -3,16 +3,16 @@ using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
 using Chirp.Web;
 using Microsoft.AspNetCore.Mvc.Testing;
-using webApplication.Tests.Utils;
+using TestUtils;
 
 namespace webApplication.Tests;
 
-public class TestAPI : IClassFixture<CostumeWebApplicationFactory<Program, ChirpDBContext>>
+public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory<Program>>
 {
-    private readonly CostumeWebApplicationFactory<Program, ChirpDBContext> fixture;
+    private readonly InMemoryCostumeWebApplicationFactory<Program> fixture;
     private readonly HttpClient client;
 
-    public TestAPI(CostumeWebApplicationFactory<Program, ChirpDBContext> fixture)
+    public TestAPI(InMemoryCostumeWebApplicationFactory<Program> fixture)
     {
         this.fixture = fixture;
         client = fixture.CreateClient(new WebApplicationFactoryClientOptions
