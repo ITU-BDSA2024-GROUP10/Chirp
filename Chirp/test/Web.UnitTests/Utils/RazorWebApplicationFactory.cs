@@ -13,7 +13,7 @@ public class RazorWebApplicationFactory<TProgram>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment("Development");
+        builder.UseEnvironment("Testing");
     }
 
     public HttpClient GetClientFromCheepServiceMock(Mock<ICheepService> serviceMock)

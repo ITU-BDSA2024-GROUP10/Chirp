@@ -45,7 +45,7 @@ public class CostumeWebApplicationFactory<TProgram, TDbContext>
             });
         });
 
-        builder.UseEnvironment("Development");
+        builder.UseEnvironment("Testing");
     }
     
     public void ResetDB()
