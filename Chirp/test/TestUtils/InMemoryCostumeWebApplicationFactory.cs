@@ -1,18 +1,17 @@
 ﻿using System.Data.Common;
+using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace webApplication.Tests.Utils;
+namespace TestUtils;
 
-//Adapted from microsofts test guide, for clarification:
-//https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
-public class CostumeWebApplicationFactory<TProgram, TDbContext> 
+public class InMemoryCostumeWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram>
     where TProgram : class
-    where TDbContext : DbContext
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -20,7 +19,7 @@ public class CostumeWebApplicationFactory<TProgram, TDbContext>
         {
             var dbContextDescriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
-                     typeof(DbContextOptions<TDbContext>));
+                     typeof(DbContextOptions<ChirpDBContext>));
             if (dbContextDescriptor != null) services.Remove(dbContextDescriptor);
 
             var dbConnectionDescriptor = services.SingleOrDefault(
@@ -38,27 +37,39 @@ public class CostumeWebApplicationFactory<TProgram, TDbContext>
                 return connection;
             });
 
-            services.AddDbContext<TDbContext>((container, options) =>
+            services.AddDbContext<ChirpDBContext>((container, options) =>
             {
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
             });
         });
 
-        builder.UseEnvironment("Development");
+        builder.ConfigureAppConfiguration((_, config) =>
+        {
+            var testConfiguration = new Dictionary<string, string>
+            {
+                ["authentication:github:clientId"] = "test-client-id",
+                ["authentication:github:clientSecret"] = "test-client-secret"
+            };
+            config.AddInMemoryCollection(testConfiguration!);
+        });
+
+        builder.UseEnvironment("Testing");
     }
-    
+
     public void ResetDB()
     {
-        using var scope = Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
+        using (var scope = Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+        }
     }
-    
-    public TDbContext GetDbContext()
+
+    public ChirpDBContext GetDbContext()
     {
         var scope = Services.CreateScope();
-        return scope.ServiceProvider.GetRequiredService<TDbContext>();
+        return scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
     }
 }

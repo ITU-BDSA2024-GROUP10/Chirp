@@ -1,21 +1,22 @@
-﻿using Chirp.Core;
+﻿using System.Data.Common;
+using Chirp.Core;
+using Chirp.Infrastructure;
 using Chirp.Web;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using TestUtils;
 
 namespace Web.UnitTests.Utils;
 
 public class RazorWebApplicationFactory<TProgram>
-    : WebApplicationFactory<TProgram>
+    : InMemoryCostumeWebApplicationFactory<TProgram>
     where TProgram : class
 {
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        builder.UseEnvironment("Development");
-    }
-
     public HttpClient GetClientFromCheepServiceMock(Mock<ICheepService> serviceMock)
     {
         return WithWebHostBuilder(builder =>
