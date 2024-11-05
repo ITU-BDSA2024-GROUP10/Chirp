@@ -12,6 +12,12 @@ public class UserTimelineModel(ICheepService service) : PageModel
 
     public ActionResult OnGet(string author, [FromQuery] int page)
     {
+        if (page < 1)
+        {
+            var returnUrl = Url.Content($"~/{author}?page=1");
+            return LocalRedirect(returnUrl);
+        }
+        
         Cheeps = _service.GetCheepsFromAuthorByPage(author, page, 32);
         return Page();
     }
