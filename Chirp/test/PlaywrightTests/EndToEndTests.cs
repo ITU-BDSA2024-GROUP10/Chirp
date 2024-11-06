@@ -3,8 +3,9 @@ using Microsoft.Playwright;
 
 namespace PlaywrightTests;
 
-[Parallelizable(ParallelScope.Self)]
+//[Parallelizable(ParallelScope.Self)]
 [TestFixture]
+[NonParallelizable]
 public class EndToEndTests : PageTestWithCustomWebApplicationFactory
 {
     [Test]
