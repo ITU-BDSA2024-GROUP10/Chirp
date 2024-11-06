@@ -1,6 +1,9 @@
 using System.Data.Common;
+using System.Net.Sockets;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +18,7 @@ namespace PlaywrightTests;
 //https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
 //Further Adapted from this Medium posts:
 //https://medium.com/younited-tech-blog/end-to-end-test-a-blazor-app-with-playwright-part-3-48c0edeff4b6
-public class CustomWebApplicationFactory 
+public class CustomWebApplicationFactory(String baseUrl) 
     : InMemoryCostumeWebApplicationFactory<Chirp.Web.Program>
 {
     protected override IHost CreateHost(IHostBuilder builder)
@@ -29,10 +32,49 @@ public class CustomWebApplicationFactory
 
         var host = builder.Build();
         host.Start();
+        
+        // Wait until the server is listening
+        var server = host.Services.GetRequiredService<IServer>();
+        var addresses = server.Features.Get<IServerAddressesFeature>();
+        var url = baseUrl;
+
+        WaitUntilServerIsAvailable(url);
+        
         // In order to cleanup and properly dispose HTTP server
         // resources we return a composite host object that is
         // actually just a way to intercept the StopAsync and Dispose
         // call and relay to our HTTP host.
         return new CompositeHost(testHost, host);
+    }
+    
+    private void WaitUntilServerIsAvailable(string url)
+    {
+        var uri = new Uri(url);
+        using var client = new TcpClient();
+
+        var maxAttempts = 5;
+        var attempt = 0;
+
+        while (attempt < maxAttempts)
+        {
+            try
+            {
+                client.Connect(uri.Host, uri.Port);
+                if (client.Connected)
+                {
+                    break;
+                }
+            }
+            catch
+            {
+                attempt++;
+                Thread.Sleep(1000);
+            }
+        }
+
+        if (attempt == maxAttempts)
+        {
+            throw new Exception("Server did not start in time.");
+        }
     }
 }

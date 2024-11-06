@@ -21,7 +21,7 @@ public class PageTestWithCustomWebApplicationFactory : PageTest
     }
 
     [OneTimeSetUp]
-    public void OneTimeSetUp() => _factory = new CustomWebApplicationFactory();
+    public void OneTimeSetUp() => _factory = new CustomWebApplicationFactory(BaseUrl);
 
     [SetUp]
     public void Setup()
