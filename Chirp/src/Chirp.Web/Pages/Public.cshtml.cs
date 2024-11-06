@@ -1,6 +1,6 @@
 ﻿using Chirp.Core;
 using Chirp.Core.DTO;
-using Chirp.Web.Pages.Shared.Components.SubmitCheep;
+using Chirp.Web.Pages.Shared.Components.Timelines;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
