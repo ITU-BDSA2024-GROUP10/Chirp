@@ -34,11 +34,7 @@ public class CustomWebApplicationFactory(String baseUrl)
         host.Start();
         
         // Wait until the server is listening
-        var server = host.Services.GetRequiredService<IServer>();
-        var addresses = server.Features.Get<IServerAddressesFeature>();
-        var url = baseUrl;
-
-        WaitUntilServerIsAvailable(url);
+        WaitUntilServerIsAvailable(baseUrl);
         
         // In order to cleanup and properly dispose HTTP server
         // resources we return a composite host object that is
