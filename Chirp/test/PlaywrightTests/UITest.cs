@@ -3,6 +3,7 @@ using Microsoft.Playwright;
 
 namespace PlaywrightTests;
 
+[NonParallelizable]
 public class UITest : PageTestWithCustomWebApplicationFactory
 {
     [Test]
