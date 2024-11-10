@@ -10,8 +10,8 @@
 <div>
     <h2> Public Timeline </h2>
 
-    @await Component.InvokeAsync("SubmitCheep", new { messageModel = new MessageModel()})
-
+    @await Component.InvokeAsync("SubmitCheep", new { Model.MessageModel, targetPage = "/"})
+    
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">

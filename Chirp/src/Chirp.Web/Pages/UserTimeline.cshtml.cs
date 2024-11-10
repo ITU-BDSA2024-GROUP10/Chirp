@@ -1,18 +1,25 @@
 ﻿using Chirp.Core;
 using Chirp.Core.DTO;
+using Chirp.Web.Pages.Shared.Components.Timelines;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
-public class UserTimelineModel(ICheepService service) : PageModel
+public class UserTimelineModel(ICheepService service) : TimeLinePageModel(service)
 {
-    private readonly ICheepService _service = service;
-    public required List<CheepDTO> Cheeps { get; set; }
-
     public ActionResult OnGet(string author, [FromQuery] int page)
     {
-        Cheeps = _service.GetCheepsFromAuthorByPage(author, page, 32);
+        Author = author;
+        LoadCheeps(page);
         return Page();
+    }
+
+    protected override void LoadCheeps(int page)
+    {
+        if (Author == null) {
+            throw new ArgumentNullException(nameof(Author));
+        }
+        Cheeps = Service.GetCheepsFromAuthorByPage(Author, page, 32);
     }
 }
