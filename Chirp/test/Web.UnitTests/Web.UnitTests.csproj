@@ -26,6 +26,7 @@
       <ProjectReference Include="..\..\src\Chirp.Core\Chirp.Core.csproj" />
       <ProjectReference Include="..\..\src\Chirp.Web\Chirp.Web.csproj" />
       <ProjectReference Include="..\TestUtils\TestUtils.csproj" />
+      <ProjectReference Include="..\Utils\TestUtils\TestUtils.csproj" />
     </ItemGroup>
 
 </Project>
