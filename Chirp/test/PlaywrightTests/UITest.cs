@@ -45,4 +45,11 @@ public class UITest : PageTestWithCustomWebApplicationFactory
         //assert
         await Expect(Page.GetByText("Passwords must have at least")).ToBeVisibleAsync();
     }
+
+
+    [Test]
+    public async Task CheepBoxNotVisibleWhileLoggedOut()
+    {
+        
+    }
 }
