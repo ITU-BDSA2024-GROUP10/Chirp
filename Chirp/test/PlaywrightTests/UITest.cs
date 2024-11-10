@@ -50,6 +50,8 @@ public class UITest : PageTestWithCustomWebApplicationFactory
     [Test]
     public async Task CheepBoxNotVisibleWhileLoggedOut()
     {
+        await Page.GotoAsync("/");
         
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Log in to post Cheeps!" })).ToBeVisibleAsync();
     }
 }
