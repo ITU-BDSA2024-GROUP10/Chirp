@@ -13,9 +13,7 @@ using TestUtils;
 
 namespace Web.UnitTests.Utils;
 
-public class RazorWebApplicationFactory<TProgram>
-    : InMemoryCostumeWebApplicationFactory<TProgram>
-    where TProgram : class
+public class RazorWebApplicationFactory : InMemoryCostumeWebApplicationFactory
 {
     public HttpClient GetClientFromCheepServiceMock(Mock<ICheepService> serviceMock)
     {

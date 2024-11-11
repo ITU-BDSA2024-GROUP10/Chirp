@@ -7,8 +7,8 @@ using Program = Chirp.Web.Program;
 
 namespace Web.UnitTests;
 
-public class RazorPageIntegrationTest(RazorWebApplicationFactory<Program> factory)
-    : IClassFixture<RazorWebApplicationFactory<Program>>
+public class RazorPageIntegrationTest(RazorWebApplicationFactory factory)
+    : IClassFixture<RazorWebApplicationFactory>
 {
     [Fact]
     public async void DisplayCheeps_On_PublicTimeline()

@@ -18,8 +18,7 @@ namespace PlaywrightTests;
 //https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
 //Further Adapted from this Medium posts:
 //https://medium.com/younited-tech-blog/end-to-end-test-a-blazor-app-with-playwright-part-3-48c0edeff4b6
-public class CustomWebApplicationFactory(String baseUrl) 
-    : InMemoryCostumeWebApplicationFactory<Chirp.Web.Program>
+public class CustomWebApplicationFactory(String baseUrl) : InMemoryCostumeWebApplicationFactory
 {
     protected override IHost CreateHost(IHostBuilder builder)
     {
