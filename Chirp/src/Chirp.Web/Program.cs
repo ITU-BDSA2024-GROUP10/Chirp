@@ -1,9 +1,12 @@
+using System.Security.Claims;
 using Chirp.Core;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using ChirpDBContext = Chirp.Infrastructure.ChirpDBContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +49,31 @@ builder.Services.AddAuthentication( /*options =>
                          ?? throw new InvalidOperationException("github:clientSecret secret not found");
         o.CallbackPath = "/signin-github";
     });
+
+if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("testing"))
+{
+    builder.Services.AddAuthentication()
+        .AddOpenIdConnect(options =>
+        {
+            options.Authority = "http://localhost:5001";
+            options.ClientId = "razorclient";
+            options.ResponseType = "code";
+            options.UsePkce = true;
+            options.SaveTokens = true;
+            options.RequireHttpsMetadata = false; // disabling need for https
+            options.Scope.Add("profile");
+            options.Scope.Add("email");
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                NameClaimType = "name",
+                RoleClaimType = "role"
+            };
+            options.GetClaimsFromUserInfoEndpoint = true; // Ensure claims are retrieved
+            //map claims type from OpenID Connect to .NET Core claims
+            options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+            options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+        });
+}
 
 // Add services to the container.
 builder.Services.AddRazorPages();
