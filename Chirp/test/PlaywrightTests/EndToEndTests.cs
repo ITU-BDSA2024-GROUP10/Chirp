@@ -39,6 +39,7 @@ public class EndToEndTests : PageTestWithCustomWebApplicationFactory
         await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
         await Page.Locator("#Message").ClickAsync();
         await Page.Locator("#Message").FillAsync("Cheep in public timeline");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
         await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Cheep in public timeline");
         await Page.GetByRole(AriaRole.Link, new() { Name = "logout [Mathias]" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
