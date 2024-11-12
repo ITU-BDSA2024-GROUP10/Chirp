@@ -1,21 +1,11 @@
-﻿using System.Data.Common;
-using Chirp.Core;
-using Chirp.Infrastructure;
-using Chirp.Web;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Chirp.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using TestUtils;
 
 namespace Web.UnitTests.Utils;
 
-public class RazorWebApplicationFactory<TProgram>
-    : InMemoryCostumeWebApplicationFactory<TProgram>
-    where TProgram : class
+public class RazorWebApplicationFactory : InMemoryCostumeWebApplicationFactory
 {
     public HttpClient GetClientFromCheepServiceMock(Mock<ICheepService> serviceMock)
     {

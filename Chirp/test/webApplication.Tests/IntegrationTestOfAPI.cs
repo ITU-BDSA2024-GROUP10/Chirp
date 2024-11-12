@@ -7,12 +7,12 @@ using TestUtils;
 
 namespace webApplication.Tests;
 
-public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory<Program>>
+public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory>
 {
-    private readonly InMemoryCostumeWebApplicationFactory<Program> fixture;
+    private readonly InMemoryCostumeWebApplicationFactory fixture;
     private readonly HttpClient client;
 
-    public TestAPI(InMemoryCostumeWebApplicationFactory<Program> fixture)
+    public TestAPI(InMemoryCostumeWebApplicationFactory fixture)
     {
         this.fixture = fixture;
         client = fixture.CreateClient(new WebApplicationFactoryClientOptions
