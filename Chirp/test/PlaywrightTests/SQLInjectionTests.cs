@@ -6,7 +6,7 @@ namespace PlaywrightTests;
 public class SQLInjectionTests : PageTestWithCustomWebApplicationFactory
 {
     [Test]
-    public async Task SQLInjection()
+    public async Task SQLInjectionInCheepTextBox()
     {
         //act
         await Page.GotoAsync("/");
@@ -37,7 +37,7 @@ public class SQLInjectionTests : PageTestWithCustomWebApplicationFactory
     }
 
     [Test]
-    public async Task SQLInjectionWhenLoggingIn()
+    public async Task SQLInjectionInRegisterNameAndLoggingIn()
     {
         //act
         await Page.GotoAsync("/");
