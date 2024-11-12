@@ -7,13 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Duende.IdentityServer" Version="7.0.8" />
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+        <PackageReference Include="Duende.IdentityServer" Version="7.0.8"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\src\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
-      <ProjectReference Include="..\Duende.Identity.Server\Duende.Identity.Server.csproj" />
+        <ProjectReference Include="..\..\..\src\Chirp.Infrastructure\Chirp.Infrastructure.csproj"/>
+        <ProjectReference Include="..\Duende.Identity.Server\Duende.Identity.Server.csproj"/>
+        <ProjectReference Include="..\..\src\Chirp.Web\Chirp.Web.csproj"/>
     </ItemGroup>
 </Project>

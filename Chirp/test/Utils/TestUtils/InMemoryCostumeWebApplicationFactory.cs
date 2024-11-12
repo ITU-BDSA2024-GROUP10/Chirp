@@ -9,9 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace TestUtils;
 
-public class InMemoryCostumeWebApplicationFactory<TProgram>
-    : WebApplicationFactory<TProgram>
-    where TProgram : class
+public class InMemoryCostumeWebApplicationFactory : WebApplicationFactory<Chirp.Web.Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
