@@ -11,7 +11,7 @@
 <div>
     <h2> @routeName's Timeline </h2>
 
-    @await Component.InvokeAsync("SubmitCheep", new { messageModel = new MessageModel()})
+    @await Component.InvokeAsync("SubmitCheep", new {Model.MessageModel, targetPage = $"/{routeName}"})
 
     @if (Model.Cheeps.Any())
     {

@@ -28,6 +28,9 @@ public class PageTestWithCustomWebApplicationFactory : PageTest
         _client = _factory.CreateClient();
         _factory.ResetDB();
     }
+    
+    [TearDown]
+    public void TearDown() => _client.Dispose();
 
     [OneTimeTearDown]
     public async Task RazorOneTimeTearDown()
