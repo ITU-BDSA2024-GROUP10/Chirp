@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Hosting;
-using TestUtils.Duende;
+using TestUtils;
 
 namespace PlaywrightTests.Utils;
 
