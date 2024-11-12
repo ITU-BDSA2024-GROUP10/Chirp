@@ -1,0 +1,68 @@
+using System.Net.Sockets;
+using Duende.IdentityServer.Test;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using TestUtils.Duende;
+
+namespace PlaywrightTests;
+
+public class DuendePlaywrightWebAppFactory(string baseUrl) : DuendeWebAppFactory()
+{
+    protected override IHost CreateHost(IHostBuilder builder)
+    {
+        // Create the host that is actually used by the
+        // TestServer (In Memory).
+        var testHost = base.CreateHost(builder);
+
+        // configure and start the actual host using Kestrel.
+        // Configure Kestrel with specific URLs
+        builder.ConfigureWebHost(webHostBuilder =>
+        {
+            webHostBuilder.UseKestrel()
+                          .UseUrls(baseUrl); // Use the baseUrl provided
+        });
+
+        var host = builder.Build();
+        host.Start();
+        
+        // Wait until the server is listening
+        WaitUntilServerIsAvailable(baseUrl);
+        
+        // In order to cleanup and properly dispose HTTP server
+        // resources we return a composite host object that is
+        // actually just a way to intercept the StopAsync and Dispose
+        // call and relay to our HTTP host.
+        return new CompositeHost(testHost, host);
+    }
+    
+    private void WaitUntilServerIsAvailable(string url)
+    {
+        var uri = new Uri(url);
+        using var client = new TcpClient();
+
+        var maxAttempts = 5;
+        var attempt = 0;
+
+        while (attempt < maxAttempts)
+        {
+            try
+            {
+                client.Connect(uri.Host, uri.Port);
+                if (client.Connected)
+                {
+                    break;
+                }
+            }
+            catch
+            {
+                attempt++;
+                Thread.Sleep(1000);
+            }
+        }
+
+        if (attempt == maxAttempts)
+        {
+            throw new Exception("Server did not start in time.");
+        }
+    }
+}
