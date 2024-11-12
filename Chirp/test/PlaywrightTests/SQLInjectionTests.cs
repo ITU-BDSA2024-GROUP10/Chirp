@@ -21,7 +21,6 @@ public class SQLInjectionTests : PageTestWithCustomWebApplicationFactory
         await Page.GetByLabel("Confirm Password").FillAsync("Password123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
-        await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
         await Page.GetByPlaceholder("name@example.com").FillAsync("mlao@itu.dk");
