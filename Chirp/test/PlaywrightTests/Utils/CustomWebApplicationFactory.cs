@@ -8,7 +8,7 @@ namespace PlaywrightTests.Utils;
 //Further Adapted from this Medium posts:
 //https://medium.com/younited-tech-blog/end-to-end-test-a-blazor-app-with-playwright-part-3-48c0edeff4b6
 public class CustomWebApplicationFactory(string baseUrl) 
-    : InMemoryCostumeWebApplicationFactory<Chirp.Web.Program>
+    : InMemoryCostumeWebApplicationFactory
 {
     protected override IHost CreateHost(IHostBuilder builder)
     {
