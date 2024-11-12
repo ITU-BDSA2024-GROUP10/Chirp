@@ -1,24 +1,20 @@
 using System.Net.Sockets;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using TestUtils;
 
-namespace PlaywrightTests;
+namespace PlaywrightTests.Utils;
 
-//Adapted from microsofts test guide, for clarification:
-//https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
-//Further Adapted from this Medium posts:
-//https://medium.com/younited-tech-blog/end-to-end-test-a-blazor-app-with-playwright-part-3-48c0edeff4b6
-public class CustomWebApplicationFactory(String baseUrl) : InMemoryCostumeWebApplicationFactory
+public static class CreateHostUsingKestrel
 {
-    protected override IHost CreateHost(IHostBuilder builder)
+    public static IHost CreateHost(IHostBuilder builder, IHost testHost, string baseUrl)
     {
-        // Create the host that is actually used by the
-        // TestServer (In Memory).
-        var testHost = base.CreateHost(builder);
-
         // configure and start the actual host using Kestrel.
-        builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
+        // Configure Kestrel with specific URLs
+        builder.ConfigureWebHost(webHostBuilder =>
+        {
+            webHostBuilder.UseKestrel()
+                .UseUrls(baseUrl); // Use the baseUrl provided
+        });
 
         var host = builder.Build();
         host.Start();
@@ -33,7 +29,7 @@ public class CustomWebApplicationFactory(String baseUrl) : InMemoryCostumeWebApp
         return new CompositeHost(testHost, host);
     }
     
-    private void WaitUntilServerIsAvailable(string url)
+    private static void WaitUntilServerIsAvailable(string url)
     {
         var uri = new Uri(url);
         using var client = new TcpClient();

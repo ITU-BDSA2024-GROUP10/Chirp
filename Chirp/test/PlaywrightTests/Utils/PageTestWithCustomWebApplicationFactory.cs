@@ -1,12 +1,11 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 
-namespace PlaywrightTests;
+namespace PlaywrightTests.Utils;
 
 public class PageTestWithCustomWebApplicationFactory : PageTest
 {
-    private const string BaseUrl = "http://localhost:5273/";
+    protected const string RazorBaseUrl = "http://localhost:5273";
     private CustomWebApplicationFactory _factory;
     private HttpClient _client;
 
@@ -16,17 +15,17 @@ public class PageTestWithCustomWebApplicationFactory : PageTest
         {
             Locale = "en-US",
             ColorScheme = ColorScheme.Light,
-            BaseURL = BaseUrl,
+            BaseURL = RazorBaseUrl,
         };
     }
 
     [OneTimeSetUp]
-    public void OneTimeSetUp() => _factory = new CustomWebApplicationFactory(BaseUrl);
+    public void RazorOneTimeSetUp() => _factory = new CustomWebApplicationFactory(RazorBaseUrl);
 
     [SetUp]
-    public void Setup()
+    public void RazorSetup()
     {
-        _client = _factory.WithWebHostBuilder(builder => builder.UseUrls(BaseUrl)).CreateClient();
+        _client = _factory.CreateClient();
         _factory.ResetDB();
     }
     
@@ -34,7 +33,7 @@ public class PageTestWithCustomWebApplicationFactory : PageTest
     public void TearDown() => _client.Dispose();
 
     [OneTimeTearDown]
-    public async Task OneTimeTearDown()
+    public async Task RazorOneTimeTearDown()
     {
         _client.Dispose();
         await _factory.DisposeAsync();

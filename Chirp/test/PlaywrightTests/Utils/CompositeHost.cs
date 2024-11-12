@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Hosting;
 
-namespace PlaywrightTests;
+namespace PlaywrightTests.Utils;
 
 //https://medium.com/younited-tech-blog/end-to-end-test-a-blazor-app-with-playwright-part-3-48c0edeff4b6
 // Relay the call to both test host and kestrel host.
