@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 
-namespace Duende.Identity.Server.Pages.Logout;
+namespace Duende.Identity.Server.Pages.Account.Logout;
 
 public static class LogoutOptions
 {

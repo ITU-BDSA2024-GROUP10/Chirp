@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Duende.Identity.Server.Pages.Login;
+namespace Duende.Identity.Server.Pages.Account.Login;
 
 [SecurityHeaders]
 [AllowAnonymous]
