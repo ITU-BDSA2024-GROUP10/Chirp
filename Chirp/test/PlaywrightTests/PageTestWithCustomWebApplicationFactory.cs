@@ -6,7 +6,7 @@ namespace PlaywrightTests;
 
 public class PageTestWithCustomWebApplicationFactory : PageTest
 {
-    private const string RazorBaseUrl = "http://localhost:5273";
+    protected const string RazorBaseUrl = "http://localhost:5273";
     private CustomWebApplicationFactory _factory;
     private HttpClient _client;
 
@@ -21,17 +21,17 @@ public class PageTestWithCustomWebApplicationFactory : PageTest
     }
 
     [OneTimeSetUp]
-    public void OneTimeSetUp() => _factory = new CustomWebApplicationFactory(RazorBaseUrl);
+    public void RazorOneTimeSetUp() => _factory = new CustomWebApplicationFactory(RazorBaseUrl);
 
     [SetUp]
-    public void Setup()
+    public void RazorSetup()
     {
         _client = _factory.WithWebHostBuilder(builder => builder.UseUrls(RazorBaseUrl)).CreateClient();
         _factory.ResetDB();
     }
 
     [OneTimeTearDown]
-    public async Task OneTimeTearDown()
+    public async Task RazorOneTimeTearDown()
     {
         _client.Dispose();
         await _factory.DisposeAsync();
