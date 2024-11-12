@@ -10,7 +10,7 @@ namespace PlaywrightTests;
 public class EndToEndTests : PageTestWithCustomWebApplicationFactory
 {
     [Test]
-    public async Task EndToEnd_RegisterLoginAndLogout()
+    public async Task EndToEnd_RegisterLoginCheepAndLogout()
     {
         await Page.GotoAsync("/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
@@ -32,7 +32,14 @@ public class EndToEndTests : PageTestWithCustomWebApplicationFactory
         await Page.GetByPlaceholder("password").FillAsync("Password123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Heading, new() { Name = "Mathias's Timeline" }).ClickAsync();
+        await Page.Locator("#Message").ClickAsync();
+        await Page.Locator("#Message").FillAsync("Cheep in my timeline");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Cheep in my timeline");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        await Page.Locator("#Message").ClickAsync();
+        await Page.Locator("#Message").FillAsync("Cheep in public timeline");
+        await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Cheep in public timeline");
         await Page.GetByRole(AriaRole.Link, new() { Name = "logout [Mathias]" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
 
