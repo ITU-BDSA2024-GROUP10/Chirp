@@ -26,7 +26,7 @@ public class PageTestWithCustomWebApplicationFactory : PageTest
     [SetUp]
     public void RazorSetup()
     {
-        _client = _factory.WithWebHostBuilder(builder => builder.UseUrls(RazorBaseUrl)).CreateClient();
+        _client = _factory.CreateClient();
         _factory.ResetDB();
     }
 
