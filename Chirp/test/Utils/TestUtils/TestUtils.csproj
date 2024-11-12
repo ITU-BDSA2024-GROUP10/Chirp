@@ -14,6 +14,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\Chirp.Infrastructure\Chirp.Infrastructure.csproj"/>
+        <ProjectReference Include="..\..\..\src\Chirp.Web\Chirp.Web.csproj" />
         <ProjectReference Include="..\Duende.Identity.Server\Duende.Identity.Server.csproj"/>
         <ProjectReference Include="..\..\src\Chirp.Web\Chirp.Web.csproj"/>
     </ItemGroup>
