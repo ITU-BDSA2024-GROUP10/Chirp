@@ -1,11 +1,6 @@
-using CsvHelper;
-using Duende.IdentityServer.Test;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Playwright;
-using Microsoft.Playwright.NUnit;
 
-
-namespace PlaywrightTests;
+namespace PlaywrightTests.Utils;
 
 public class PageTestWithDuende : PageTestWithCustomWebApplicationFactory
 {

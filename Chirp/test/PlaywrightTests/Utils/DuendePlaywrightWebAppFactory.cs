@@ -1,10 +1,7 @@
-using System.Net.Sockets;
-using Duende.IdentityServer.Test;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using TestUtils.Duende;
 
-namespace PlaywrightTests;
+namespace PlaywrightTests.Utils;
 
 public class DuendePlaywrightWebAppFactory(string baseUrl) : DuendeWebAppFactory()
 {

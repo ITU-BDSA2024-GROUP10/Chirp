@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Hosting;
 using TestUtils;
 
-namespace PlaywrightTests;
+namespace PlaywrightTests.Utils;
 
 //Adapted from microsofts test guide, for clarification:
 //https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
