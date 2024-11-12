@@ -30,4 +30,16 @@ public class CrossSiteScriptingTest : PageTestWithCustomWebApplicationFactory
         await Expect(Page.Locator("h3")).ToContainTextAsync("What's on your mind <script>alert('alert?");
     }
     
+    [Test]
+    public async Task CrossSiteScripting_loginForm()
+    {
+        await Page.GotoAsync("/Identity/Account/Login");
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("mlao@itu.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("<script>alert('alert!');</script>");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Expect(Page.GetByRole(AriaRole.Listitem)).ToContainTextAsync("Invalid login attempt.");
+    }
+    
 }
