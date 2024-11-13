@@ -23,8 +23,8 @@ public static class DbInitializer
             var a10 = new Author() { Id = "10", UserName = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>() };
 
             var userManager = serviceProvider.GetRequiredService<UserManager<Author>>();
-            var a11 = new Author {UserName = "ropf@itu.dk", Email = "ropf@itu.dk", Cheeps = new List<Cheep>(), Name = "Helge"};
-            var a12 = new Author {UserName = "adho@itu.dk", Email = "adho@itu.dk", Cheeps = new List<Cheep>(), Name = "Adrian"};
+            var a11 = new Author {Email = "ropf@itu.dk", Cheeps = new List<Cheep>(), UserName = "Helge"};
+            var a12 = new Author {Email = "adho@itu.dk", Cheeps = new List<Cheep>(), UserName = "Adrian"};
             a11.EmailConfirmed = true;
             a12.EmailConfirmed = true;
             await userManager.CreateAsync(a11, "LetM31n!");
