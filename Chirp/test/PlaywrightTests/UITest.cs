@@ -12,7 +12,7 @@ public class UITest : PageTestWithCustomWebApplicationFactory
     {
         //act
         await Page.GotoAsync("/");
-        
+
         //assert
         await Expect(Page).ToHaveTitleAsync(new Regex("Chirp!"));
     }
@@ -23,7 +23,7 @@ public class UITest : PageTestWithCustomWebApplicationFactory
         //act
         await Page.GotoAsync("/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
-        
+
         //assert
         await Expect(Page).ToHaveTitleAsync(new Regex("Register"));
     }
@@ -52,12 +52,11 @@ public class UITest : PageTestWithCustomWebApplicationFactory
     public async Task CheepBoxNotVisibleWhileLoggedOut()
     {
         await Page.GotoAsync("/");
-        
+
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Log in to post Cheeps!" })).ToBeVisibleAsync();
     }
 
     [Test]
-
     public async Task CheepBoxVisibleWhileLoggedIn()
     {
         await Page.GotoAsync("/");
@@ -83,6 +82,19 @@ public class UITest : PageTestWithCustomWebApplicationFactory
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "What's on your mind Mathias?" }))
             .ToBeVisibleAsync();
         await Expect(Page.Locator("#Message")).ToBeVisibleAsync();
-       
+    }
+
+    [Test]
+    public async Task PageButtons_FirstMiddleEndPages()
+    {
+        //first
+        await Page.GotoAsync("/");
+        await Expect(Page.Locator("body")).ToContainTextAsync("1 Next");
+        //middle
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Next" }).First.ClickAsync();
+        await Expect(Page.Locator("body")).ToContainTextAsync("Previous 2 Next");
+        //end
+        await Page.GotoAsync("/?page=9999");
+        await Expect(Page.Locator("body")).ToContainTextAsync("Previous 9999");
     }
 }
