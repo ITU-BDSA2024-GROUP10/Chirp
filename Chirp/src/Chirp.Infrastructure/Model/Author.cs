@@ -23,7 +23,6 @@ public sealed class Author : IdentityUser
 
         return new Author()
         {
-            Name = name,
             Email = email,
             UserName = email
         };
