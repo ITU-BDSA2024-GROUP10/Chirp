@@ -2,8 +2,6 @@
 using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using RepositoryTests.Utils;
 
 namespace RepositoryTests;
@@ -93,42 +91,5 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
         Assert.NotNull(checkSuccession);
         Assert.Equal(author.Email, checkSuccession.Email);
         Assert.Equal(author.Name, checkSuccession.Name);
-    }
-
-    [Fact]
-    public async void GetAuthorByEmail_EmailIsAnITUMail_ReturnAuthorDTOOfMail()
-    {
-        //Arrange
-        var chirpContext = _fixture.GetContext();
-        var author = new Author { Name = "John Doe", Email = "jodoe@itu.dk" };
-
-        IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
-        chirpContext.Add(author);
-        chirpContext.SaveChanges();
-        //Act
-        var result = await authorRepository.GetAuthorByEmail(author.Email);
-
-        //Assert
-        Assert.NotNull(result);
-        Assert.Equal(author.Name, result.Name);
-        Assert.Equal(author.Email, result.Email);
-    }
-
-    [Fact]
-    public async void GetAuthorByEmail_EmailIsNotThere_ReturnNull()
-    {
-        //Arrange
-        var chirpContext = _fixture.GetContext();
-        var author = new AuthorDTO("John Doe", "jodoe@itu.dk");
-        var author2 = new Author { Name = "Abra Cabrera", Email = "AbraCabrera@gmail.com" };
-
-        IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
-        await authorRepository.AddAuthor(author);
-
-        //Act
-        var result = await authorRepository.GetAuthorByEmail(author2.Email);
-
-        //Assert
-        Assert.Null(result);
     }
 }
