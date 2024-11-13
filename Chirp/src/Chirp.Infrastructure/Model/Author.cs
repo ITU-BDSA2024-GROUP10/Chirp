@@ -5,7 +5,6 @@ namespace Chirp.Infrastructure.Model;
 
 public sealed class Author : IdentityUser
 {
-    public required string Name { get; set; }
     public List<Cheep> Cheeps { get; set; } = [];
 
     public Author()
