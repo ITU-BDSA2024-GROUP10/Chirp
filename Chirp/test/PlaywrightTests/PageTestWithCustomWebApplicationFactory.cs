@@ -1,4 +1,6 @@
+using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 
@@ -6,8 +8,8 @@ namespace PlaywrightTests;
 
 public class PageTestWithCustomWebApplicationFactory : PageTest
 {
-    public const string BaseUrl = "http://localhost:5273/";
-    private CustomWebApplicationFactory _factory;
+    protected const string BaseUrl = "http://localhost:5273/";
+    protected CustomWebApplicationFactory _factory;
     private HttpClient _client;
 
     public override BrowserNewContextOptions ContextOptions()
