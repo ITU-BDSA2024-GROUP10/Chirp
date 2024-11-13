@@ -1,14 +1,13 @@
 ﻿using Chirp.Core;
 using Chirp.Core.DTO;
+using Chirp.Web.Pages.Shared.Components.Timelines;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
-public class PublicModel(ICheepService service) : PageModel
+public class PublicModel(ICheepService service) : TimeLinePageModel(service)
 {
-    public List<CheepDTO> Cheeps { get; set; } = [];
-
     public ActionResult OnGet([FromQuery] int page)
     {
         if (page < 1)
@@ -16,9 +15,14 @@ public class PublicModel(ICheepService service) : PageModel
             var returnUrl = Url.Content("~/?page=1");
             return LocalRedirect(returnUrl);
         }
-        
-        Cheeps = service.GetCheepsByPage(page, 32);
-        
+
+        LoadCheeps(page);
+
         return Page();
+    }
+
+    protected override void LoadCheeps(int page)
+    {
+        Cheeps = Service.GetCheepsByPage(page, 32);
     }
 }

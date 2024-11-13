@@ -2,9 +2,11 @@ using System.Text.RegularExpressions;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
 using Microsoft.Playwright;
+using PlaywrightTests.Utils;
 
 namespace PlaywrightTests;
 
+[NonParallelizable]
 public class UITest : PageTestWithCustomWebApplicationFactory
 {
     [Test]
@@ -58,7 +60,7 @@ public class UITest : PageTestWithCustomWebApplicationFactory
         await Page.GotoAsync($"/?page={page}");
 
         //assert
-        await Expect(Page).ToHaveURLAsync($"{BaseUrl}{expectedEndpoint}");
+        await Expect(Page).ToHaveURLAsync($"{RazorBaseUrl}{expectedEndpoint}");
     }
 
     [Test]
@@ -72,14 +74,14 @@ public class UITest : PageTestWithCustomWebApplicationFactory
         await Page.GotoAsync($"/test?page={page}");
 
         //assert
-        await Expect(Page).ToHaveURLAsync($"{BaseUrl}{expectedEndpoint}");
+        await Expect(Page).ToHaveURLAsync($"{RazorBaseUrl}{expectedEndpoint}");
     }
 
     [Test]
     public async Task SeeCorrectNumberOfCheepsOnPublicTimeline()
     {
         //arrange
-        var context = _factory.GetDbContext();
+        var context = razorFactory.GetDbContext();
         Author testAuthor = new Author
         {
             Name = "mr. test",
@@ -113,7 +115,7 @@ public class UITest : PageTestWithCustomWebApplicationFactory
     {
         #region Arrange
 
-        var context = _factory.GetDbContext();
+        var context = razorFactory.GetDbContext();
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         Author realTestAuthor = new Author
@@ -160,5 +162,42 @@ public class UITest : PageTestWithCustomWebApplicationFactory
         await Expect(Page.Locator("#messagelist > li")).ToHaveCountAsync(1);
         await Page.GotoAsync($"/{realTestAuthor.Name}?page=3");
         await Expect(Page.Locator("#messagelist > li")).ToHaveCountAsync(0);
+    }
+
+    [Test]
+    public async Task CheepBoxNotVisibleWhileLoggedOut()
+    {
+        await Page.GotoAsync("/");
+
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Log in to post Cheeps!" }))
+            .ToBeVisibleAsync();
+    }
+
+    [Test]
+    public async Task CheepBoxVisibleWhileLoggedIn()
+    {
+        await Page.GotoAsync("/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+        await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
+        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync("Mathias");
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("mlao@itu.dk");
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Password123!");
+        await Page.GetByLabel("Confirm Password").ClickAsync();
+        await Page.GetByLabel("Confirm Password").FillAsync("Password123!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+        await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("mlao@itu.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Password123!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "What's on your mind Mathias?" }))
+            .ToBeVisibleAsync();
+        await Expect(Page.Locator("#Message")).ToBeVisibleAsync();
     }
 }
