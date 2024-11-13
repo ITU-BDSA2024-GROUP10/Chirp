@@ -32,7 +32,7 @@ public abstract class TimeLinePageModel(ICheepService service) : PageModel
         
         var dt = (DateTimeOffset)DateTime.UtcNow;
         var cheep = new CheepDTO (
-            User.Claims.FirstOrDefault(c => c.Type == "UserName")?.Value ?? "no name",
+            User.Identity.Name ?? "no name",
             MessageModel.Message!,
             dt.ToUnixTimeSeconds()
         );
