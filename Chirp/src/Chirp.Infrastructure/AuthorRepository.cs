@@ -15,18 +15,6 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
             .Select(a => new AuthorDTO(a.UserName!, a.Email!))
             .FirstOrDefaultAsync();
 
-    public async Task<AuthorDTO?> GetAuthorByEmail(string email)
-    {
-        var query = context.Authors
-            .Where(author => author.Email == email)
-            .Select(author => new { author.UserName, author.Email });
-
-
-        var authors = await query.ToListAsync();
-
-        return authors.Select(author => new AuthorDTO(author.UserName!, author.Email ?? string.Empty)).FirstOrDefault();
-    }
-
     public async Task<bool> AddAuthor(AuthorDTO author)
     {
         try
