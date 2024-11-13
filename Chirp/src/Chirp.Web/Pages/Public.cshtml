@@ -8,8 +8,8 @@
 <div>
     <h2> Public Timeline </h2>
 
-    @await Component.InvokeAsync("SubmitCheep", new { Model.MessageModel, targetPage = "/"})
-    
+    @await Component.InvokeAsync("SubmitCheep", new { Model.MessageModel, targetPage = "/" })
+
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
@@ -31,15 +31,7 @@
     {
         <em>There are no cheeps so far.</em>
     }
-    <div>
-        @if (Model.PageNumber > 1)
-        {
-        <a href="/?page=@(Model.PageNumber - 1)">Previous</a>
-        }
-        <p>@Model.PageNumber</p>
-        @if (Model.Cheeps.Count > 31)
-        {
-        <a href="/?page=@(Model.PageNumber + 1)">Next</a>
-        }
-    </div>
+    
+    @await Component.InvokeAsync("PageButtons", new { pageNumber = Model.PageNumber, targetPage = "/", isLastPage = Model.Cheeps.Count < 32 })
+    
 </div>
