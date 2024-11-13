@@ -39,11 +39,11 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
         modelBuilder.Entity<Author>(entity =>
         {
             //define required + unique name
-            entity.Property(a => a.Name)
+            entity.Property(a => a.UserName)
                 .IsRequired();
             entity.Property(a => a.Email)
                 .IsRequired();
-            entity.HasIndex(a => a.Name)
+            entity.HasIndex(a => a.UserName)
                 .IsUnique();
             entity.HasIndex(a => a.Email)
                 .IsUnique();
