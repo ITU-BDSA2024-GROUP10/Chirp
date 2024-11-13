@@ -4,12 +4,12 @@
     var isLastPage = ViewBag.IsLastPage as bool? ?? false;
 }
 
-<div>
+<div style="display: flex; align-items: center;">
     @if (pageNumber > 1)
     {
         <a href="@targetPage?page=@(pageNumber - 1)">Previous</a>
     }
-    <p>@pageNumber</p>
+    <p style="margin: 10px">@pageNumber</p>
     @if (!isLastPage)
     {
         <a href="/?page=@(pageNumber + 1)">Next</a>
