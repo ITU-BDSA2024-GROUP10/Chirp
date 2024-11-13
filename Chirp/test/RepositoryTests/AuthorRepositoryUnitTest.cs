@@ -2,8 +2,6 @@
 using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using RepositoryTests.Utils;
 
 namespace RepositoryTests;
