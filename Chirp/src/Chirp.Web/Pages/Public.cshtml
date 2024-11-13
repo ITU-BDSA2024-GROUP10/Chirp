@@ -31,4 +31,15 @@
     {
         <em>There are no cheeps so far.</em>
     }
+    <div>
+        @if (Model.PageNumber > 1)
+        {
+        <a href="/?page=@(Model.PageNumber - 1)">Previous</a>
+        }
+        <p>@Model.PageNumber</p>
+        @if (Model.Cheeps.Count > 31)
+        {
+        <a href="/?page=@(Model.PageNumber + 1)">Next</a>
+        }
+    </div>
 </div>
