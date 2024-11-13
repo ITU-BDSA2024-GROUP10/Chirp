@@ -28,7 +28,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = [] };
+        var author = new Author { Id = "1", UserName = "Bill", Email = "Bill@email", Cheeps = [] };
         for (int i = 0; i < 7; i++)
         {
             var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now };
@@ -51,7 +51,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var author = new Author { Name = "mr. test", Email = "test@test.test" };
+        var author = new Author { UserName = "mr. test", Email = "test@test.test" };
         var cheep = new Cheep { Author = author, Message = "test", TimeStamp = DateTime.Now };
         chirpContext.Cheeps.Add(cheep);
         await chirpContext.SaveChangesAsync();
@@ -69,7 +69,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email", Cheeps = [] };
+        var author = new Author { Id = "1", UserName = "Bill", Email = "Bill@email", Cheeps = [] };
         List<Cheep> cheeps = [];
         for (int i = 0; i < 7; i++)
         {
@@ -94,7 +94,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
             var expectedCheep = cheeps.ElementAt(i + 3);
             var singleCheep = resultList.ElementAt(i);
 
-            Assert.Equal(expectedCheep.Author.Name, singleCheep.Author);
+            Assert.Equal(expectedCheep.Author.UserName, singleCheep.Author);
             Assert.Equal(expectedCheep.Message, singleCheep.Message);
             Assert.Equal(((DateTimeOffset)expectedCheep.TimeStamp).ToUnixTimeSeconds(), singleCheep.UnixTimestamp);
         }
@@ -121,7 +121,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var author = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = [] };
+        var author = new Author { Id = "1", UserName = "Bill", Email = "Bill@email.com", Cheeps = [] };
         var timeStamp = new DateTime(2000, 01, 01);
         var cheep = new Cheep { Author = author, Message = "test", TimeStamp = timeStamp };
         chirpContext.Cheeps.Add(cheep);
@@ -158,7 +158,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
 
         for (int i = 0; i < 5; i++)
         {
-            var author = new Author { Name = $"name{i}", Email = $"{i}@mail.com", Cheeps = [] };
+            var author = new Author { UserName = $"name{i}", Email = $"{i}@mail.com", Cheeps = [] };
             authors.Add(author);
             var cheep = new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now };
             cheeps.Add(cheep);
@@ -172,11 +172,11 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
         for (int i = 0; i < 5; i++)
         {
             //act
-            var result = await cheepRepo.GetCheepsFromAuthorByPage(authors[i].Name, 1, 1);
+            var result = await cheepRepo.GetCheepsFromAuthorByPage(authors[i].UserName!, 1, 1);
             var resultDTO = result.ToList().ElementAt(0);
 
             //arrange
-            Assert.Equal(cheeps[i].Author.Name, resultDTO.Author);
+            Assert.Equal(cheeps[i].Author.UserName, resultDTO.Author);
             Assert.Equal(cheeps[i].Message, resultDTO.Message);
             Assert.Equal(((DateTimeOffset)cheeps[i].TimeStamp).ToUnixTimeSeconds(), resultDTO.UnixTimestamp);
         }
@@ -192,7 +192,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
 
         for (int i = 0; i < 5; i++)
         {
-            var author = new Author { Name = $"name{i}", Email = $"{i}@mail.com" };
+            var author = new Author { UserName = $"name{i}", Email = $"{i}@mail.com" };
             authors.Add(author);
             var cheep = new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now };
             cheeps.Add(cheep);
@@ -216,8 +216,8 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var authorA = new Author { Id = "1", Name = "Bill", Email = "Bill@email.com", Cheeps = [] };
-        var authorB = new Author { Id = "2", Name = "Amy", Email = "Amy@email.com", Cheeps = [] };
+        var authorA = new Author { Id = "1", UserName = "Bill", Email = "Bill@email.com", Cheeps = [] };
+        var authorB = new Author { Id = "2", UserName = "Amy", Email = "Amy@email.com", Cheeps = [] };
 
         var authTotal = 0;
         var rand = new Random();
@@ -265,7 +265,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var author = new Author { Name = "John Doe", Email = "JohnDoe@gmail.com" };
+        var author = new Author { UserName = "John Doe", Email = "JohnDoe@gmail.com" };
         chirpContext.Authors.Add(author);
         await chirpContext.SaveChangesAsync();
 

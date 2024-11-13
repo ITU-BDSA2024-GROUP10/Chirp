@@ -38,8 +38,8 @@ public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory>
         //arrange
         fixture.ResetDB();
 
-        var wantedAuthor = new Author { Name = author, Email = $"{author}@gmail.com" };
-        var otherAuthor = new Author { Name = "Mr. test", Email = "test@test.com" };
+        var wantedAuthor = new Author { UserName = author, Email = $"{author}@gmail.com" };
+        var otherAuthor = new Author { UserName = "Mr. test", Email = "test@test.com" };
         var wantedCheep = new Cheep
         {
             Author = wantedAuthor,
@@ -68,22 +68,22 @@ public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory>
         var content = await response.Content.ReadAsStringAsync();
 
         //assert
-        Assert.Contains(wantedAuthor.Name, content);
+        Assert.Contains(wantedAuthor.UserName, content);
         Assert.Contains(wantedCheep.Message, content);
         Assert.Contains(wantedCheep.TimeStamp.ToUniversalTime().ToString("dd/MM/yy H:mm:ss"), content);
 
-        Assert.DoesNotContain(otherAuthor.Name, content);
+        Assert.DoesNotContain(otherAuthor.UserName, content);
         Assert.DoesNotContain(otherCheep.Message, content);
         Assert.DoesNotContain(otherCheep.TimeStamp.ToUniversalTime().ToString("dd/MM/yy H:mm:ss"), content);
 
-        Assert.Contains($"{wantedAuthor.Name}'s Timeline", content);
+        Assert.Contains($"{wantedAuthor.UserName}'s Timeline", content);
     }
 
     [Fact]
     public async void CanSeePublicTimeline()
     {
         fixture.ResetDB();
-        var wantedAuthor = new Author { Name = "Wanted", Email = "wanted@gmail.com" };
+        var wantedAuthor = new Author { UserName = "Wanted", Email = "wanted@gmail.com" };
         var wantedCheep = new Cheep
         {
             Author = wantedAuthor,
@@ -101,7 +101,7 @@ public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory>
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains(wantedAuthor.Name, content);
+        Assert.Contains(wantedAuthor.UserName, content);
         Assert.Contains(wantedCheep.Message, content);
         Assert.Contains(wantedCheep.TimeStamp.ToUniversalTime().ToString("dd/MM/yy H:mm:ss"), content);
     }
@@ -115,7 +115,7 @@ public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory>
         var cheepslist = new List<Cheep>();
         var author = new Author
         {
-            Name = "Sir Page",
+            UserName = "Sir Page",
             Email = "Page1@gmail.com",
         };
 
@@ -149,7 +149,7 @@ public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory>
         {
             Assert.Contains(cheep.Message, content);
             Assert.Contains(cheep.TimeStamp.ToUniversalTime().ToString("dd/MM/yy H:mm:ss"), content);
-            Assert.Contains(cheep.Author.Name, content);
+            Assert.Contains(cheep.Author.UserName!, content);
         }
 
         foreach (var cheep in cheepslist)
