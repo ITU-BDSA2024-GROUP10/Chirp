@@ -12,7 +12,7 @@ namespace PlaywrightTests.Utils;
 //https://medium.com/younited-tech-blog/end-to-end-test-a-blazor-app-with-playwright-part-3-48c0edeff4b6
 //The db connection string "DataSource=file::memory:?cache=shared" is used to create an in-memory database
 //that is shared between the test host and the Kestrel host.
-public class CustomWebApplicationFactory(string baseUrl) 
+public class RazorPlaywrightWebApplicationFactory(string baseUrl) 
     : InMemoryCostumeWebApplicationFactory("DataSource=file::memory:?cache=shared")
 {
     protected override IHost CreateHost(IHostBuilder builder)
