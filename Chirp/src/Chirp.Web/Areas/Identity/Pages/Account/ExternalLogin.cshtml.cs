@@ -88,8 +88,9 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [DisplayName]
-            [Display(Name = "Display Name")]
-            public string DisplayName { get; set; }
+            
+            [Display(Name = "Username")]
+            public string UserName { get; set; }
 
             public string getNeededInfo()
             {
@@ -99,7 +100,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     _output += "Email, ";
                 }
 
-                if (DisplayName == null)
+                if (UserName == null)
                 {
                     _output += "Display Name, ";
                 }
@@ -109,7 +110,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
             public bool isComplete()
             {
-                return Email != null && DisplayName != null;
+                return Email != null && UserName != null;
             }
         }
 
@@ -167,8 +168,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
                 {
-                    Input.DisplayName = info.Principal.FindFirstValue(ClaimTypes.Name);
-                    TempData["DisplayName"] = Input.DisplayName;
+                    Input.UserName = info.Principal.FindFirstValue(ClaimTypes.Name);
+                    TempData["DisplayName"] = Input.UserName;
                 }
                 
                 // If all the needed information is already provided, skip the form and create the user
@@ -196,7 +197,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.Name = (Input.DisplayName ?? TempData["DisplayName"].ToString()) ?? throw new InvalidOperationException();
+                user.UserName = (Input.UserName ?? TempData["DisplayName"].ToString()) ?? throw new InvalidOperationException();
                 var email = Input.Email ?? TempData["Email"].ToString();
                 
                 await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
@@ -212,7 +213,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
-                        var claim = new Claim("UserName", user.Name);
+                        var claim = new Claim("UserName", user.UserName);
                         await _userManager.AddClaimAsync(user, claim);
                         
                         /*var userId = await _userManager.GetUserIdAsync(user);
