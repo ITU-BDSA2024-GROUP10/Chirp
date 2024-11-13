@@ -12,6 +12,7 @@
 
     @if (Model.Cheeps.Any())
     {
+        @await Component.InvokeAsync("PageButtons", new { pageNumber = Model.PageNumber, targetPage = "/", isLastPage = Model.Cheeps.Count < 32 })
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {

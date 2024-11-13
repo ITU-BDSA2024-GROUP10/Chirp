@@ -8,6 +8,7 @@ namespace Chirp.Web.Pages;
 
 public class UserTimelineModel(ICheepService service) : TimeLinePageModel(service)
 {
+    public int PageNumber;
     public ActionResult OnGet(string author, [FromQuery] int page)
     {
         Author = author;
@@ -20,6 +21,7 @@ public class UserTimelineModel(ICheepService service) : TimeLinePageModel(servic
         if (Author == null) {
             throw new ArgumentNullException(nameof(Author));
         }
-        Cheeps = Service.GetCheepsFromAuthorByPage(Author, page, 32);
+        PageNumber = page < 1 ? 1 : page;
+        Cheeps = Service.GetCheepsFromAuthorByPage(Author, PageNumber, 32);
     }
 }
