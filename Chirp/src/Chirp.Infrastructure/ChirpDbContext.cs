@@ -45,8 +45,7 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
                 .IsRequired();
             entity.HasIndex(a => a.UserName)
                 .IsUnique();
-            entity.HasIndex(a => a.Email)
-                .IsUnique();
+            entity.HasIndex(a => a.Email);
         });
 
         
