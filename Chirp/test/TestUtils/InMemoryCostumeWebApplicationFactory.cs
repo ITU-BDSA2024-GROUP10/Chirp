@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
 using Chirp.Infrastructure;
+using Chirp.Infrastructure.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
@@ -9,10 +10,21 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace TestUtils;
 
-public class InMemoryCostumeWebApplicationFactory<TProgram>
-    : WebApplicationFactory<TProgram>
+public class InMemoryCostumeWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram>
     where TProgram : class
 {
+    private readonly string _connectionString;
+    
+    public InMemoryCostumeWebApplicationFactory()
+    {
+        _connectionString = "DataSource=:memory:";
+    }
+    
+    protected InMemoryCostumeWebApplicationFactory(string connectionString)
+    {
+        _connectionString = connectionString;
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -31,12 +43,12 @@ public class InMemoryCostumeWebApplicationFactory<TProgram>
             // Create open SqliteConnection so EF won't automatically close it.
             services.AddSingleton<DbConnection>(container =>
             {
-                var connection = new SqliteConnection("DataSource=:memory:");
+                var connection = new SqliteConnection(_connectionString);
                 connection.Open();
 
                 return connection;
             });
-
+            
             services.AddDbContext<ChirpDBContext>((container, options) =>
             {
                 var connection = container.GetRequiredService<DbConnection>();
