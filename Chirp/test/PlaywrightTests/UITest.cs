@@ -108,4 +108,57 @@ public class UITest : PageTestWithCustomWebApplicationFactory
         await Expect(Page.Locator("#messagelist > li")).ToHaveCountAsync(0);
     }
 
+    [Test]
+    public async Task SeeCorrectNumberOfCheepsOnPrivateTimeline()
+    {
+        #region Arrange
+
+        var context = _factory.GetDbContext();
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+        Author realTestAuthor = new Author
+        {
+            Name = "mr. test",
+            Email = "realtest@test.com"
+        };
+        Author fakeTestAuthor = new Author
+        {
+            Name = "fake mr. test",
+            Email = "faketest@test.com"
+        };
+        context.Authors.Add(realTestAuthor);
+        context.Authors.Add(fakeTestAuthor);
+
+        for (var i = 0; i < 33; i++)
+        {
+            context.Cheeps.Add(new Cheep()
+            {
+                Author = realTestAuthor,
+                Message = "real test",
+                TimeStamp = DateTime.Now.AddHours(i),
+            });
+        }
+
+        for (var i = 0; i < 33; i++)
+        {
+            context.Cheeps.Add(new Cheep()
+            {
+                Author = fakeTestAuthor,
+                Message = "fake test",
+                TimeStamp = DateTime.Now.AddHours(i),
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        #endregion
+
+        //act
+        await Page.GotoAsync($"/{realTestAuthor.Name}");
+        await Expect(Page.Locator("#messagelist > li")).ToHaveCountAsync(32);
+        await Page.GotoAsync($"/{realTestAuthor.Name}?page=2");
+        await Expect(Page.Locator("#messagelist > li")).ToHaveCountAsync(1);
+        await Page.GotoAsync($"/{realTestAuthor.Name}?page=3");
+        await Expect(Page.Locator("#messagelist > li")).ToHaveCountAsync(0);
+    }
 }
