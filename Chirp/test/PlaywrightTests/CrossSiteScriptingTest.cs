@@ -49,7 +49,7 @@ public class CrossSiteScriptingTest : PageTestWithCustomWebApplicationFactory
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync("Mathias");
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("mlao@itu.dk");
+        await Page.GetByPlaceholder("name@example.com").FillAsync("test@itu.dk");
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Password123!");
         await Page.GetByLabel("Confirm Password").ClickAsync();
@@ -59,7 +59,7 @@ public class CrossSiteScriptingTest : PageTestWithCustomWebApplicationFactory
         await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("mlao@itu.dk");
+        await Page.GetByPlaceholder("name@example.com").FillAsync("test@itu.dk");
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("Password123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
