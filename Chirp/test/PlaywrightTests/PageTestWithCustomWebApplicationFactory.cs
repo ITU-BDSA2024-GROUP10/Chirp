@@ -9,7 +9,7 @@ namespace PlaywrightTests;
 public class PageTestWithCustomWebApplicationFactory : PageTest
 {
     protected const string BaseUrl = "http://localhost:5273/";
-    protected CustomWebApplicationFactory _factory;
+    protected RazorPlaywrightWebApplicationFactory _factory;
     private HttpClient _client;
 
     public override BrowserNewContextOptions ContextOptions()
@@ -23,7 +23,7 @@ public class PageTestWithCustomWebApplicationFactory : PageTest
     }
 
     [OneTimeSetUp]
-    public void OneTimeSetUp() => _factory = new CustomWebApplicationFactory();
+    public void OneTimeSetUp() => _factory = new RazorPlaywrightWebApplicationFactory();
 
     [SetUp]
     public void Setup()
