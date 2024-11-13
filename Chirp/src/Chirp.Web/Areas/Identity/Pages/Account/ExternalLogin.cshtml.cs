@@ -87,7 +87,6 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
 
-            [DisplayName]
             
             [Display(Name = "Username")]
             public string UserName { get; set; }
