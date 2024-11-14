@@ -6,7 +6,7 @@ using PlaywrightTests.Utils;
 namespace PlaywrightTests;
 
 [NonParallelizable]
-public class UITest : PageTestWithCustomWebApplicationFactory
+public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
 {
     [Test]
     public async Task HasTitle()

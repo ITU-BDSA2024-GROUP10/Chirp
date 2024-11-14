@@ -3,7 +3,7 @@ using Microsoft.Playwright.NUnit;
 
 namespace PlaywrightTests.Utils;
 
-public class PageTestWithCustomWebApplicationFactory : PageTest
+public class PageTestWithRazorPlaywrightWebApplicationFactory : PageTest
 {
     protected const string RazorBaseUrl = "http://localhost:5273/";
     protected RazorPlaywrightWebApplicationFactory razorFactory;

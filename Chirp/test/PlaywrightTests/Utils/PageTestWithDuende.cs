@@ -2,7 +2,7 @@ using Microsoft.Playwright;
 
 namespace PlaywrightTests.Utils;
 
-public class PageTestWithDuende : PageTestWithCustomWebApplicationFactory
+public class PageTestWithDuende : PageTestWithRazorPlaywrightWebApplicationFactory
 {
     protected const string DuendeBaseUrl = "http://localhost:5001";
 

@@ -7,7 +7,7 @@ namespace PlaywrightTests;
 //[Parallelizable(ParallelScope.Self)]
 [TestFixture]
 [NonParallelizable]
-public class EndToEndTests : PageTestWithCustomWebApplicationFactory
+public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
 {
     [Test]
     public async Task EndToEnd_RegisterLoginCheepAndLogout()
