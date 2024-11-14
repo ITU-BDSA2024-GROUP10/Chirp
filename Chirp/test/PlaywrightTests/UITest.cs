@@ -203,6 +203,26 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task PageButtons_FirstMiddleEndPages()
     {
+        //arrange
+        var context = razorFactory.GetDbContext();
+        Author testAuthor = new Author
+        {
+            Name = "mr. test",
+            Email = "test@test.com"
+        };
+        context.Authors.Add(testAuthor);
+
+        for (var i = 0; i < 65; i++)
+        {
+            context.Cheeps.Add(new Cheep()
+            {
+                Author = testAuthor,
+                Message = "test",
+                TimeStamp = DateTime.Now.AddHours(i),
+            });
+        }
+
+        await context.SaveChangesAsync();
         //first
         await Page.GotoAsync("/");
         await Expect(Page.Locator("body")).ToContainTextAsync("1 Next");
