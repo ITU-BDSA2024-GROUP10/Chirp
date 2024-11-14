@@ -8,7 +8,12 @@ public class PublicModel(ICheepService service) : TimeLinePageModel(service)
 {
     public ActionResult OnGet([FromQuery] int page)
     {
-        PageNumber = page < 1 ? 1 : page;
+        if (page < 1)
+        {
+            var returnUrl = Url.Content("~/?page=1");
+            return LocalRedirect(returnUrl);
+        }
+        PageNumber = page;
         LoadCheeps(PageNumber);
         return Page();
     }
