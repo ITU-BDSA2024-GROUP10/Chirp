@@ -5,9 +5,9 @@ namespace PlaywrightTests.Utils;
 
 public class PageTestWithCustomWebApplicationFactory : PageTest
 {
-    protected const string RazorBaseUrl = "http://localhost:5273";
-    private CustomWebApplicationFactory _factory;
-    private HttpClient _client;
+    protected const string RazorBaseUrl = "http://localhost:5273/";
+    protected RazorPlaywrightWebApplicationFactory razorFactory;
+    private HttpClient _razorClient;
 
     public override BrowserNewContextOptions ContextOptions()
     {
@@ -20,22 +20,22 @@ public class PageTestWithCustomWebApplicationFactory : PageTest
     }
 
     [OneTimeSetUp]
-    public void RazorOneTimeSetUp() => _factory = new CustomWebApplicationFactory(RazorBaseUrl);
+    public void RazorOneTimeSetUp() => razorFactory = new RazorPlaywrightWebApplicationFactory(RazorBaseUrl);
 
     [SetUp]
     public void RazorSetup()
     {
-        _client = _factory.CreateClient();
-        _factory.ResetDB();
+        _razorClient = razorFactory.CreateClient();
+        razorFactory.ResetDB();
     }
     
     [TearDown]
-    public void TearDown() => _client.Dispose();
+    public void TearDown() => _razorClient.Dispose();
 
     [OneTimeTearDown]
     public async Task RazorOneTimeTearDown()
     {
-        _client.Dispose();
-        await _factory.DisposeAsync();
+        _razorClient.Dispose();
+        await razorFactory.DisposeAsync();
     }
 }

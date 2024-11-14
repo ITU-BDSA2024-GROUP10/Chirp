@@ -10,8 +10,15 @@ public class UserTimelineModel(ICheepService service) : TimeLinePageModel(servic
 {
     public ActionResult OnGet(string author, [FromQuery] int page)
     {
+        if (page < 1)
+        {
+            var returnUrl = Url.Content($"~/{author}?page=1");
+            return LocalRedirect(returnUrl);
+        }
+        
         Author = author;
         LoadCheeps(page);
+        
         return Page();
     }
 
