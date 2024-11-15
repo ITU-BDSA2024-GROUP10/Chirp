@@ -16,15 +16,15 @@ public sealed class Author : IdentityUser
         return CreateAuthor(author.Name, author.Email);
     }
 
-    public static Author CreateAuthor(string name, string email)
+    public static Author CreateAuthor(string username, string email)
     {
-        _ = name ?? throw new ArgumentNullException(nameof(name));
+        _ = username ?? throw new ArgumentNullException(nameof(username));
         _ = email ?? throw new ArgumentNullException(nameof(email));
 
         return new Author()
         {
             Email = email,
-            UserName = email
+            UserName = username
         };
     }
 }
