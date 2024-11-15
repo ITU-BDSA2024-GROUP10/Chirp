@@ -16,13 +16,13 @@ public class ExternalTests : PageTestWithDuende
         await Page.GetByPlaceholder("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Password", new() { Exact = true }).FillAsync("password");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Login" }).ClickAsync();
+        await Page.WaitForURLAsync($"{RazorBaseUrl}/**");
+        
         await Expect(Page.Locator("body")).ToContainTextAsync("logout [Mr. test with all info]");
-        Assert.That(Page.Url, Does.Contain($"{RazorBaseUrl}/"));
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "logout [Mr. test with all" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "OpenIdConnect" }).ClickAsync();
         await Expect(Page.Locator("body")).ToContainTextAsync("logout [Mr. test with all info]");
-        Assert.That(Page.Url, Does.Contain($"{RazorBaseUrl}/"));
     }

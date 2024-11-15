@@ -202,7 +202,10 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, email, CancellationToken.None);
 
-                user.EmailConfirmed = true;
+                if (Input.Email != null)
+                {
+                    user.EmailConfirmed = true;
+                }
                 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
