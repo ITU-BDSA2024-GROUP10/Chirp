@@ -23,6 +23,49 @@ public static class TestUsers
                 new Claim(JwtClaimTypes.Email, "Alice@exampel.com"),
                 new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
             }
+        },
+        new TestUser
+        {
+            SubjectId = "2",
+            Username = "TestWithAllInfo",
+            Password = "password",
+            
+            Claims = new List<Claim>
+            {
+                new Claim(JwtClaimTypes.Name, "Mr. test with all info"),
+                new Claim(JwtClaimTypes.Email, "Test@AllInfo.com"),
+                new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
+            }
+        },
+        new TestUser
+        {
+            SubjectId = "3",
+            Username = "TestWithEmail",
+            Password = "password",
+            
+            Claims = new List<Claim>
+            {
+                new Claim(JwtClaimTypes.Email, "Test@WithEmail.com"),
+                new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
+            }
+        },
+        new TestUser
+        {
+            SubjectId = "4",
+            Username = "TestWithUserName",
+            Password = "password",
+            
+            Claims = new List<Claim>
+            {
+                new Claim(JwtClaimTypes.Name, "mr. Test with username"),
+                new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
+            }
+        },
+        new TestUser
+        {
+            SubjectId = "5",
+            Username = "TestWithNoInfo",
+            Password = "password"
         }
     };
 }
