@@ -77,3 +77,32 @@ public class ExternalTests : PageTestWithDuende
         await Expect(Page.Locator("body")).ToContainTextAsync("logout [mr. Test with username]");
 
     }
+    
+    [Test]
+    public async Task CreateUserUsingExternalProvider_NoInfo()
+    {
+        await Page.GotoAsync($"{RazorBaseUrl}/Identity/Account/Register");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "OpenIdConnect" }).ClickAsync();
+        await Page.GetByPlaceholder("Username").ClickAsync();
+        await Page.GetByPlaceholder("Username").FillAsync("TestWithNoInfo");
+        await Page.GetByPlaceholder("Password").ClickAsync();
+        await Page.GetByPlaceholder("Password").FillAsync("password");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Login" }).ClickAsync();
+        await Page.WaitForURLAsync($"{RazorBaseUrl}/**");
+        
+        await Expect(Page.Locator("form")).ToContainTextAsync("Email");
+        await Expect(Page.Locator("form")).ToContainTextAsync("Display Name");
+        await Page.GetByPlaceholder("Please enter your email.").ClickAsync();
+        await Page.GetByPlaceholder("Please enter your email.").FillAsync("Test@noInfo.com");
+        await Page.GetByPlaceholder("Please enter your display name").ClickAsync();
+        await Page.GetByPlaceholder("Please enter your display name").FillAsync("mr. test with no info");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Expect(Page.Locator("body")).ToContainTextAsync("logout [mr. test with no info]");
+       
+        await Page.GetByRole(AriaRole.Link, new() { Name = "logout [mr. test with no info]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "OpenIdConnect" }).ClickAsync();
+        await Expect(Page.Locator("body")).ToContainTextAsync("logout [mr. test with no info]");
+    }
+}
