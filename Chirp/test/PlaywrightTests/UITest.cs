@@ -59,7 +59,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GotoAsync($"/?page={page}");
 
         //assert
-        await Expect(Page).ToHaveURLAsync($"{RazorBaseUrl}{expectedEndpoint}");
+        await Expect(Page).ToHaveURLAsync($"{RazorBaseUrl}/{expectedEndpoint}");
     }
 
     [Test]
@@ -73,7 +73,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GotoAsync($"/test?page={page}");
 
         //assert
-        await Expect(Page).ToHaveURLAsync($"{RazorBaseUrl}{expectedEndpoint}");
+        await Expect(Page).ToHaveURLAsync($"{RazorBaseUrl}/{expectedEndpoint}");
     }
 
     [Test]
