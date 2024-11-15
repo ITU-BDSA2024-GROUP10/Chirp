@@ -5,7 +5,7 @@ namespace PlaywrightTests.Utils;
 
 public class PageTestWithRazorPlaywrightWebApplicationFactory : PageTest
 {
-    protected const string RazorBaseUrl = "http://localhost:5273/";
+    protected const string RazorBaseUrl = "http://localhost:5273";
     protected RazorPlaywrightWebApplicationFactory razorFactory;
     private HttpClient _razorClient;
 
