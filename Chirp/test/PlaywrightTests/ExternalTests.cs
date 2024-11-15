@@ -51,3 +51,29 @@ public class ExternalTests : PageTestWithDuende
         await Page.GetByRole(AriaRole.Button, new() { Name = "OpenIdConnect" }).ClickAsync();
         await Expect(Page.Locator("body")).ToContainTextAsync("logout [Mr. test with email]");
     }
+    
+    [Test]
+    public async Task CreateUserUsingExternalProvider_OnlyUsername()
+    {
+        await Page.GotoAsync($"{RazorBaseUrl}/Identity/Account/Register");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "OpenIdConnect" }).ClickAsync();
+        await Page.GetByPlaceholder("Username").ClickAsync();
+        await Page.GetByPlaceholder("Username").FillAsync("TestWithUserName");
+        await Page.GetByPlaceholder("Password").ClickAsync();
+        await Page.GetByPlaceholder("Password").FillAsync("password");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Login" }).ClickAsync();
+        await Page.WaitForURLAsync($"{RazorBaseUrl}/**");
+        
+        await Expect(Page.Locator("label")).ToContainTextAsync("Email");
+        await Page.GetByPlaceholder("Please enter your email.").ClickAsync();
+        await Page.GetByPlaceholder("Please enter your email.").FillAsync("Test@withUsername.com");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Expect(Page.Locator("body")).ToContainTextAsync("logout [mr. Test with username]");
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "logout [mr. Test with" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "OpenIdConnect" }).ClickAsync();
+        await Expect(Page.Locator("body")).ToContainTextAsync("logout [mr. Test with username]");
+
+    }
