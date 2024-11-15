@@ -13,6 +13,7 @@ public abstract class TimeLinePageModel(ICheepService service) : PageModel
     protected readonly ICheepService Service = service;
     
     public string? Author { get; set; } 
+    public int PageNumber = 1;
 
     [BindProperty] 
     public MessageModel MessageModel { get; set; } = new MessageModel();

@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
 using Microsoft.Playwright;
 using PlaywrightTests.Utils;
@@ -7,7 +6,7 @@ using PlaywrightTests.Utils;
 namespace PlaywrightTests;
 
 [NonParallelizable]
-public class UITest : PageTestWithCustomWebApplicationFactory
+public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
 {
     [Test]
     public async Task HasTitle()
@@ -199,5 +198,39 @@ public class UITest : PageTestWithCustomWebApplicationFactory
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "What's on your mind Mathias?" }))
             .ToBeVisibleAsync();
         await Expect(Page.Locator("#Message")).ToBeVisibleAsync();
+    }
+
+    [Test]
+    public async Task PageButtons_FirstMiddleEndPages()
+    {
+        //arrange
+        var context = razorFactory.GetDbContext();
+        Author testAuthor = new Author
+        {
+            Name = "mr. test",
+            Email = "test@test.com"
+        };
+        context.Authors.Add(testAuthor);
+
+        for (var i = 0; i < 65; i++)
+        {
+            context.Cheeps.Add(new Cheep()
+            {
+                Author = testAuthor,
+                Message = "test",
+                TimeStamp = DateTime.Now.AddHours(i),
+            });
+        }
+
+        await context.SaveChangesAsync();
+        //first
+        await Page.GotoAsync("/");
+        await Expect(Page.Locator("body")).ToContainTextAsync("1 Next");
+        //middle
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Next" }).First.ClickAsync();
+        await Expect(Page.Locator("body")).ToContainTextAsync("Previous 2 Next");
+        //end
+        await Page.GotoAsync("/?page=9999");
+        await Expect(Page.Locator("body")).ToContainTextAsync("Previous 9999");
     }
 }
