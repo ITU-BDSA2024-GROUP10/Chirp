@@ -32,13 +32,21 @@ public abstract class TimeLinePageModel(ICheepService service) : PageModel
         }
         
         var dt = (DateTimeOffset)DateTime.UtcNow;
-        var cheep = new CheepDTO (
-            User.Claims.FirstOrDefault(c => c.Type == "UserName")?.Value ?? "no name",
-            MessageModel.Message!,
-            dt.ToUnixTimeSeconds()
-        );
+        if (User.Identity != null)
+        {
+            var cheep = new CheepDTO (
+                User.Identity.Name ?? "no name",
+                MessageModel.Message!,
+                dt.ToUnixTimeSeconds()
+            );
 
-        Service.CreateCheep(cheep);
+            Service.CreateCheep(cheep);
+        }
+        else
+        {
+            throw new ArgumentNullException();
+        }
+
         return RedirectToPage(null); //redirects to the same page
     }
 
