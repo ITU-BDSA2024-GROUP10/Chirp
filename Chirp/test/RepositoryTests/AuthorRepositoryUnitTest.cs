@@ -15,17 +15,17 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var author = new Author { Name = "John Doe", Email = "JohnDoe@gmail.com" };
+        var author = new Author { UserName = "John Doe", Email = "JohnDoe@gmail.com" };
 
         chirpContext.Authors.Add(author);
         chirpContext.SaveChanges();
 
         IAuthorRepository authorRepo = new AuthorRepository(chirpContext);
 
-        var newAuthor = new Author { Name = "Abra Cabrera", Email = "AbraCabrera@gmail.com" };
+        var newAuthor = new Author { UserName = "Abra Cabrera", Email = "AbraCabrera@gmail.com" };
 
         //Act
-        var result = await authorRepo.GetAuthorByName(newAuthor.Name);
+        var result = await authorRepo.GetAuthorByName(newAuthor.UserName);
 
         //Assert
         Assert.Null(result);
@@ -36,7 +36,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
     {
         //Arrange an arbitrary author with name 'Helge' and create arbitrary database to put up
         var chirpContext = _fixture.GetContext();
-        var author = new Author { Name = "Helge", Email = "Helge@gmail.com" };
+        var author = new Author { UserName = "Helge", Email = "Helge@gmail.com" };
 
         chirpContext.Authors.Add(author);
         await chirpContext.SaveChangesAsync();
@@ -44,7 +44,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
 
         //Act a scenario where the repository can get an author by the name of 'Helge'
-        var result = await authorRepository.GetAuthorByName(author.Name);
+        var result = await authorRepository.GetAuthorByName(author.UserName);
 
         //Assert the value of the arbitrary author that was arranged
         Assert.NotNull(result);
@@ -82,7 +82,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
         var checkSuccession = chirpContext.Authors.Where(a => a.Email == author.Email).Select(a => new Author
         {
             Id = a.Id,
-            Name = a.Name,
+            UserName = a.UserName,
             Email = a.Email
         }).FirstOrDefault();
 
@@ -90,6 +90,6 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
         Assert.True(result);
         Assert.NotNull(checkSuccession);
         Assert.Equal(author.Email, checkSuccession.Email);
-        Assert.Equal(author.Name, checkSuccession.Name);
+        Assert.Equal(author.Name, checkSuccession.UserName);
     }
 }

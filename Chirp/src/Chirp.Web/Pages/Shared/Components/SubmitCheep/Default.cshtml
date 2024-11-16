@@ -7,7 +7,11 @@
 }
 
 <div class="cheepbox">
-    <h3>What's on your mind @(User.Claims.FirstOrDefault(c => c.Type == "UserName")?.Value)?</h3>
+    <h3>What's on your mind
+        @{
+            System.Diagnostics.Debug.Assert(User.Identity != null, "User.Identity != null");
+        }
+        @(User.Identity.Name)?</h3>
     <form method="post" asp-page="@targetPage">
         <input style="float: left" type="text" asp-for="@Model.Message">
         <span asp-validation-for="@Model.Message"></span>

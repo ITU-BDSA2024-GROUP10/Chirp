@@ -5,7 +5,6 @@ namespace Chirp.Infrastructure.Model;
 
 public sealed class Author : IdentityUser
 {
-    public required string Name { get; set; }
     public List<Cheep> Cheeps { get; set; } = [];
 
     public Author()
@@ -17,16 +16,15 @@ public sealed class Author : IdentityUser
         return CreateAuthor(author.Name, author.Email);
     }
 
-    public static Author CreateAuthor(string name, string email)
+    public static Author CreateAuthor(string username, string email)
     {
-        _ = name ?? throw new ArgumentNullException(nameof(name));
+        _ = username ?? throw new ArgumentNullException(nameof(username));
         _ = email ?? throw new ArgumentNullException(nameof(email));
 
         return new Author()
         {
-            Name = name,
             Email = email,
-            UserName = email
+            UserName = username
         };
     }
 }

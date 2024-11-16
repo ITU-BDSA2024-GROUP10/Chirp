@@ -83,7 +83,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         var context = razorFactory.GetDbContext();
         Author testAuthor = new Author
         {
-            Name = "mr. test",
+            UserName = "mr. test",
             Email = "test@test.com"
         };
         context.Authors.Add(testAuthor);
@@ -119,12 +119,12 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         await context.Database.EnsureCreatedAsync();
         Author realTestAuthor = new Author
         {
-            Name = "mr. test",
+            UserName = "mr. test",
             Email = "realtest@test.com"
         };
         Author fakeTestAuthor = new Author
         {
-            Name = "fake mr. test",
+            UserName = "fake mr. test",
             Email = "faketest@test.com"
         };
         context.Authors.Add(realTestAuthor);
@@ -155,11 +155,11 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         #endregion
 
         //act
-        await Page.GotoAsync($"/{realTestAuthor.Name}");
+        await Page.GotoAsync($"/{realTestAuthor.UserName}");
         await Expect(Page.Locator("#messagelist > li")).ToHaveCountAsync(32);
-        await Page.GotoAsync($"/{realTestAuthor.Name}?page=2");
+        await Page.GotoAsync($"/{realTestAuthor.UserName}?page=2");
         await Expect(Page.Locator("#messagelist > li")).ToHaveCountAsync(1);
-        await Page.GotoAsync($"/{realTestAuthor.Name}?page=3");
+        await Page.GotoAsync($"/{realTestAuthor.UserName}?page=3");
         await Expect(Page.Locator("#messagelist > li")).ToHaveCountAsync(0);
     }
 
@@ -175,27 +175,35 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task CheepBoxVisibleWhileLoggedIn()
     {
+        var user = new Author
+        {
+            UserName = "Mathias",
+            Email = "mlao@itu.dk"
+        };
+        var password = "Password123!";
+        
         await Page.GotoAsync("/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync("Mathias");
+        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName);
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("mlao@itu.dk");
+        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email);
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
-        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Password123!");
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
         await Page.GetByLabel("Confirm Password").ClickAsync();
-        await Page.GetByLabel("Confirm Password").FillAsync("Password123!");
+        await Page.GetByLabel("Confirm Password").FillAsync(password);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
         await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
+        
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("mlao@itu.dk");
+        await Page.GetByPlaceholder("Username").ClickAsync();
+        await Page.GetByPlaceholder("Username").FillAsync(user.UserName);
         await Page.GetByPlaceholder("password").ClickAsync();
-        await Page.GetByPlaceholder("password").FillAsync("Password123!");
+        await Page.GetByPlaceholder("password").FillAsync(password);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "What's on your mind Mathias?" }))
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"What's on your mind {user.UserName}?" }))
             .ToBeVisibleAsync();
         await Expect(Page.Locator("#Message")).ToBeVisibleAsync();
     }
@@ -207,7 +215,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         var context = razorFactory.GetDbContext();
         Author testAuthor = new Author
         {
-            Name = "mr. test",
+            UserName = "mr. test",
             Email = "test@test.com"
         };
         context.Authors.Add(testAuthor);

@@ -1,3 +1,4 @@
+using Chirp.Infrastructure.Model;
 using Microsoft.Playwright;
 using PlaywrightTests.Utils;
 
@@ -8,25 +9,34 @@ public class SQLInjectionTests : PageTestWithRazorPlaywrightWebApplicationFactor
     [Test]
     public async Task SQLInjectionInCheepTextBox()
     {
+        var user = new Author
+        {
+            UserName = "Mathias",
+            Email = "mlao@itu.dk"
+        };
+        var password = "Password123!";
+        
         //act
         await Page.GotoAsync("/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync("Mathias");
+        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName);
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("mlao@itu.dk");
+        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email);
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
-        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Password123!");
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
         await Page.GetByLabel("Confirm Password").ClickAsync();
-        await Page.GetByLabel("Confirm Password").FillAsync("Password123!");
+        await Page.GetByLabel("Confirm Password").FillAsync(password);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync(); 
+        
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("mlao@itu.dk");
+        await Page.GetByPlaceholder("Username").ClickAsync();
+        await Page.GetByPlaceholder("Username").FillAsync(user.UserName);
         await Page.GetByPlaceholder("password").ClickAsync();
-        await Page.GetByPlaceholder("password").FillAsync("Password123!");
+        await Page.GetByPlaceholder("password").FillAsync(password);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        
         await Page.Locator("#Message").ClickAsync();
         await Page.Locator("#Message").FillAsync("105; DROP TABLE Cheeps;");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
@@ -38,32 +48,37 @@ public class SQLInjectionTests : PageTestWithRazorPlaywrightWebApplicationFactor
     [Test]
     public async Task SQLInjectionInRegisterNameAndLoggingIn()
     {
-        //act
         await Page.GotoAsync("/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync("DROP TABLE Cheeps;");
-        await Page.Locator("#registerForm div").Filter(new() { HasText = "Name" }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
+        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync("DROP TABLE Cheeps;");
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("cheep");
         await Page.GetByPlaceholder("name@example.com").FillAsync("cheep@gmail.com");
-        await Page.GetByPlaceholder("name@example.com").PressAsync("Tab");
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Password!123");
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Password!123");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Expect(Page.GetByRole(AriaRole.Listitem)).ToContainTextAsync("Username 'DROP TABLE Cheeps;' is invalid, can only contain letters or digits.");
+    }
+
+    [Test]
+    public async Task SQLInjectionInRegisterEmailAndLoggingIn()
+    {
+        await Page.GotoAsync("/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+        await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
+        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync("TestUser");
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("cheep");
-        await Page.GetByPlaceholder("name@example.com").PressAsync("Alt+@");
-        await Page.GetByPlaceholder("name@example.com").FillAsync("cheep@gmail.com");
-        await Page.Locator("#account div").Nth(1).ClickAsync();
-        await Page.GetByPlaceholder("password").ClickAsync();
-        await Page.GetByPlaceholder("password").FillAsync("Password!123");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-        
-        //assert
-        await Expect(Page.Locator("body")).ToContainTextAsync("logout [DROP TABLE Cheeps;]");
+        await Page.GetByPlaceholder("name@example.com").FillAsync("DROP TABLE Cheeps;@gmail.com");
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Password!123");
+        await Page.GetByLabel("Confirm Password").ClickAsync();
+        await Page.GetByLabel("Confirm Password").FillAsync("Password!123");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Expect(Page.GetByPlaceholder("name", new() { Exact = true })).ToHaveValueAsync("TestUser");
+        await Expect(Page.GetByPlaceholder("name@example.com")).ToHaveValueAsync("DROP TABLE Cheeps;@gmail.com");
+        await Expect(Page.GetByLabel("Password", new() { Exact = true })).ToHaveValueAsync("Password!123");
+        await Expect(Page.GetByLabel("Confirm Password")).ToHaveValueAsync("Password!123");
     }
 }
