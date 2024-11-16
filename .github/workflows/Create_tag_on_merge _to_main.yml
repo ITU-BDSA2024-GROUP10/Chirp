@@ -59,13 +59,6 @@ jobs:
         run: |
           # Initizalise skip release
           echo "SKIP_RELEASE=false" >> $GITHUB_ENV
-
-          # Check if "workflow" label is present and skip if so
-          if echo "$PR_LABELS" | grep -E -q "(^|,)workflow(,|$)"; then
-            echo "Workflow label detected. Skipping release process."
-            echo "SKIP_RELEASE=true" >> $GITHUB_ENV
-            exit 0
-          fi
           
           # Extract major, minor, patch from the latest tag (strip leading 'v')
           VERSION=${LATEST_TAG#v}
