@@ -92,6 +92,5 @@ public class UITest : PageTestWithCustomWebApplicationFactory
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"What's on your mind {user.UserName}?" }))
             .ToBeVisibleAsync();
         await Expect(Page.Locator("#Message")).ToBeVisibleAsync();
-       
     }
 }
