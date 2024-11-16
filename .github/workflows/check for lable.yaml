@@ -38,21 +38,21 @@ jobs:
           # E allows for use of OR operators
           # breaking
           if echo "$PR_LABELS" | grep -q "\bbreaking\b"; then
-            NOT_ALLOWED_LABELS="refactor|test|workflow"
+            NOT_ALLOWED_LABELS="refactor|test|workflow|code feature"
             if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
               echo "Combination of 'breaking' with '$NOT_ALLOWED_LABELS' is not allowed."
               exit 1
             fi
           # bug
           elif echo "$PR_LABELS" | grep -q "\bbug\b"; then
-            NOT_ALLOWED_LABELS="test|workflow"
+            NOT_ALLOWED_LABELS="code feature"
             if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
               echo "Combination of 'bug' with '$NOT_ALLOWED_LABELS' is not allowed."
               exit 1
             fi
           # feature
           elif echo "$PR_LABELS" | grep -q "\bfeature\b"; then
-            NOT_ALLOWED_LABELS="test|workflow"
+            NOT_ALLOWED_LABELS="code feature"
             if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
               echo "Combination of 'feature' with '$NOT_ALLOWED_LABELS' is not allowed."
               exit 1
