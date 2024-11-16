@@ -199,8 +199,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
                 user.UserName = (Input.UserName ?? TempData["DisplayName"].ToString()) ?? throw new InvalidOperationException();
                 var email = Input.Email ?? TempData["Email"].ToString();
-                
-                await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
+
+                await _userStore.SetUserNameAsync(user, username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, email, CancellationToken.None);
 
                 if (Input.Email != null)
