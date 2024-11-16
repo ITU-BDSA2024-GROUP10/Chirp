@@ -197,17 +197,18 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.UserName = (Input.UserName ?? TempData["DisplayName"].ToString()) ?? throw new InvalidOperationException();
+                var username = (Input.UserName ?? TempData["Username"].ToString()) ??
+                               throw new InvalidOperationException();
                 var email = Input.Email ?? TempData["Email"].ToString();
 
                 await _userStore.SetUserNameAsync(user, username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, email, CancellationToken.None);
 
-                if (Input.Email != null)
+                if (TempData["Email"] != null)
                 {
                     user.EmailConfirmed = true;
                 }
-                
+
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -215,9 +216,32 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                        
-                        await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
-                        return LocalRedirect(returnUrl);
+
+                        //if email wasn't provided, send a confirmation email
+                        if (TempData["Email"] == null)
+                        {
+                            var userId = await _userManager.GetUserIdAsync(user);
+                            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                            var callbackUrl = Url.Page(
+                                "/Account/ConfirmEmail",
+                                pageHandler: null,
+                                values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                                protocol: Request.Scheme);
+
+                            await _emailSender.SendEmailAsync(email, "Confirm your email",
+                                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                            if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                            {
+                                return RedirectToPage("RegisterConfirmation",
+                                    new { email = Input.Email, returnUrl = returnUrl });
+                            }
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
                 }
 
