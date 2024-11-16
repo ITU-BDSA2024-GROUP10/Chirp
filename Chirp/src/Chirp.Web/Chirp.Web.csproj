@@ -4,7 +4,7 @@
     <TargetFramework>net$(NETCoreAppMaximumVersion)</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>91700f7c-ee8a-447a-a733-7e076d02a3c4</UserSecretsId>
+    <UserSecretsId>be96c223-e47c-4364-bec7-8df5fcd20bc1</UserSecretsId>
   </PropertyGroup>
   
   <ItemGroup>

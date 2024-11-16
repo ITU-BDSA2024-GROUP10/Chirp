@@ -1,8 +1,6 @@
 ﻿using Chirp.Core;
-using Chirp.Core.DTO;
 using Chirp.Web.Pages.Shared.Components.Timelines;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
@@ -10,7 +8,13 @@ public class PublicModel(ICheepService service) : TimeLinePageModel(service)
 {
     public ActionResult OnGet([FromQuery] int page)
     {
-        LoadCheeps(page);
+        if (page < 1)
+        {
+            var returnUrl = Url.Content("~/?page=1");
+            return LocalRedirect(returnUrl);
+        }
+        PageNumber = page;
+        LoadCheeps(PageNumber);
         return Page();
     }
 

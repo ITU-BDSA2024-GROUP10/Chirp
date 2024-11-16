@@ -4,7 +4,7 @@ using PlaywrightTests.Utils;
 
 namespace PlaywrightTests;
 
-public class SQLInjectionTests : PageTestWithCustomWebApplicationFactory
+public class SQLInjectionTests : PageTestWithRazorPlaywrightWebApplicationFactory
 {
     [Test]
     public async Task SQLInjectionInCheepTextBox()
