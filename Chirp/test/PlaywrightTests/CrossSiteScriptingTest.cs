@@ -5,7 +5,7 @@ using PlaywrightTests.Utils;
 namespace PlaywrightTests;
 
 [TestFixture]
-public class CrossSiteScriptingTest : PageTestWithCustomWebApplicationFactory
+public class CrossSiteScriptingTest : PageTestWithRazorPlaywrightWebApplicationFactory
 {
     [Test]
     public async Task CrossSiteScripting_RegisterForm()

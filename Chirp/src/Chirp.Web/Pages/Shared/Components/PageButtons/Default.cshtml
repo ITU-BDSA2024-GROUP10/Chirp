@@ -1,0 +1,17 @@
+@{
+    var targetPage = ViewBag.TargetPage as string ?? "/";
+    var pageNumber = ViewBag.PageNumber as int? ?? 1;
+    var isLastPage = ViewBag.IsLastPage as bool? ?? false;
+}
+
+<div style="display: flex; align-items: center;">
+    @if (pageNumber > 1)
+    {
+        <a href="@targetPage?page=@(pageNumber - 1)">Previous</a>
+    }
+    <p style="margin: 10px">@pageNumber</p>
+    @if (!isLastPage)
+    {
+        <a href="@targetPage?page=@(pageNumber + 1)">Next</a>
+    }
+</div>
