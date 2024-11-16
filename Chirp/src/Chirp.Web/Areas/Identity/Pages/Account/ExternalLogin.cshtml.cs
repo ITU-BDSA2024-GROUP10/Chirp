@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Chirp.Web.Areas.Identity.Pages.Account
 {
@@ -87,9 +88,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
 
-            
-            [Display(Name = "Username")]
-            public string UserName { get; set; }
+
+            [Display(Name = "Username")] public string UserName { get; set; }
 
             public string getNeededInfo()
             {
@@ -101,7 +101,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
                 if (UserName == null)
                 {
-                    _output += "Display Name, ";
+                    _output += "Username, ";
                 }
 
                 return _output.Trim();
@@ -153,7 +153,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             {
                 return RedirectToPage("./Lockout");
             }
-            else
+
+            if (result == SignInResult.Failed)
             {
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
@@ -168,17 +169,17 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
                 {
                     Input.UserName = info.Principal.FindFirstValue(ClaimTypes.Name);
-                    TempData["DisplayName"] = Input.UserName;
+                    TempData["Username"] = Input.UserName;
                 }
-                
+
                 // If all the needed information is already provided, skip the form and create the user
                 if (Input.isComplete())
                 {
                     return await OnPostConfirmationAsync("~/");
                 }
-
-                return Page();
             }
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
