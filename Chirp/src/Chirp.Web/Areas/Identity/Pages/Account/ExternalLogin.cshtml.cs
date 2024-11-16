@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Chirp.Web.Areas.Identity.Pages.Account
 {
@@ -87,9 +88,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
 
-            
-            [Display(Name = "Username")]
-            public string UserName { get; set; }
+
+            [Display(Name = "Username")] public string UserName { get; set; }
 
             public string getNeededInfo()
             {
@@ -101,7 +101,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
                 if (UserName == null)
                 {
-                    _output += "Display Name, ";
+                    _output += "Username, ";
                 }
 
                 return _output.Trim();
@@ -153,7 +153,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             {
                 return RedirectToPage("./Lockout");
             }
-            else
+
+            if (result == SignInResult.Failed)
             {
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
@@ -168,17 +169,17 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
                 {
                     Input.UserName = info.Principal.FindFirstValue(ClaimTypes.Name);
-                    TempData["DisplayName"] = Input.UserName;
+                    TempData["Username"] = Input.UserName;
                 }
-                
+
                 // If all the needed information is already provided, skip the form and create the user
                 if (Input.isComplete())
                 {
                     return await OnPostConfirmationAsync("~/");
                 }
-
-                return Page();
             }
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
@@ -196,14 +197,18 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.UserName = (Input.UserName ?? TempData["DisplayName"].ToString()) ?? throw new InvalidOperationException();
+                var username = (Input.UserName ?? TempData["Username"].ToString()) ??
+                               throw new InvalidOperationException();
                 var email = Input.Email ?? TempData["Email"].ToString();
-                
-                await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
+
+                await _userStore.SetUserNameAsync(user, username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, email, CancellationToken.None);
 
-                user.EmailConfirmed = true;
-                
+                if (TempData["Email"] != null)
+                {
+                    user.EmailConfirmed = true;
+                }
+
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -211,9 +216,32 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                        
-                        await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
-                        return LocalRedirect(returnUrl);
+
+                        //if email wasn't provided, send a confirmation email
+                        if (TempData["Email"] == null)
+                        {
+                            var userId = await _userManager.GetUserIdAsync(user);
+                            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                            var callbackUrl = Url.Page(
+                                "/Account/ConfirmEmail",
+                                pageHandler: null,
+                                values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                                protocol: Request.Scheme);
+
+                            await _emailSender.SendEmailAsync(email, "Confirm your email",
+                                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                            if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                            {
+                                return RedirectToPage("RegisterConfirmation",
+                                    new { email = Input.Email, returnUrl = returnUrl });
+                            }
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
                 }
 
