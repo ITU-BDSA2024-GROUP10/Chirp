@@ -99,16 +99,29 @@ using (var scope = app.Services.CreateScope())
 {
     // ChirpDBContext critical to our app so use GetRequiredService to enforce its presence
     var context = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
-
-    // Execute the migration from code
-    try
+    
+    
+    for (int i = 0; i < 2; i++)
     {
-        context.Database.Migrate();
-    }
-    catch (Exception ex)
-    {
-        Console.Error.WriteLine($"Database migration failed: {ex.Message}");
-        throw; // rethrow since this migration is critical
+        // Execute the migration from code
+        try
+        {
+            context.Database.Migrate();
+            break;
+        }
+        catch (Exception ex)
+        {
+            // If the migration fails, its probably because the database needs to be updated
+            // so we try to delete the database and try again.
+            // This is uckly but, don't now how to update the database on azure
+            if (i == 0)
+            {
+                File.Delete("database/chirp.db");
+                continue;
+            }
+            Console.Error.WriteLine($"Database migration failed: {ex.Message}");
+            throw; // rethrow since this migration is critical
+        }
     }
 }
 
