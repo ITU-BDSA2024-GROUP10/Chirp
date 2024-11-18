@@ -4,7 +4,7 @@ using Chirp.Web.Pages.BindingModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Chirp.Web.Pages.Shared.Components.Timelines;
+namespace Chirp.Web.Pages.Shared;
 
 public abstract class TimeLinePageModel(ICheepService service) : PageModel
 {
