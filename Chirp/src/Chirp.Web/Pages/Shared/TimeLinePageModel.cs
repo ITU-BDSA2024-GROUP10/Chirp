@@ -12,16 +12,13 @@ public abstract class TimeLinePageModel(ICheepService service) : PageModel
     
     protected readonly ICheepService Service = service;
     
-    public string? Author { get; set; } 
     public int PageNumber = 1;
 
     [BindProperty] 
     public MessageModel MessageModel { get; set; } = new MessageModel();
     
-    public ActionResult OnPost(string? author, [FromQuery] int page)
+    public ActionResult OnPost([FromQuery] int page)
     {
-        Author = author;
-        
         if (string.IsNullOrWhiteSpace(MessageModel.Message)) {
             ModelState.AddModelError("Message", "Message cannot be empty");
         }
