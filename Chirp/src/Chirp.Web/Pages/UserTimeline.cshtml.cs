@@ -38,4 +38,17 @@ public class UserTimelineModel(ICheepService service) : TimeLinePageModel(servic
 
         Cheeps = Service.GetCheepsFromAuthorByPage(author, page, 32);
     }
+    
+    public string NormalizeForDisplay(string author)
+    {
+        var parts = author.Split(' ');
+        var result = new StringBuilder();
+        foreach (var part in parts)
+        {
+            result.Append(char.ToUpper(part[0]));
+            result.Append(part.Substring(1).ToLower());
+            result.Append(' ');
+        }
+        return result.ToString().Trim();
+    }
 }
