@@ -13,21 +13,22 @@ public class UserTimelineModel(ICheepService service) : TimeLinePageModel(servic
             var returnUrl = Url.Content($"~/{author}?page=1");
             return LocalRedirect(returnUrl);
         }
-        
-        Author = author;
+
         PageNumber = page < 1 ? 1 : page;
         LoadCheeps(page);
-        
+
         return Page();
     }
 
     protected override void LoadCheeps(int page)
     {
-        if (Author == null)
+        var author = HttpContext.GetRouteValue("author");
+
+        if (author == null)
         {
-            throw new ArgumentNullException(nameof(Author));
+            throw new ArgumentNullException(nameof(author), "Couldn't get the author from the route");
         }
 
-        Cheeps = Service.GetCheepsFromAuthorByPage(Author, page, 32);
+        Cheeps = Service.GetCheepsFromAuthorByPage(author.ToString()!, page, 32);
     }
 }
