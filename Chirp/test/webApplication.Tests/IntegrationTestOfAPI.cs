@@ -40,6 +40,8 @@ public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory>
 
         var wantedAuthor = new Author { UserName = author, Email = $"{author}@gmail.com" };
         var otherAuthor = new Author { UserName = "Mr. test", Email = "test@test.com" };
+        wantedAuthor.NormalizedUserName = wantedAuthor.UserName.ToUpper();
+        otherAuthor.NormalizedUserName = otherAuthor.UserName.ToUpper();
         var wantedCheep = new Cheep
         {
             Author = wantedAuthor,

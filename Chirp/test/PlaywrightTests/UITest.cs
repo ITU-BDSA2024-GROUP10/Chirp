@@ -122,11 +122,14 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
             UserName = "mr. test",
             Email = "realtest@test.com"
         };
+        realTestAuthor.NormalizedUserName = realTestAuthor.UserName.ToUpper();
         Author fakeTestAuthor = new Author
         {
             UserName = "fake mr. test",
             Email = "faketest@test.com"
         };
+        fakeTestAuthor.NormalizedUserName = fakeTestAuthor.UserName.ToUpper();
+        
         context.Authors.Add(realTestAuthor);
         context.Authors.Add(fakeTestAuthor);
 
