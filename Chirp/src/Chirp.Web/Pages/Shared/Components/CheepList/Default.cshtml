@@ -1,0 +1,19 @@
+﻿@using Chirp.Core.DTO
+@{
+    IEnumerable<CheepDTO> cheeps = ViewBag.Cheeps;
+}
+
+<ul id="messagelist" class="cheeps">
+    @foreach (var cheep in cheeps)
+    {
+        <li>
+            <p>
+                <strong>
+                    <a href="/@cheep.Author">@cheep.Author</a>
+                </strong>
+                @cheep.Message
+                <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss")</small>
+            </p>
+        </li>
+    }
+</ul>
