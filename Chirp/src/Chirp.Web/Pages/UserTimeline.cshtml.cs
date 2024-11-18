@@ -14,7 +14,6 @@ public class UserTimelineModel(ICheepService service) : TimeLinePageModel(servic
             return LocalRedirect(returnUrl);
         }
         
-        Author = author;
         PageNumber = page < 1 ? 1 : page;
         LoadCheeps(page);
         
@@ -23,11 +22,13 @@ public class UserTimelineModel(ICheepService service) : TimeLinePageModel(servic
 
     protected override void LoadCheeps(int page)
     {
-        if (Author == null)
+        var author = HttpContext.GetRouteValue("author")?.ToString();
+        
+        if (author == null)
         {
-            throw new ArgumentNullException(nameof(Author));
+            throw new ArgumentNullException(nameof(author), "Author cannot be null, failed to get the route value");
         }
 
-        Cheeps = Service.GetCheepsFromAuthorByPage(Author, page, 32);
+        Cheeps = Service.GetCheepsFromAuthorByPage(author, page, 32);
     }
 }
