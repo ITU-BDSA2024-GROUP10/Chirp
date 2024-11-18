@@ -13,7 +13,7 @@
 
     @if (Model.Cheeps.Any())
     {
-        @await Component.InvokeAsync("PageButtons", new { pageNumber = Model.PageNumber, targetPage = $"/{Model.Author}", isLastPage = Model.Cheeps.Count < 32 })
+        @await Component.InvokeAsync("PageButtons", new { pageNumber = Model.PageNumber, targetPage = $"/{routeName}", isLastPage = Model.Cheeps.Count < 32 })
         @await Component.InvokeAsync("CheepList", new {cheeps = Model.Cheeps})
     }
     else
@@ -21,6 +21,6 @@
         <em>There are no cheeps so far.</em>
     }
 
-    @await Component.InvokeAsync("PageButtons", new { pageNumber = Model.PageNumber, targetPage = $"/{Model.Author}", isLastPage = Model.Cheeps.Count < 32 })
+    @await Component.InvokeAsync("PageButtons", new { pageNumber = Model.PageNumber, targetPage = $"/{routeName}", isLastPage = Model.Cheeps.Count < 32 })
     
 </div>
