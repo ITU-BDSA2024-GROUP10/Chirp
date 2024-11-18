@@ -1,5 +1,5 @@
 ﻿using Chirp.Core;
-using Chirp.Web.Pages.Shared.Components.Timelines;
+using Chirp.Web.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Web.Pages;

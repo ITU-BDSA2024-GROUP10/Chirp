@@ -14,20 +14,7 @@
     @if (Model.Cheeps.Any())
     {
         @await Component.InvokeAsync("PageButtons", new { pageNumber = Model.PageNumber, targetPage = $"/{Model.Author}", isLastPage = Model.Cheeps.Count < 32 })
-        <ul id="messagelist" class="cheeps">
-            @foreach (var cheep in Model.Cheeps)
-            {
-                <li>
-                    <p>
-                        <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
-                        </strong>
-                        @cheep.Message
-                        <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss")</small>
-                    </p>
-                </li>
-            }
-        </ul>
+        @await Component.InvokeAsync("CheepList", new {cheeps = Model.Cheeps})
     }
     else
     {
