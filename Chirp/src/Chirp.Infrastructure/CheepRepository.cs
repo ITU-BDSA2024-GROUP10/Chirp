@@ -27,8 +27,13 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
 
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorByPage(string author, int page, int pageSize)
     {
+        return await GetCheepsFromAuthorsByPage([author], page, pageSize);
+    }
+    
+    public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page, int pageSize)
+    {
         var query = context.Cheeps
-            .Where(cheep => cheep.Author.UserName == author)
+            .Where(cheep => authors.Contains(cheep.Author.UserName!))
             .Select(cheep => new { cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip((page - 1) * pageSize)
