@@ -14,7 +14,7 @@ public class UserTimelineModel(ICheepService cheepService, IAuthorService author
             return LocalRedirect(returnUrl);
         }
         
-        PageNumber = page < 1 ? 1 : page;
+        PageNumber = page;
         LoadCheeps(page);
         
         return Page();
