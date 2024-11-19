@@ -2,6 +2,7 @@
 @using Chirp.Core.DTO
 @inject IAuthorService service
 @{
+    var targetPage = ViewBag.TargetPage as string ?? "";
     IEnumerable<CheepDTO> cheeps = ViewBag.Cheeps;
     List<AuthorDTO> Follows = service.GetFollows(User.Identity!.Name!);
 
