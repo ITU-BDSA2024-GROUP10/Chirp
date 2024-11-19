@@ -11,6 +11,6 @@ public class AuthorService(IAuthorRepository db) : IAuthorService
 {
     public List<AuthorDTO> GetFollows(string username)
     {
-        return db.GetFollows(username).Result;
+        return db.GetAuthorFollows(username).Result;
     }
 }

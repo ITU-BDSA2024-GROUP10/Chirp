@@ -8,5 +8,8 @@ public interface IAuthorRepository
     
     public Task<bool> AddAuthor(AuthorDTO author);
     
-    public Task<List<AuthorDTO>> GetFollows(string username);
+    public Task<List<AuthorDTO>> GetAuthorFollows(string username);
+    
+    public Task<bool> Follow (string currentUser, string userToFollow);
+    public Task<bool> UnFollow (string currentUser, string userToUnFollow);
 }
