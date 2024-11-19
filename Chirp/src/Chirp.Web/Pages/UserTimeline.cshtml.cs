@@ -59,8 +59,8 @@ public class UserTimelineModel(ICheepService cheepService, IAuthorService author
             throw new ArgumentNullException(nameof(author), "Author cannot be null, failed to get the route value");
         }
 
-        var authors = AuthorService.GetFollows(NormalizeForDisplay(author)).Select(a => a.Name)
-            .Append(NormalizeForDisplay(author));
+        var authors = AuthorService.GetFollows(author).Select(a => a.Name)
+            .Append(author);
         Cheeps = CheepService.GetCheepsFromAuthorsByPage(authors, page, 32);
     }
     

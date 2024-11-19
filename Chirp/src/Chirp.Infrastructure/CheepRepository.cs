@@ -1,4 +1,4 @@
-using Chirp.Core;
+﻿using Chirp.Core;
 using Chirp.Core.DTO;
 using Chirp.Infrastructure.Model;
 using Microsoft.EntityFrameworkCore;
@@ -32,8 +32,9 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
     
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page, int pageSize)
     {
+        authors = authors.Select(author => author.ToUpper());
         var query = context.Cheeps
-            .Where(cheep => authors.Contains(cheep.Author.UserName!))
+            .Where(cheep => authors.Contains(cheep.Author.NormalizedUserName!))
             .Select(cheep => new { cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip((page - 1) * pageSize)
