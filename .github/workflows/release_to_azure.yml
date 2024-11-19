@@ -69,4 +69,5 @@ jobs:
           app-name: 'bdsa2024group10chirpremotedb'
           slot-name: 'Production'
           package: .
+          clean: true
           
