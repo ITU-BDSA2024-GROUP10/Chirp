@@ -1,4 +1,5 @@
 ﻿using Chirp.Core;
+using Chirp.Core.CustomException;
 using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
@@ -11,24 +12,21 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
 {
 
     [Fact]
-    public async void GetAuthorByName_NameCantBeFound_ReturnNull()
+    public async Task GetAuthorByName_NameCantBeFound_ThrowsException()
     {
         //arrange
         var chirpContext = _fixture.GetContext();
         var author = new Author { UserName = "John Doe", Email = "JohnDoe@gmail.com" };
 
         chirpContext.Authors.Add(author);
-        chirpContext.SaveChanges();
+        await chirpContext.SaveChangesAsync();
 
         IAuthorRepository authorRepo = new AuthorRepository(chirpContext);
 
         var newAuthor = new Author { UserName = "Abra Cabrera", Email = "AbraCabrera@gmail.com" };
 
-        //Act
-        var result = await authorRepo.GetAuthorByName(newAuthor.UserName);
-
-        //Assert
-        Assert.Null(result);
+        //act & assert
+        await Assert.ThrowsAsync<UserDoesNotExist>(() => authorRepo.GetAuthorByName(newAuthor.UserName));
     }
 
     [Fact]
