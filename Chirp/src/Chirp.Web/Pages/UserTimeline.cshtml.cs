@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Chirp.Core;
+using Chirp.Core.CustomException;
 using Chirp.Web.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,28 @@ public class UserTimelineModel(ICheepService cheepService, IAuthorService author
         }
         
         PageNumber = page;
-        LoadCheeps(page);
+        
+        try
+        {
+            LoadCheeps(page);
+        }
+        catch (AggregateException ae)
+        {
+            bool shouldRedirect = false;
+            // https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/exception-handling-task-parallel-library
+            foreach (var ex in ae.InnerExceptions)
+            {
+                if (ex is UserDoesNotExist)
+                {
+                    shouldRedirect = true;
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            if (shouldRedirect) return LocalRedirect("/notfound");
+        }
         
         return Page();
     }
@@ -37,7 +59,8 @@ public class UserTimelineModel(ICheepService cheepService, IAuthorService author
             throw new ArgumentNullException(nameof(author), "Author cannot be null, failed to get the route value");
         }
 
-        var authors = AuthorService.GetFollows(NormalizeForDisplay(author)).Select(a => a.Name).Append(NormalizeForDisplay(author));
+        var authors = AuthorService.GetFollows(NormalizeForDisplay(author)).Select(a => a.Name)
+            .Append(NormalizeForDisplay(author));
         Cheeps = CheepService.GetCheepsFromAuthorsByPage(authors, page, 32);
     }
     
