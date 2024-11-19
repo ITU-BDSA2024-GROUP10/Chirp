@@ -6,6 +6,6 @@ namespace Chirp.Web.Pages.BindingModels;
 public class MessageModel {
     [BindProperty]
     [Required]
-    [StringLength(160, ErrorMessage = "Maximum length needs to be {0}")]
+    [StringLength(160, ErrorMessage = "Maximum length is {1}")]
     public string? Message {get; set;}
 }
