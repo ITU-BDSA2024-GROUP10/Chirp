@@ -1,4 +1,4 @@
-﻿using Chirp.Core;
+using Chirp.Core;
 using Chirp.Core.CustomException;
 using Chirp.Core.DTO;
 using Chirp.Infrastructure.Model;
@@ -15,6 +15,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         var author = await GetAuthor(name);
         return new AuthorDTO(author.UserName!, author.Email!);
     }
+
     public async Task<bool> AddAuthor(AuthorDTO author)
     {
         try

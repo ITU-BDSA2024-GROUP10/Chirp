@@ -159,6 +159,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
         for (int i = 0; i < 5; i++)
         {
             var author = new Author { UserName = $"name{i}", Email = $"{i}@mail.com", Cheeps = [] };
+            author.NormalizedUserName = author.UserName.ToUpper();
             authors.Add(author);
             var cheep = new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now };
             cheeps.Add(cheep);
@@ -218,7 +219,9 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
         var chirpContext = _fixture.GetContext();
         var authorA = new Author { Id = "1", UserName = "Bill", Email = "Bill@email.com", Cheeps = [] };
         var authorB = new Author { Id = "2", UserName = "Amy", Email = "Amy@email.com", Cheeps = [] };
-
+        authorA.NormalizedUserName = authorA.UserName.ToUpper();
+        authorB.NormalizedUserName = authorB.UserName.ToUpper();
+        
         var authTotal = 0;
         var rand = new Random();
 

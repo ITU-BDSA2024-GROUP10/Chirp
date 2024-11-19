@@ -7,7 +7,7 @@
 }
 
 <div>
-    <h2> @routeName's Timeline </h2>
+    <h2> @Model.NormalizeForDisplay(routeName?.ToString() ?? throw new InvalidOperationException())'s Timeline </h2>
 
     @await Component.InvokeAsync("SubmitCheep", new {Model.MessageModel, targetPage = $"/{routeName}"})
 

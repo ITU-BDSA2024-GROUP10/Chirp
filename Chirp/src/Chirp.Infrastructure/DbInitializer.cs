@@ -11,6 +11,8 @@ public static class DbInitializer
     {
         if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
         {
+            var userManager = serviceProvider.GetRequiredService<UserManager<Author>>();
+            
             var a1 = new Author() { Id = "1", UserName = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
             var a2 = new Author() { Id = "2", UserName = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>() };
             var a3 = new Author() { Id = "3", UserName = "Wendell Ballan", Email = "Wendell-Ballan@gmail.com", Cheeps = new List<Cheep>() };
@@ -21,20 +23,35 @@ public static class DbInitializer
             var a8 = new Author() { Id = "8", UserName = "Octavio Wagganer", Email = "Octavio.Wagganer@dtu.dk", Cheeps = new List<Cheep>() };
             var a9 = new Author() { Id = "9", UserName = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>() };
             var a10 = new Author() { Id = "10", UserName = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>() };
-
-            var userManager = serviceProvider.GetRequiredService<UserManager<Author>>();
+            
+            a1.EmailConfirmed = true;
+            a2.EmailConfirmed = true;
+            a3.EmailConfirmed = true;
+            a4.EmailConfirmed = true;
+            a5.EmailConfirmed = true;
+            a6.EmailConfirmed = true;
+            a7.EmailConfirmed = true;
+            a8.EmailConfirmed = true;
+            a9.EmailConfirmed = true;
+            a10.EmailConfirmed = true;
+            
+            await userManager.CreateAsync(a1, "Password123!");
+            await userManager.CreateAsync(a2, "Password123!");
+            await userManager.CreateAsync(a3, "Password123!");
+            await userManager.CreateAsync(a4, "Password123!");
+            await userManager.CreateAsync(a5, "Password123!");
+            await userManager.CreateAsync(a6, "Password123!");
+            await userManager.CreateAsync(a7, "Password123!");
+            await userManager.CreateAsync(a8, "Password123!");
+            await userManager.CreateAsync(a9, "Password123!");
+            await userManager.CreateAsync(a10, "Password123!");
+            
             var a11 = new Author {Email = "ropf@itu.dk", Cheeps = new List<Cheep>(), UserName = "Helge"};
             var a12 = new Author {Email = "adho@itu.dk", Cheeps = new List<Cheep>(), UserName = "Adrian"};
             a11.EmailConfirmed = true;
             a12.EmailConfirmed = true;
             await userManager.CreateAsync(a11, "LetM31n!");
             await userManager.CreateAsync(a12, "M32Want_Access");
-            
-            var claim11 = new Claim("UserName", a11.UserName);
-            var claim12 = new Claim("UserName", a12.UserName);
-            await userManager.AddClaimAsync(a11, claim11);
-            await userManager.AddClaimAsync(a12, claim12);
-            var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10};
 
             var c1 = new Cheep() { Id = 1, Author = a10, Message = "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.", TimeStamp = DateTime.Parse("2023-08-01 13:14:37") };
             var c2 = new Cheep() { Id = 2, Author = a10, Message = "And then, as he listened to all that''s left o'' twenty-one people.", TimeStamp = DateTime.Parse("2023-08-01 13:15:21") };
@@ -707,8 +724,7 @@ public static class DbInitializer
             a8.Cheeps = new List<Cheep>() { c55, c124, c139, c151, c164, c263, c310, c328, c360, c375, c430, c470, c564, c576, c605 };
             a11.Cheeps = new List<Cheep>() { c656 };
             a12.Cheeps = new List<Cheep>() { c657 };
-
-            chirpContext.Authors.AddRange(authors);
+            
             chirpContext.Cheeps.AddRange(cheeps);
             chirpContext.SaveChanges();
         }

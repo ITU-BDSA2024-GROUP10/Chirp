@@ -1,4 +1,5 @@
-﻿using Chirp.Core;
+﻿using System.Text;
+using Chirp.Core;
 using Chirp.Web.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,13 @@ public class UserTimelineModel(ICheepService cheepService, IAuthorService author
     {
         if (page < 1)
         {
-            var returnUrl = Url.Content($"~/{author}?page=1");
+            var returnUrl = Url.Content($"~/{author.ToLower()}?page=1");
+            return LocalRedirect(returnUrl);
+        }
+
+        if (!author.All(c => char.IsLower(c) || !char.IsLetter(c)))
+        {
+            var returnUrl = Url.Content($"~/{author.ToLower()}?page={page}");
             return LocalRedirect(returnUrl);
         }
         
@@ -32,5 +39,18 @@ public class UserTimelineModel(ICheepService cheepService, IAuthorService author
 
         var authors = AuthorService.GetFollows(author).Select(a => a.Name).Append(author);
         Cheeps = CheepService.GetCheepsFromAuthorsByPage(authors, page, 32);
+    }
+    
+    public string NormalizeForDisplay(string author)
+    {
+        var parts = author.Split(' ');
+        var result = new StringBuilder();
+        foreach (var part in parts)
+        {
+            result.Append(char.ToUpper(part[0]));
+            result.Append(part.Substring(1).ToLower());
+            result.Append(' ');
+        }
+        return result.ToString().Trim();
     }
 }

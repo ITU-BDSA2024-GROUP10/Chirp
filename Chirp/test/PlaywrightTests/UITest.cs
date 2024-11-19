@@ -122,11 +122,14 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
             UserName = "mr. test",
             Email = "realtest@test.com"
         };
+        realTestAuthor.NormalizedUserName = realTestAuthor.UserName.ToUpper();
         Author fakeTestAuthor = new Author
         {
             UserName = "fake mr. test",
             Email = "faketest@test.com"
         };
+        fakeTestAuthor.NormalizedUserName = fakeTestAuthor.UserName.ToUpper();
+
         context.Authors.Add(realTestAuthor);
         context.Authors.Add(fakeTestAuthor);
 
@@ -181,7 +184,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
             Email = "mlao@itu.dk"
         };
         var password = "Password123!";
-        
+
         await Page.GotoAsync("/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
@@ -195,7 +198,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
         await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
-        
+
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
         await Page.GetByPlaceholder("Username").FillAsync(user.UserName);
@@ -240,5 +243,44 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         //end
         await Page.GotoAsync("/?page=9999");
         await Expect(Page.Locator("body")).ToContainTextAsync("Previous 9999");
+    }
+
+    [Test]
+    public async Task ThePrivateTimeLineIsCaseInSensitive()
+    {
+        #region Arrange
+
+        var context = razorFactory.GetDbContext();
+        var author = new Author
+        {
+            UserName = "MR. tESt",
+            Email = "test@test.com"
+        };
+        author.NormalizedUserName = author.UserName.ToUpper();
+        context.Authors.Add(author);
+
+        var cheep = new Cheep
+        {
+            Author = author,
+            Message = "test",
+            TimeStamp = DateTime.Now
+        };
+        context.Cheeps.Add(cheep);
+        await context.SaveChangesAsync();
+
+        #endregion
+
+        //act
+        await Page.GotoAsync($"/{author.UserName.ToUpper()}");
+        await Expect(Page.Locator("#messagelist"))
+            .ToContainTextAsync(cheep.Message);
+        
+        await Page.GotoAsync($"/{author.UserName.ToLower()}");
+        await Expect(Page.Locator("#messagelist"))
+            .ToContainTextAsync(cheep.Message);
+        
+        await Page.GotoAsync($"/{author.UserName}");
+        await Expect(Page.Locator("#messagelist"))
+            .ToContainTextAsync(cheep.Message);
     }
 }
