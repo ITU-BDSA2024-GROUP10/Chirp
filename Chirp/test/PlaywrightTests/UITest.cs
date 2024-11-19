@@ -69,6 +69,17 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     [TestCase("test?page=1", null)]
     public async Task PaginationOfUserTimeline(string expectedEndpoint, string page)
     {
+        //arrange
+        var context = razorFactory.GetDbContext();
+        Author testAuthor = new Author
+        {
+            UserName = "test",
+            Email = "test@test.com",
+            NormalizedUserName = "TEST",
+        };
+        context.Authors.Add(testAuthor);
+        await context.SaveChangesAsync();
+        
         //act
         await Page.GotoAsync($"/test?page={page}");
 
