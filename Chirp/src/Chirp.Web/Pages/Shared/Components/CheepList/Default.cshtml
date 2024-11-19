@@ -4,12 +4,12 @@
 @{
     var targetPage = ViewBag.TargetPage as string ?? "";
     IEnumerable<CheepDTO> cheeps = ViewBag.Cheeps;
-    List<AuthorDTO> Follows = service.GetFollows(User.Identity!.Name!);
-
-    
+    List<AuthorDTO> Follows = [];
+    if (User.Identity!.IsAuthenticated)
+    {
+        Follows = service.GetFollows(User.Identity!.Name!);
+    }
 }
-
-
 
 <ul id="messagelist" class="cheeps">
     @foreach (var cheep in cheeps)
@@ -18,18 +18,24 @@
             <p>
                 <strong>
                     <a href="/@cheep.Author">@cheep.Author</a>
-                    @if (User.Identity!.IsAuthenticated)
+                    @if (User.Identity!.IsAuthenticated && User.Identity!.Name != cheep.Author)
                     {    
                         if (Follows.Any(a => a.Name == cheep.Author))
                         {
-                            <form method="post" asp-page="@tagetPage">
-                                <a type="submit" value="Share">unfollow</a>
+                            <form method="post" asp-page="/follow">
+                                <input type="hidden" name="followName" value="@cheep.Author" />
+                                <input type="hidden" name="shouldFollow" value="false" />
+                                <input type="hidden" name="returnUrl" value="@targetPage" />
+                                <button type="submit" value="Share">unfollow</button>
                             </form>
                         }
                         else
                         {
-                            <form method="post" asp-page="@tagetPage">
-                                <a type="submit" value="Share">unfollow</a>
+                            <form method="post" asp-page="/follow">
+                                <input type="hidden" name="followName" value="@cheep.Author" />
+                                <input type="hidden" name="shouldFollow" value="true" />
+                                <input type="hidden" name="returnUrl" value="@targetPage" />
+                                <button type="submit" value="Share">follow</button>
                             </form>
                         }
                     }
