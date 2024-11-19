@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Web.Pages;
 
-public class PublicModel(ICheepService service) : TimeLinePageModel(service)
+public class PublicModel(ICheepService cheepService) : TimeLinePageModel(cheepService)
 {
     public ActionResult OnGet([FromQuery] int page)
     {
@@ -20,6 +20,6 @@ public class PublicModel(ICheepService service) : TimeLinePageModel(service)
 
     protected override void LoadCheeps(int page)
     {
-        Cheeps = Service.GetCheepsByPage(page, 32);
+        Cheeps = CheepService.GetCheepsByPage(page, 32);
     }
 }

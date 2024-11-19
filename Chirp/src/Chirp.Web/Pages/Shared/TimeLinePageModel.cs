@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages.Shared;
 
-public abstract class TimeLinePageModel(ICheepService service) : PageModel
+public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
 {
     public List<CheepDTO> Cheeps { get; set; } = [];
     
-    protected readonly ICheepService Service = service;
+    protected readonly ICheepService CheepService = cheepService;
     
     public int PageNumber = 1;
 
@@ -37,7 +37,7 @@ public abstract class TimeLinePageModel(ICheepService service) : PageModel
                 dt.ToUnixTimeSeconds()
             );
 
-            Service.CreateCheep(cheep);
+            CheepService.CreateCheep(cheep);
         }
         else
         {
