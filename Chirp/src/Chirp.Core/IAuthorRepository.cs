@@ -11,5 +11,6 @@ public interface IAuthorRepository
     public Task<List<AuthorDTO>> GetAuthorFollows(string username);
     
     public Task<bool> Follow (string currentUser, string userToFollow);
+    
     public Task<bool> UnFollow (string currentUser, string userToUnFollow);
 }
