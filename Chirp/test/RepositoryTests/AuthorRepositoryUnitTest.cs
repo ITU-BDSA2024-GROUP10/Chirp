@@ -30,7 +30,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
     }
 
     [Fact]
-    public async void GetAuthorByName_NameIsHelge_ReturnsAuthorDTOOfHelge()
+    public async Task GetAuthorByName_NameIsHelge_ReturnsAuthorDTOOfHelge()
     {
         //Arrange an arbitrary author with name 'Helge' and create arbitrary database to put up
         var chirpContext = fixture.GetContext();
@@ -52,7 +52,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
     }
 
     [Fact]
-    public async void AddAuthor_NameIsNullKeyword_ReturnFalse()
+    public async Task AddAuthor_NameIsNullKeyword_ReturnFalse()
     {
         //Arrange
         var chirpContext = fixture.GetContext();
@@ -68,7 +68,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
     }
 
     [Fact]
-    public async void AddAuthor_NameIsJohn_Doe_ReturnTrue()
+    public async Task AddAuthor_NameIsJohn_Doe_ReturnTrue()
     {
         //Arrange
         var chirpContext = fixture.GetContext();
