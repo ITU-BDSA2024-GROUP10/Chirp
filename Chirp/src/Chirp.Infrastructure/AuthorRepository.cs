@@ -28,4 +28,13 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
             return false;
         }
     }
+
+    public async Task<List<AuthorDTO>> GetFollows(string username)
+    {
+        return await context.Authors
+            .Where((a => a.UserName == username))
+            .Select(a => a.Follows)
+            .Select(follows => follows.Select(author => new AuthorDTO(author.UserName!, author.Email!)).ToList())
+            .FirstOrDefaultAsync() ?? new List<AuthorDTO>();
+    }
 }
