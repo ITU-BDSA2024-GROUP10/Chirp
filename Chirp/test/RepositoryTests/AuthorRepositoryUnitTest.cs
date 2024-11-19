@@ -1,4 +1,5 @@
 ﻿using Chirp.Core;
+using Chirp.Core.CustomException;
 using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
@@ -6,36 +7,33 @@ using RepositoryTests.Utils;
 
 namespace RepositoryTests;
 
-public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
+public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
     : IClassFixture<InMemoryDBFixture<ChirpDBContext>> 
 {
 
     [Fact]
-    public async void GetAuthorByName_NameCantBeFound_ReturnNull()
+    public async Task GetAuthorByName_NameCantBeFound_ThrowsException()
     {
         //arrange
-        var chirpContext = _fixture.GetContext();
+        var chirpContext = fixture.GetContext();
         var author = new Author { UserName = "John Doe", Email = "JohnDoe@gmail.com" };
 
         chirpContext.Authors.Add(author);
-        chirpContext.SaveChanges();
+        await chirpContext.SaveChangesAsync();
 
         IAuthorRepository authorRepo = new AuthorRepository(chirpContext);
 
         var newAuthor = new Author { UserName = "Abra Cabrera", Email = "AbraCabrera@gmail.com" };
 
-        //Act
-        var result = await authorRepo.GetAuthorByName(newAuthor.UserName);
-
-        //Assert
-        Assert.Null(result);
+        //act & assert
+        await Assert.ThrowsAsync<UserDoesNotExist>(() => authorRepo.GetAuthorByName(newAuthor.UserName));
     }
 
     [Fact]
-    public async void GetAuthorByName_NameIsHelge_ReturnsAuthorDTOOfHelge()
+    public async Task GetAuthorByName_NameIsHelge_ReturnsAuthorDTOOfHelge()
     {
         //Arrange an arbitrary author with name 'Helge' and create arbitrary database to put up
-        var chirpContext = _fixture.GetContext();
+        var chirpContext = fixture.GetContext();
         var author = new Author { UserName = "Helge", Email = "Helge@gmail.com" };
         author.NormalizedUserName = author.UserName.ToUpper();
         
@@ -54,10 +52,10 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
     }
 
     [Fact]
-    public async void AddAuthor_NameIsNullKeyword_ReturnFalse()
+    public async Task AddAuthor_NameIsNullKeyword_ReturnFalse()
     {
         //Arrange
-        var chirpContext = _fixture.GetContext();
+        var chirpContext = fixture.GetContext();
         var author = new AuthorDTO(null!, "null@gmail.com");
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
@@ -70,10 +68,10 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
     }
 
     [Fact]
-    public async void AddAuthor_NameIsJohn_Doe_ReturnTrue()
+    public async Task AddAuthor_NameIsJohn_Doe_ReturnTrue()
     {
         //Arrange
-        var chirpContext = _fixture.GetContext();
+        var chirpContext = fixture.GetContext();
         var author = new AuthorDTO("John Doe", "JohnDoe@gmail.com");
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);

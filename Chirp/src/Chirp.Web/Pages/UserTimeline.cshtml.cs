@@ -1,12 +1,14 @@
 ﻿using System.Text;
 using Chirp.Core;
+using Chirp.Core.CustomException;
 using Chirp.Web.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Web.Pages;
 
-public class UserTimelineModel(ICheepService service) : TimeLinePageModel(service)
+public class UserTimelineModel(ICheepService cheepService, IAuthorService authorService) : TimeLinePageModel(cheepService)
 {
+    protected readonly IAuthorService AuthorService = authorService;
     public ActionResult OnGet(string author, [FromQuery] int page)
     {
         if (page < 1)
@@ -21,8 +23,29 @@ public class UserTimelineModel(ICheepService service) : TimeLinePageModel(servic
             return LocalRedirect(returnUrl);
         }
         
-        PageNumber = page < 1 ? 1 : page;
-        LoadCheeps(page);
+        PageNumber = page;
+        
+        try
+        {
+            LoadCheeps(page);
+        }
+        catch (AggregateException ae)
+        {
+            bool shouldRedirect = false;
+            // https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/exception-handling-task-parallel-library
+            foreach (var ex in ae.InnerExceptions)
+            {
+                if (ex is UserDoesNotExist)
+                {
+                    shouldRedirect = true;
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            if (shouldRedirect) return LocalRedirect("/notfound");
+        }
         
         return Page();
     }
@@ -36,7 +59,9 @@ public class UserTimelineModel(ICheepService service) : TimeLinePageModel(servic
             throw new ArgumentNullException(nameof(author), "Author cannot be null, failed to get the route value");
         }
 
-        Cheeps = Service.GetCheepsFromAuthorByPage(author, page, 32);
+        var authors = AuthorService.GetFollows(author).Select(a => a.Name)
+            .Append(author);
+        Cheeps = CheepService.GetCheepsFromAuthorsByPage(authors, page, 32);
     }
     
     public string NormalizeForDisplay(string author)

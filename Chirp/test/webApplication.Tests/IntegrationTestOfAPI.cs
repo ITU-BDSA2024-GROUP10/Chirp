@@ -33,7 +33,7 @@ public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory>
     [Theory]
     [InlineData("Helge")]
     [InlineData("Adrian")]
-    public async void CanSeePrivateTimeline(string author)
+    public async Task CanSeePrivateTimeline(string author)
     {
         //arrange
         fixture.ResetDB();
@@ -61,11 +61,11 @@ public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory>
             context.Authors.Add(otherAuthor);
             context.Cheeps.Add(wantedCheep);
             context.Cheeps.Add(otherCheep);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
         //act
-        var response = await client.GetAsync($"/{author}");
+        var response = await client.GetAsync($"/{author.ToLower()}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
@@ -82,7 +82,7 @@ public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory>
     }
 
     [Fact]
-    public async void CanSeePublicTimeline()
+    public async Task CanSeePublicTimeline()
     {
         fixture.ResetDB();
         var wantedAuthor = new Author { UserName = "Wanted", Email = "wanted@gmail.com" };
@@ -111,7 +111,7 @@ public class TestAPI : IClassFixture<InMemoryCostumeWebApplicationFactory>
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
-    public async void PaginationChangesDisplayedCheepsTest(int page)
+    public async Task PaginationChangesDisplayedCheepsTest(int page)
     {
         fixture.ResetDB();
         var cheepslist = new List<Cheep>();
