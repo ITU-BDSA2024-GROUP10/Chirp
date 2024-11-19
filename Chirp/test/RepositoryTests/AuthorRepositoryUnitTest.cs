@@ -37,7 +37,8 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
         //Arrange an arbitrary author with name 'Helge' and create arbitrary database to put up
         var chirpContext = _fixture.GetContext();
         var author = new Author { UserName = "Helge", Email = "Helge@gmail.com" };
-
+        author.NormalizedUserName = author.UserName.ToUpper();
+        
         chirpContext.Authors.Add(author);
         await chirpContext.SaveChangesAsync();
 
