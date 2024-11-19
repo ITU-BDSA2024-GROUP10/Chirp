@@ -7,7 +7,7 @@ using RepositoryTests.Utils;
 
 namespace RepositoryTests;
 
-public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
+public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
     : IClassFixture<InMemoryDBFixture<ChirpDBContext>> 
 {
 
@@ -15,7 +15,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
     public async Task GetAuthorByName_NameCantBeFound_ThrowsException()
     {
         //arrange
-        var chirpContext = _fixture.GetContext();
+        var chirpContext = fixture.GetContext();
         var author = new Author { UserName = "John Doe", Email = "JohnDoe@gmail.com" };
 
         chirpContext.Authors.Add(author);
@@ -33,7 +33,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
     public async void GetAuthorByName_NameIsHelge_ReturnsAuthorDTOOfHelge()
     {
         //Arrange an arbitrary author with name 'Helge' and create arbitrary database to put up
-        var chirpContext = _fixture.GetContext();
+        var chirpContext = fixture.GetContext();
         var author = new Author { UserName = "Helge", Email = "Helge@gmail.com" };
         author.NormalizedUserName = author.UserName.ToUpper();
         
@@ -55,7 +55,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
     public async void AddAuthor_NameIsNullKeyword_ReturnFalse()
     {
         //Arrange
-        var chirpContext = _fixture.GetContext();
+        var chirpContext = fixture.GetContext();
         var author = new AuthorDTO(null!, "null@gmail.com");
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
@@ -71,7 +71,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture
     public async void AddAuthor_NameIsJohn_Doe_ReturnTrue()
     {
         //Arrange
-        var chirpContext = _fixture.GetContext();
+        var chirpContext = fixture.GetContext();
         var author = new AuthorDTO("John Doe", "JohnDoe@gmail.com");
 
         IAuthorRepository authorRepository = new AuthorRepository(chirpContext);
