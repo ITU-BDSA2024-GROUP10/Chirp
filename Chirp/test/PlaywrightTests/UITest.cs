@@ -294,4 +294,11 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         await Expect(Page.Locator("#messagelist"))
             .ToContainTextAsync(cheep.Message);
     }
+
+    [Test]
+    public async Task PageNotFound_ShownWhenUserNotFound()
+    {
+        await Page.GotoAsync($"/ugsrniutgfnbdfikjfns");
+        await Expect(Page).ToHaveURLAsync($"{RazorBaseUrl}/notfound");
+    }
 }
