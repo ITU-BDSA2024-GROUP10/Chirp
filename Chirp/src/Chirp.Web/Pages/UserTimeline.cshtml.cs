@@ -6,6 +6,7 @@ namespace Chirp.Web.Pages;
 
 public class UserTimelineModel(ICheepService cheepService, IAuthorService authorService) : TimeLinePageModel(cheepService)
 {
+    protected readonly IAuthorService AuthorService = authorService;
     public ActionResult OnGet(string author, [FromQuery] int page)
     {
         if (page < 1)
@@ -29,6 +30,7 @@ public class UserTimelineModel(ICheepService cheepService, IAuthorService author
             throw new ArgumentNullException(nameof(author), "Author cannot be null, failed to get the route value");
         }
 
-        Cheeps = Service.GetCheepsFromAuthorByPage(author, page, 32);
+        var authors = AuthorService.GetFollows(author).Select(a => a.Name).Append(author);
+        Cheeps = CheepService.GetCheepsFromAuthorsByPage(authors, page, 32);
     }
 }
