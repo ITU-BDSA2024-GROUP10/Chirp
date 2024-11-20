@@ -94,6 +94,12 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     }
 
     [Test]
+    public async Task CannotSeeAboutMeLinkWhenNotRegistered()
+    {
+        
+    }
+
+    [Test]
     public async Task SeeCorrectNumberOfCheepsOnPublicTimeline()
     {
         //arrange
