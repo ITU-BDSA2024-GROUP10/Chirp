@@ -100,6 +100,12 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     }
 
     [Test]
+    public async Task AboutMePageShowsUserInfo()
+    {
+        
+    }
+
+    [Test]
     public async Task SeeCorrectNumberOfCheepsOnPublicTimeline()
     {
         //arrange
