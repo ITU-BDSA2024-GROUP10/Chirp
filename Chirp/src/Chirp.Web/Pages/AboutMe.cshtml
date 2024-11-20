@@ -1,0 +1,32 @@
+@page
+@model Chirp.Web.Pages.AboutMe
+
+@{
+    ViewData["Title"] = "Chirp!";
+    Layout = "Shared/_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div>
+    <h2>Name: @Model.Author.Name</h2>
+    <h3>Email: @Model.Author.Email</h3>
+    @if (Model.Cheeps.Count == 1)
+    {
+        <h4>You have Cheep'd: @Model.Cheeps.Count time</h4>
+    }
+    else
+    {
+        <h4>You have Cheep'd: @Model.Cheeps.Count times</h4>
+    }
+    
+    
+    @await Component.InvokeAsync("CheepList", new {cheeps = Model.Cheeps, targetPage = "/AboutMe"})
+</div>
+</body>
+</html>
