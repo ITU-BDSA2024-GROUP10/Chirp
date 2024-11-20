@@ -1,5 +1,6 @@
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
+using PlaywrightTests.Utils.Factories;
 
 namespace PlaywrightTests.Utils.PageTests;
 

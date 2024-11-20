@@ -2,7 +2,7 @@ using System.Net.Sockets;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace PlaywrightTests.Utils;
+namespace PlaywrightTests.Utils.Factories;
 
 public static class CreateHostUsingKestrel
 {

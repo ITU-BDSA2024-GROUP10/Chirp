@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TestUtilities;
 
-namespace PlaywrightTests.Utils;
+namespace PlaywrightTests.Utils.Factories;
 
 //Adapted from microsofts test guide, for clarification:
 //https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
