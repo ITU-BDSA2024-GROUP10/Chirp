@@ -63,7 +63,10 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     [Test]
     public async Task UserCanFollowAuthor()
     {
-        
+        await Page.GetByText("mr. author follow test").ClickAsync();
+        await Page.Locator("li").Filter(new() { HasText = "mr. author follow test" }).GetByRole(AriaRole.Button).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+        await Expect(Page.GetByText("mr. author  unfollow test")).ToBeVisibleAsync();
     }
 
     [Test]
