@@ -1,17 +1,17 @@
 @{
-    var targetPage = ViewBag.TargetPage as string ?? "/";
-    var pageNumber = ViewBag.PageNumber as int? ?? 1;
-    var isLastPage = ViewBag.IsLastPage as bool? ?? false;
+    var targetPageUrl = ViewBag.TargetPageUrl as string ?? "/";
+    var currentPageNumber = ViewBag.CurrentPageNumber as int? ?? 1;
+    var lastPageNumber = ViewBag.LastPageNumber as int? ?? 1;
 }
 
 <div style="display: flex; align-items: center;">
-    @if (pageNumber > 1)
+    @if (currentPageNumber > 1)
     {
-        <a href="@targetPage?page=@(pageNumber - 1)">Previous</a>
+        <a href="@targetPageUrl?page=@(currentPageNumber - 1)">&lt; Prev</a>
     }
-    <p style="margin: 10px">@pageNumber</p>
-    @if (!isLastPage)
+    <p style="margin: 10px">@currentPageNumber</p>
+    @if (currentPageNumber < lastPageNumber)
     {
-        <a href="@targetPage?page=@(pageNumber + 1)">Next</a>
+        <a href="@targetPageUrl?page=@(currentPageNumber + 1)">Next &gt;</a>
     }
 </div>
