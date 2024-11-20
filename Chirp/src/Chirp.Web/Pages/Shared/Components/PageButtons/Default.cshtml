@@ -4,14 +4,32 @@
     var lastPageNumber = ViewBag.LastPageNumber as int? ?? 1;
 }
 
-<div style="display: flex; align-items: center;">
+<div style="display: flex; align-items: baseline;">
     @if (currentPageNumber > 1)
     {
-        <a href="@targetPageUrl?page=@(currentPageNumber - 1)">&lt; Prev</a>
+        <a style="background-color: #cc6e6e; color: white; padding: 8px 16px; text-align: center; text-decoration: none; margin-right: 8px;" href="@targetPageUrl?page=@(currentPageNumber - 1)">&lt; Prev</a>
     }
-    <p style="margin: 10px">@currentPageNumber</p>
+    @if (currentPageNumber != 1)
+    {
+        <a style="margin: 5px" href="@targetPageUrl?page=1">1</a>
+        @if (currentPageNumber != 2)
+        {
+            <p style="margin: 5px">...</p>
+            <a style="margin: 5px" href="@targetPageUrl?page=@(currentPageNumber - 1)">@(currentPageNumber - 1)</a>
+        }
+    }
+    <p style="margin: 5px">@currentPageNumber</p>
+    @if (currentPageNumber != lastPageNumber)
+    {
+        @if (currentPageNumber != lastPageNumber-1)
+        {
+            <a style="margin: 5px" href="@targetPageUrl?page=@(currentPageNumber + 1)">@(currentPageNumber + 1)</a>
+            <p style="margin: 5px">...</p>
+        }
+        <a style="margin: 5px" href="@targetPageUrl?page=@lastPageNumber">@lastPageNumber</a>
+    }
     @if (currentPageNumber < lastPageNumber)
     {
-        <a href="@targetPageUrl?page=@(currentPageNumber + 1)">Next &gt;</a>
+        <a style="background-color: #cc6e6e; color: white; padding: 8px 16px; text-align: center; text-decoration: none; margin-left: 8px;" href="@targetPageUrl?page=@(currentPageNumber + 1)">Next &gt;</a>
     }
 </div>
