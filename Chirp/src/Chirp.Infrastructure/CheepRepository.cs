@@ -29,6 +29,10 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
     {
         return await GetCheepsFromAuthorsByPage([author], page, pageSize);
     }
+
+    public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthor(string author)
+    {
+    }
     
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page, int pageSize)
     {
