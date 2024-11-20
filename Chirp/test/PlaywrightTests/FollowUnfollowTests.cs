@@ -38,6 +38,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         };
         var password = "Password123!";
 
+        await Page.GotoAsync("/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(follower.UserName);
@@ -62,7 +63,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     [Test]
     public async Task UserCanFollowAuthor()
     {
-      
+        
     }
 
     [Test]
