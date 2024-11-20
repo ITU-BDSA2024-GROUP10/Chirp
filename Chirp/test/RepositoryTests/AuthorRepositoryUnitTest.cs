@@ -4,6 +4,7 @@ using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
 using RepositoryTests.Utils;
+using TestUtilities;
 
 namespace RepositoryTests;
 
@@ -29,7 +30,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
     }
 
     [Fact]
-    public async Task GetAuthorByName_NameIsHelge_ReturnsAuthorDTOOfHelge()
+    public async Task GetAuthorByName_AuthorExist_ReturnsAuthorDTOOfAuthor()
     {
         //Arrange an arbitrary author with name 'Helge' and create arbitrary database to put up
         var chirpContext = fixture.GetContext();
@@ -67,7 +68,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
     }
 
     [Fact]
-    public async Task AddAuthor_NameIsJohn_Doe_ReturnTrue()
+    public async Task AddAuthor_UserDosentExistYet_ReturnTrue()
     {
         //Arrange
         var chirpContext = fixture.GetContext();
@@ -91,18 +92,42 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
         Assert.Equal(author.Name, checkSuccession.UserName);
     }
 
-    #region Follow tests
-
     #region GetAuthorFollows tests
 
     [Fact]
     public async Task GetAuthorFollows_UserDoesNotExist_ThrowsException()
     {
+        var authorRepo = new AuthorRepository(fixture.GetContext());
+        await Assert.ThrowsAsync<UserDoesNotExist>(() => authorRepo.GetAuthorFollows("mr. test"));
     }
 
     [Fact]
     public async Task GetAuthorFollows_UserExists_ReturnsListOfAuthors()
     {
+        #region Arrange
+
+        var context = fixture.GetContext();
+        var authorRepo = new AuthorRepository(context);
+
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var following = TestUtils.CreateTestAuthor("mr. follow");
+        var notFollowing = TestUtils.CreateTestAuthor("mr. not follow");
+        
+        author.Follows.Add(following);
+
+        context.Authors.Add(notFollowing);
+        context.Authors.Add(following);
+        context.Authors.Add(author);
+        await context.SaveChangesAsync();
+
+        #endregion
+
+        var result = await authorRepo.GetAuthorFollows(author.UserName!);
+
+        Assert.NotNull(result);
+        Assert.NotEmpty(result);
+        Assert.Single(result);
+        Assert.Equal(following.UserName, result[0].Name);
     }
 
     #endregion
@@ -162,8 +187,6 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
     public async Task UnFollow_UserToUnfollowIsFollowed_ReturnsTrue()
     {
     }
-
-    #endregion
 
     #endregion
 }
