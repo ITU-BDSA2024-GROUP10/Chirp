@@ -240,26 +240,95 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
     [Fact]
     public async Task UnFollow_UserToUnfollowDoesNotExist_ThrowsException()
     {
+        //Arrange
+        var context = fixture.GetContext();
+        var authorRepo = new AuthorRepository(context);
+        
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        context.Authors.Add(author);
+        await context.SaveChangesAsync();
+        
+        //Act & Assert
+        await Assert.ThrowsAsync<UserDoesNotExist>(() => authorRepo.UnFollow(author.UserName!, "mr. follow"));
     }
 
     [Fact]
     public async Task UnFollow_UserDoesNotExist_ThrowsException()
     {
+        //Arrange
+        var context = fixture.GetContext();
+        var authorRepo = new AuthorRepository(context);
+        
+        var author = TestUtils.CreateTestAuthor("mr. follow");
+        context.Authors.Add(author);
+        await context.SaveChangesAsync();
+        
+        //Act & Assert
+        await Assert.ThrowsAsync<UserDoesNotExist>(() => authorRepo.UnFollow("mr. test", author.UserName!));
     }
 
     [Fact]
     public async Task UnFollow_UserToUnfollowIsItSelf_ThrowsException()
     {
+        //Arrange
+        var context = fixture.GetContext();
+        var authorRepo = new AuthorRepository(context);
+        
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        context.Authors.Add(author);
+        await context.SaveChangesAsync();
+        
+        //Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => authorRepo.UnFollow(author.UserName!, author.UserName!));
     }
 
     [Fact]
     public async Task UnFollow_UserToUnfollowIsNotFollowed_ReturnsFalse()
     {
+        //Arrange
+        var context = fixture.GetContext();
+        var authorRepo = new AuthorRepository(context);
+        
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var following = TestUtils.CreateTestAuthor("mr. follow");
+        
+        context.Authors.Add(following);
+        context.Authors.Add(author);
+        
+        await context.SaveChangesAsync();
+        
+        //Act
+        var result = await authorRepo.UnFollow(author.UserName!, following.UserName!);
+        
+        //Assert
+        Assert.False(result);
     }
 
     [Fact]
     public async Task UnFollow_UserToUnfollowIsFollowed_ReturnsTrue()
     {
+        //Arrange
+        var context = fixture.GetContext();
+        var authorRepo = new AuthorRepository(context);
+        
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var following = TestUtils.CreateTestAuthor("mr. follow");
+        author.Follows.Add(following);
+        
+        context.Authors.Add(following);
+        context.Authors.Add(author);
+        
+        await context.SaveChangesAsync();
+        
+        //Act
+        var result = await authorRepo.UnFollow(author.UserName!, following.UserName!);
+        var authorsFollowing = context.Authors
+            .Where(a => a.NormalizedUserName == author.NormalizedUserName)
+            .SelectMany(a => a.Follows).ToList();
+        
+        //Assert
+        Assert.True(result);
+        Assert.Empty(authorsFollowing);
     }
 
     #endregion
