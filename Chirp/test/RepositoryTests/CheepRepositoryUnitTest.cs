@@ -388,7 +388,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
 
         for (var i = 0; i < 5; i++)
         {
-            var cheep = new Cheep { Author = author1, Message = $"{i}", TimeStamp = DateTime.Now };
+            var cheep = new Cheep { Author = author1, Message = $"{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i * 60).DateTime };
             chirpContext.Cheeps.Add(cheep);
             Thread.Sleep(2000);
         }
