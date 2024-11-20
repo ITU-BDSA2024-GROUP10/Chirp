@@ -363,6 +363,13 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
         authors.Add(author2.UserName);
 
         chirpContext.Cheeps.AddRange(cheeps);
+        for (int i = 0; i < 7; i++)
+        {
+            var cheep1 = new Cheep { Author = author1, Message = $"test_{i}", TimeStamp = DateTime.Now };
+            var cheep2 = new Cheep { Author = author2, Message = $"test_{i}", TimeStamp = DateTime.Now };
+            cheeps.Add(cheep1);
+            cheeps.Add(cheep2);
+        }
         
         await chirpContext.SaveChangesAsync();
         var cheepRepo = new CheepRepository(chirpContext);
