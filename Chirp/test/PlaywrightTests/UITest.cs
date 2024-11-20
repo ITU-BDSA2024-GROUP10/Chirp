@@ -84,6 +84,75 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     }
 
     [Test]
+    public async Task CanSeeAboutMeLinkWhenRegistered()
+    {
+        var user = TestUtils.CreateTestAuthor("Mr. test");
+        var password = "Password123!";
+
+        await Page.GotoAsync("/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+        await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
+        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName!);
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email!);
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
+        await Page.GetByLabel("Confirm Password").ClickAsync();
+        await Page.GetByLabel("Confirm Password").FillAsync(password);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+        await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByPlaceholder("Username").ClickAsync();
+        await Page.GetByPlaceholder("Username").FillAsync(user.UserName!);
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync(password);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "About Me" })).ToBeVisibleAsync();
+        
+    }
+
+    [Test]
+    public async Task CannotSeeAboutMeLinkWhenNotRegistered()
+    {
+        await Page.GotoAsync($"/?page=1");
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "About Me" })).Not.ToBeVisibleAsync();
+    }
+
+    [Test]
+    public async Task AboutMePageShowsUserInfo()
+    {
+        var user = TestUtils.CreateTestAuthor("Mr. test");
+        var password = "Password123!";
+
+        await Page.GotoAsync("/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+        await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
+        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName!);
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email!);
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
+        await Page.GetByLabel("Confirm Password").ClickAsync();
+        await Page.GetByLabel("Confirm Password").FillAsync(password);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+        await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByPlaceholder("Username").ClickAsync();
+        await Page.GetByPlaceholder("Username").FillAsync(user.UserName!);
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync(password);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Name: Mr. test" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Email: Mr.test@test.test" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "You have Cheep'd: 0 times" })).ToBeVisibleAsync();
+    }
+
+    [Test]
     public async Task SeeCorrectNumberOfCheepsOnPublicTimeline()
     {
         //arrange

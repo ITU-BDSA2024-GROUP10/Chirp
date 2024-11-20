@@ -185,6 +185,33 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     }
 
     [Fact]
+    public async Task GetCheepsFromAuthor_ReturnsAllCheeps()
+    {
+        var chirpContext = _fixture.GetContext();
+        var author = TestUtils.CreateTestAuthor("Mr. test");
+        List<Cheep> cheeps = [];
+        for (int i = 0; i < 5; i++)
+        {
+            cheeps.Add(new Cheep{ Author = author, Message = "test" + i, TimeStamp = DateTime.Now });
+        }
+
+        chirpContext.Authors.Add(author);
+        chirpContext.Cheeps.AddRange(cheeps);
+        await chirpContext.SaveChangesAsync();
+        
+        var cheepRepo = new CheepRepository(chirpContext);
+        var result = (await cheepRepo.GetCheepsFromAuthor(author.UserName!)).ToList();
+        cheeps.Reverse();
+        Assert.Equal(5, result.Count);
+        for (int i = 0; i < 5; i++)
+        {
+            Assert.Equal(cheeps.ElementAt(i).Message, result.ElementAt(i).Message);
+        }
+        
+
+    }
+
+    [Fact]
     public async Task GetCheepsFromAuthorByPage_ReturnsNoCheepsForNonexistentAuthor()
     {
         //arrange
