@@ -1,6 +1,7 @@
 using Chirp.Infrastructure.Model;
 using Microsoft.Playwright;
 using PlaywrightTests.Utils;
+using PlaywrightTests.Utils.PageTests;
 using TestUtilities;
 
 namespace PlaywrightTests;

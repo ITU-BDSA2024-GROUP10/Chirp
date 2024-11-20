@@ -1,6 +1,6 @@
 using Microsoft.Playwright;
 
-namespace PlaywrightTests.Utils;
+namespace PlaywrightTests.Utils.PageTests;
 
 public class PageTestWithDuende : PageTestWithRazorPlaywrightWebApplicationFactory
 {
