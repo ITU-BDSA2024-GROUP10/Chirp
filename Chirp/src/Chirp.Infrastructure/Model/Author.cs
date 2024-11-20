@@ -25,7 +25,9 @@ public sealed class Author : IdentityUser
         return new Author()
         {
             Email = email,
-            UserName = username
+            UserName = username,
+            NormalizedUserName = username.ToUpper(),
+            NormalizedEmail = email.ToUpper()
         };
     }
 }
