@@ -214,6 +214,17 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     [Test]
     public async Task UserStaysOnPageAfterFollowAndUnfollowOnPublicTimeline()
     {
-       
+       // follow author
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        await Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button).ClickAsync();
+
+        // unfollow author
+        await Page.Locator("li").Filter(new() { HasText = "author unfollow test" }).GetByRole(AriaRole.Button).ClickAsync();
+
+        // assert that the user is still on the public timeline by checking the cheep
+        await Expect(Page.Locator("li").Filter(new() { HasText = "author follow test" })).ToBeVisibleAsync();
+
+        // assert that "there are no cheeps so far" message does not exist
+        await Expect(Page.GetByText("There are no cheeps so far.")).ToBeHiddenAsync();
     }
 }
