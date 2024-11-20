@@ -8,9 +8,8 @@ using RepositoryTests.Utils;
 namespace RepositoryTests;
 
 public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
-    : IClassFixture<InMemoryDBFixture<ChirpDBContext>> 
+    : IClassFixture<InMemoryDBFixture<ChirpDBContext>>
 {
-
     [Fact]
     public async Task GetAuthorByName_NameCantBeFound_ThrowsException()
     {
@@ -36,7 +35,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
         var chirpContext = fixture.GetContext();
         var author = new Author { UserName = "Helge", Email = "Helge@gmail.com" };
         author.NormalizedUserName = author.UserName.ToUpper();
-        
+
         chirpContext.Authors.Add(author);
         await chirpContext.SaveChangesAsync();
 
@@ -91,4 +90,80 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
         Assert.Equal(author.Email, checkSuccession.Email);
         Assert.Equal(author.Name, checkSuccession.UserName);
     }
+
+    #region Follow tests
+
+    #region GetAuthorFollows tests
+
+    [Fact]
+    public async Task GetAuthorFollows_UserDoesNotExist_ThrowsException()
+    {
+    }
+
+    [Fact]
+    public async Task GetAuthorFollows_UserExists_ReturnsListOfAuthors()
+    {
+    }
+
+    #endregion
+
+    #region Follow tests
+
+    [Fact]
+    public async Task Follow_UserToFollowDoesNotExist_ThrowsException()
+    {
+    }
+
+    [Fact]
+    public async Task Follow_UserDoesNotExist_ThrowsException()
+    {
+    }
+
+    [Fact]
+    public async Task Follow_UserToFollowIsItSelf_ThrowsException()
+    {
+    }
+
+    [Fact]
+    public async Task Follow_UserToFollowAlreadyFollowed_ReturnsFalse()
+    {
+    }
+
+    [Fact]
+    public async Task Follow_UserToFollowIsNotFollowed_ReturnsTrue()
+    {
+    }
+
+    #endregion
+
+    #region UnFollow tests
+
+    [Fact]
+    public async Task UnFollow_UserToUnfollowDoesNotExist_ThrowsException()
+    {
+    }
+
+    [Fact]
+    public async Task UnFollow_UserDoesNotExist_ThrowsException()
+    {
+    }
+
+    [Fact]
+    public async Task UnFollow_UserToUnfollowIsItSelf_ThrowsException()
+    {
+    }
+
+    [Fact]
+    public async Task UnFollow_UserToUnfollowIsNotFollowed_ReturnsFalse()
+    {
+    }
+
+    [Fact]
+    public async Task UnFollow_UserToUnfollowIsFollowed_ReturnsTrue()
+    {
+    }
+
+    #endregion
+
+    #endregion
 }
