@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace TestUtils;
+namespace TestUtilities;
 
 public class InMemoryCostumeWebApplicationFactory : WebApplicationFactory<Chirp.Web.Program>
 {

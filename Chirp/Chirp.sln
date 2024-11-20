@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{7E19A0D2-7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{23E0FBFD-AA57-4F91-B82C-A48046CBC95E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtils", "test\Utils\TestUtils\TestUtils.csproj", "{4076521D-2BFA-4355-989A-D1E3BAA09CDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtilities", "test\Utils\TestUtilities\TestUtilities.csproj", "{4076521D-2BFA-4355-989A-D1E3BAA09CDE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duende.Identity.Server", "test\Utils\Duende.Identity.Server\Duende.Identity.Server.csproj", "{592F31D6-8A86-47C6-9A4B-C18F5FFDC79C}"
 EndProject

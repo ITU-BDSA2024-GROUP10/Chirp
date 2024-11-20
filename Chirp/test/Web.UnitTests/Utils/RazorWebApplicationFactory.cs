@@ -1,7 +1,7 @@
 ﻿using Chirp.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using TestUtils;
+using TestUtilities;
 
 namespace Web.UnitTests.Utils;
 

@@ -3,7 +3,7 @@ using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
 using Chirp.Web;
 using Microsoft.AspNetCore.Mvc.Testing;
-using TestUtils;
+using TestUtilities;
 
 namespace webApplication.Tests;
 
