@@ -390,7 +390,6 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
         {
             var cheep = new Cheep { Author = author1, Message = $"{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i * 60).DateTime };
             chirpContext.Cheeps.Add(cheep);
-            Thread.Sleep(2000);
         }
         
         await chirpContext.SaveChangesAsync();
