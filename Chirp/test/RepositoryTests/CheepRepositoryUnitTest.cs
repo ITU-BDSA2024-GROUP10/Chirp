@@ -187,10 +187,8 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     [Fact]
     public async Task GetCheepsFromAuthor_ReturnsAllCheeps()
     {
-        //TODO should be updated to use test utils class 
         var chirpContext = _fixture.GetContext();
-        var author = new Author {UserName = "Test", Email = "Test@email.com", Cheeps = [] };
-        author.NormalizedUserName = "TEST";
+        var author = TestUtils.CreateTestAuthor("Mr. test");
         List<Cheep> cheeps = [];
         for (int i = 0; i < 5; i++)
         {
