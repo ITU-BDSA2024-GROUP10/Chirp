@@ -35,12 +35,12 @@ public class CheepService(ICheepRepository db) : ICheepService
 
     public int GetAmountOfCheepPages(int pageSize)
     {
-        return db.GetAmountOfCheeps().Result / pageSize;
+        return (int)Math.Ceiling(db.GetAmountOfCheeps().Result / (double)pageSize);
     }
 
     public int GetAmountOfCheepPagesFromAuthors(IEnumerable<String> authors, int pageSize)
     {
-        return db.GetAmountOfCheepsFromAuthors(authors).Result / pageSize;
+        return (int)Math.Ceiling(db.GetAmountOfCheepsFromAuthors(authors).Result / (double)pageSize);
     }
 
     public bool CreateCheep(CheepDTO cheep)
