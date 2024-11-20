@@ -105,8 +105,24 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
 
     [Test]
     public async Task UserCannotFollowSelf()
-    {
-       
+    {   
+        // logout from follower
+        await Page.GetByRole(AriaRole.Link, new() { Name = "logout [follower]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
+
+        // login to author
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByPlaceholder("Username").ClickAsync();
+        await Page.GetByPlaceholder("Username").FillAsync("author");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Password123!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+
+        // check if there is a follow button in the cheep they wrote
+        // if it has the form author message date time, then there is no follow button.
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+
+        await Expect(Page.Locator("li").Filter(new() { HasTextRegex = new System.Text.RegularExpressions.Regex(@"author test - \d{2}/\d{2}/\d{2} \d{2}:\d{2}:") })).ToBeVisibleAsync();
     }
 
     [Test]
