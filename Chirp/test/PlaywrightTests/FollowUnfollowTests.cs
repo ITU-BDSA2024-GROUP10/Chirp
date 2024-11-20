@@ -130,13 +130,74 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     [Test]
     public async Task CanOnlySeeOwnAndFollowedCheeps()
     {
-       
+        // logout of follower
+        await Page.GetByRole(AriaRole.Link, new() { Name = "logout [follower]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
+
+        // register and login author2
+        var author2 = new Author
+        {
+            UserName = "author2",
+            Email = "author2@itu.dk"
+        };
+        var password = "Password123!";
+        
+        await Page.GotoAsync("/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+        await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
+        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(author2.UserName);
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync(author2.Email);
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
+        await Page.GetByLabel("Confirm Password").ClickAsync();
+        await Page.GetByLabel("Confirm Password").FillAsync(password);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your account" }).ClickAsync();
+
+        // login as author2
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByPlaceholder("Username").ClickAsync();
+        await Page.GetByPlaceholder("Username").FillAsync(author2.UserName);
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync(password);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+
+        // write a cheep as author2
+        await Page.Locator("#Message").ClickAsync();
+        await Page.Locator("#Message").FillAsync("this is author2's cheep");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+
+        // logout of author2
+        await Page.GetByRole(AriaRole.Link, new() { Name = "logout [author2]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
+
+        // login back as follower
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByPlaceholder("Username").ClickAsync();
+        await Page.GetByPlaceholder("Username").FillAsync("follower");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync(password);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+
+        // follow author1
+        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        await Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button).ClickAsync();
+
+        // go to private timeline
+        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+
+        // assert that author2's cheep is not on private timeline
+        await Expect(Page.Locator("li").Filter(new() { HasText = "this is author2's cheep" })).ToBeHiddenAsync();
+
+        // assert that author1's cheep is visible
+        await Expect(Page.Locator("li").Filter(new() { HasText = "author unfollow test" })).ToBeVisibleAsync();
     }
 
     [Test]
     public async Task UserStaysOnPageAfterUnfollowOnPrivateTimeline()
     {
-       
+
     }
 
     [Test]
