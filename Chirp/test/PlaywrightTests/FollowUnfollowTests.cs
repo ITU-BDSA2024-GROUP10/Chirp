@@ -118,11 +118,13 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await Page.GetByPlaceholder("password").FillAsync("Password123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
 
-        // check if there is a follow button in the cheep they wrote
-        // if it has the form author message date time, then there is no follow button.
-        await Page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+        // assert that there is no follow button for the author's own cheep
+        var followButton = Page.Locator("li")
+            .Filter(new() { HasText = "author follow test" })
+            .GetByRole(AriaRole.Button);
 
-        await Expect(Page.Locator("li").Filter(new() { HasTextRegex = new System.Text.RegularExpressions.Regex(@"author test - \d{2}/\d{2}/\d{2} \d{2}:\d{2}:") })).ToBeVisibleAsync();
+        // expect the follow button to be zero
+        await Expect(followButton).ToBeHiddenAsync();
     }
 
     [Test]
