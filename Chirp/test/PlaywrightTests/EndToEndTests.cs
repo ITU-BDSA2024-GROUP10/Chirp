@@ -31,7 +31,7 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync(password);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your account" }).ClickAsync();
         await Expect(Page.GetByText("Thank you for confirming your account")).ToBeVisibleAsync();
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
