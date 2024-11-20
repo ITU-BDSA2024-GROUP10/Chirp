@@ -96,7 +96,8 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task CannotSeeAboutMeLinkWhenNotRegistered()
     {
-        
+        await Page.GotoAsync($"/?page=1");
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "About Me" })).Not.ToBeVisibleAsync();
     }
 
     [Test]
