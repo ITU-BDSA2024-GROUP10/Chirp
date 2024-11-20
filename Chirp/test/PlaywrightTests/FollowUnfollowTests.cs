@@ -128,7 +128,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await GoToPublicTimeline();
         await FollowAuthor("author follow test");
         await GoToPrivateTimeline();
-        await Expect(Page.Locator("li").Filter(new() { HasText = "this is author2's cheep" })).ToBeHiddenAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = "author2 follow this is author2's cheep" })).ToBeHiddenAsync();
         await Expect(Page.Locator("li").Filter(new() { HasText = "author unfollow test" })).ToBeVisibleAsync();
     }
 
