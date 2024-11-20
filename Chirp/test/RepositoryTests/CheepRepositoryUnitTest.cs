@@ -398,13 +398,14 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
         
         //Act
         var result = await cheepRepo.GetCheepsFromAuthorsByPage(authors, 1, 20);
+        var resultArray = result.ToArray();
 
         //Assert
-        Assert.True(result.ToList()[0].UnixTimestamp >= result.ToList()[1].UnixTimestamp);
+        Assert.True(resultArray[0].UnixTimestamp >= resultArray[1].UnixTimestamp);
         
-        for (var i = 1; i < result.ToList().Count; i++)
+        for (var i = 1; i < resultArray.ToList().Count; i++)
         {
-        Assert.True(result.ToList()[i-1].UnixTimestamp >= result.ToList()[i].UnixTimestamp);
+            Assert.True(resultArray[i-1].UnixTimestamp >= resultArray[i].UnixTimestamp);
         }
     }
 }
