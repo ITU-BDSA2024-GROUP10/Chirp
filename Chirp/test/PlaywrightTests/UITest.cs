@@ -88,6 +88,12 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     }
 
     [Test]
+    public async Task CanSeeAboutMeLinkWhenRegistered()
+    {
+        
+    }
+
+    [Test]
     public async Task SeeCorrectNumberOfCheepsOnPublicTimeline()
     {
         //arrange
