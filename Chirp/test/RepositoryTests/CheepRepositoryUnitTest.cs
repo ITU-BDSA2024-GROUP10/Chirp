@@ -287,4 +287,62 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
         Assert.NotNull(cheep);
         Assert.Equal(newCheep.Message, cheep.Message);
     }
+
+    [Fact]
+    public async Task GetCheepsFromAuthorsByPage_ReturnsAllCheepsFromAuthorsFromMultiplePages()
+    {
+        //Arrange
+        var chirpContext = _fixture.GetContext();
+        var author1 = new Author { UserName = "Mr. Test", Email = "test@email.com" };
+        var author2 = new Author { UserName = "Mr. Test2", Email = "test2@email.com" };
+        
+        author1.NormalizedUserName = author1.UserName.ToUpper();
+        author2.NormalizedUserName = author2.UserName.ToUpper();
+
+        List<string> authors = new();
+        
+        
+        authors.Add(author1.UserName);
+        authors.Add(author2.UserName);
+        
+        var authTotal = 0;
+        var rand = new Random();
+        
+        for (var i = 0; i < 100; i++)
+        {
+            int r = rand.Next(2);
+            if (r == 1)
+            {
+                var cheep = new Cheep { Author = author1, Message = "", TimeStamp = DateTime.Now };
+                chirpContext.Cheeps.Add(cheep);
+                authTotal++;
+            }
+            else
+            {
+                var cheep = new Cheep { Author = author2, Message = "", TimeStamp = DateTime.Now };
+                chirpContext.Cheeps.Add(cheep);
+                authTotal++;
+            }
+        }
+        
+        await chirpContext.SaveChangesAsync();
+        var cheepRepo = new CheepRepository(chirpContext);
+        
+        int pageNo = 1;
+        int totalCount = 0;
+        
+        //Act
+        while (true)
+        {
+            var result = await cheepRepo.GetCheepsFromAuthorsByPage(authors, pageNo, 20);
+            var count = result.ToList().Count;
+            if (count == 0)
+                break;
+            totalCount += count;
+            pageNo++;
+        }
+        
+        //Assert
+        Assert.Equal(authTotal, totalCount);
+    }
 }
