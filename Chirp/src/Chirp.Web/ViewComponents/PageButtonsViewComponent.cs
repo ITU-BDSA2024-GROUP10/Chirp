@@ -4,11 +4,11 @@ namespace Chirp.Web.ViewComponents;
 
 public class PageButtonsViewComponent : ViewComponent
 {
-    public IViewComponentResult Invoke(int pageNumber, string targetPage, bool isLastPage)
+    public IViewComponentResult Invoke(int currentPageNumber, int lastPageNumber, string targetPageUrl)
     {
-        ViewBag.TargetPage = targetPage;
-        ViewBag.PageNumber = pageNumber;
-        ViewBag.IsLastPage = isLastPage;
+        ViewBag.TargetPageUrl = targetPageUrl;
+        ViewBag.CurrentPageNumber = currentPageNumber;
+        ViewBag.LastPageNumber = lastPageNumber;
         return View("Default");
     }
 }
