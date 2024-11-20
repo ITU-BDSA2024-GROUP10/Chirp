@@ -72,7 +72,6 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     [Test]
     public async Task UserCanUnfollowAuthor()
     {
-
     }
 
     [Test]
