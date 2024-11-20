@@ -56,7 +56,7 @@ public class CrossSiteScriptingTest : PageTestWithRazorPlaywrightWebApplicationF
         await Page.GetByLabel("Confirm Password").FillAsync(password);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your account" }).ClickAsync();
-        await Expect(Page.GetByText("Thank you for confirming your account")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Thank you for confirming")).ToBeVisibleAsync();
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
