@@ -251,7 +251,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         #endregion
 
         //act
-        await Page.GotoAsync($"/{author.UserName.ToUpper()}");
+        await Page.GotoAsync($"/{author.UserName!.ToUpper()}");
         await Expect(Page.Locator("#messagelist"))
             .ToContainTextAsync(cheep.Message);
         
