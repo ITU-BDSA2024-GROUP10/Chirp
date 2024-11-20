@@ -373,4 +373,38 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
         //Assert
         Assert.Empty(result.ToList());
     }
+
+    [Fact]
+    public async Task GetCheepsFromAuthorsByPage_ReturnsInChronologicalOrder()
+    {
+        //Arrange
+        var chirpContext = _fixture.GetContext();
+        var author1 = new Author { UserName = "Mr. Test", Email = "test@email.com" };
+
+        author1.NormalizedUserName = author1.UserName.ToUpper();
+
+        List<string> authors = new();
+        authors.Add(author1.UserName);
+
+        for (var i = 0; i < 5; i++)
+        {
+            var cheep = new Cheep { Author = author1, Message = $"{i}", TimeStamp = DateTime.Now };
+            chirpContext.Cheeps.Add(cheep);
+            Thread.Sleep(2000);
+        }
+        
+        await chirpContext.SaveChangesAsync();
+        var cheepRepo = new CheepRepository(chirpContext);
+        
+        //Act
+        var result = await cheepRepo.GetCheepsFromAuthorsByPage(authors, 1, 20);
+
+        //Assert
+        Assert.True(result.ToList()[0].UnixTimestamp >= result.ToList()[1].UnixTimestamp);
+        
+        for (var i = 1; i < result.ToList().Count; i++)
+        {
+        Assert.True(result.ToList()[i-1].UnixTimestamp >= result.ToList()[i].UnixTimestamp);
+        }
+    }
 }
