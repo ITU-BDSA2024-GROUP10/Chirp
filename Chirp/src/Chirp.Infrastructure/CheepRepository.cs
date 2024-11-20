@@ -59,6 +59,18 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             new CheepDTO(cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
 
+    public Task<int> GetAmountOfCheeps()
+    {
+        return context.Cheeps.CountAsync();
+    }
+
+    public Task<int> GetAmountOfCheepsFromAuthors(IEnumerable<String> authors)
+    {
+        authors = authors.Select(author => author.ToUpper());
+        return context.Cheeps
+            .CountAsync(cheep => authors.Contains(cheep.Author.NormalizedUserName!));
+    }
+
     public async Task<bool> CreateCheep(CheepDTO cheep)
     {
         var author = await context.Authors
