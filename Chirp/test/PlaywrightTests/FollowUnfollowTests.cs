@@ -87,6 +87,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await Page.GetByText("author follow test").ClickAsync();
         await Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+
         await Expect(Page.GetByText("author unfollow test")).ToBeVisibleAsync();
     }
 
@@ -96,10 +97,10 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await Page.GetByText("author follow test").ClickAsync();
         await Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
-        await Page.GetByText("author  unfollow test").ClickAsync();
+        await Page.GetByText("author unfollow test").ClickAsync();
         
         await Page.GetByRole(AriaRole.Button, new() { Name = "unfollow" }).ClickAsync();
-        await Page.GetByText("There are no cheeps so far.").ClickAsync();
+        await Expect(Page.GetByText("There are no cheeps so far.")).ToBeVisibleAsync();
     }
 
     [Test]
