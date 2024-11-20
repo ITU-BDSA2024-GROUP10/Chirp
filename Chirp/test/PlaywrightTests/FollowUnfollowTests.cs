@@ -119,9 +119,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
 
         // assert that there is no follow button for the author's own cheep
-        var followButton = Page.Locator("li")
-            .Filter(new() { HasText = "author follow test" })
-            .GetByRole(AriaRole.Button);
+        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
 
         // expect the follow button to be zero
         await Expect(followButton).ToBeHiddenAsync();
