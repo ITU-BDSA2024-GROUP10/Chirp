@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using Chirp.Infrastructure.Model;
 using Microsoft.Playwright;
 using PlaywrightTests.Utils;
+using TestUtilities;
 
 namespace PlaywrightTests;
 
@@ -13,19 +14,15 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task EndToEnd_RegisterLoginCheepAndLogout()
     {
-        var user = new Author
-        {
-            UserName = "Mathias",
-            Email = "mlao@itu.dk"
-        };
+        var user = TestUtils.CreateTestAuthor("Mr. test");
         var password = "Password123!";
         
         await Page.GotoAsync("/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName);
+        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName!);
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email);
+        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email!);
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
         await Page.GetByLabel("Confirm Password").ClickAsync();
@@ -36,7 +33,7 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
-        await Page.GetByPlaceholder("Username").FillAsync(user.UserName);
+        await Page.GetByPlaceholder("Username").FillAsync(user.UserName!);
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync(password);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
@@ -53,7 +50,7 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
         await Expect(Page.Locator("#messagelist")).ToContainTextAsync("Cheep in public timeline");
         
-        await Page.GetByRole(AriaRole.Link, new() { Name = "logout [Mathias]" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = $"logout [{user.UserName!}]" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
 
         //assert

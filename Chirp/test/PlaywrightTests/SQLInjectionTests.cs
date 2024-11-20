@@ -1,6 +1,7 @@
 using Chirp.Infrastructure.Model;
 using Microsoft.Playwright;
 using PlaywrightTests.Utils;
+using TestUtilities;
 
 namespace PlaywrightTests;
 
@@ -9,20 +10,16 @@ public class SQLInjectionTests : PageTestWithRazorPlaywrightWebApplicationFactor
     [Test]
     public async Task SQLInjectionInCheepTextBox()
     {
-        var user = new Author
-        {
-            UserName = "Mathias",
-            Email = "mlao@itu.dk"
-        };
+        var user = TestUtils.CreateTestAuthor("Mr. test");
         var password = "Password123!";
         
         //act
         await Page.GotoAsync("/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName);
+        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName!);
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email);
+        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email!);
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
         await Page.GetByLabel("Confirm Password").ClickAsync();
@@ -32,7 +29,7 @@ public class SQLInjectionTests : PageTestWithRazorPlaywrightWebApplicationFactor
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
-        await Page.GetByPlaceholder("Username").FillAsync(user.UserName);
+        await Page.GetByPlaceholder("Username").FillAsync(user.UserName!);
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync(password);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();

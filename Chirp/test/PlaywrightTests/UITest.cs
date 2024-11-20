@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using Chirp.Infrastructure.Model;
 using Microsoft.Playwright;
 using PlaywrightTests.Utils;
+using TestUtilities;
 
 namespace PlaywrightTests;
 
@@ -63,28 +64,23 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     }
 
     [Test]
-    [TestCase("test?page=1", "-5")]
-    [TestCase("test?page=1", "0")]
-    [TestCase("test?page=2", "2")]
-    [TestCase("test?page=1", null)]
+    [TestCase("?page=1", "-5")]
+    [TestCase("?page=1", "0")]
+    [TestCase("?page=2", "2")]
+    [TestCase("?page=1", null)]
     public async Task PaginationOfUserTimeline(string expectedEndpoint, string page)
     {
         //arrange
         var context = razorFactory.GetDbContext();
-        Author testAuthor = new Author
-        {
-            UserName = "test",
-            Email = "test@test.com",
-            NormalizedUserName = "TEST",
-        };
+        Author testAuthor = TestUtils.CreateTestAuthor("test");
         context.Authors.Add(testAuthor);
         await context.SaveChangesAsync();
         
         //act
-        await Page.GotoAsync($"/test?page={page}");
+        await Page.GotoAsync($"/{testAuthor.UserName!.ToLower()}?page={page}");
 
         //assert
-        await Expect(Page).ToHaveURLAsync($"{RazorBaseUrl}/{expectedEndpoint}");
+        await Expect(Page).ToHaveURLAsync($"{RazorBaseUrl}/{testAuthor.UserName}{expectedEndpoint}");
     }
 
     [Test]
@@ -92,11 +88,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     {
         //arrange
         var context = razorFactory.GetDbContext();
-        Author testAuthor = new Author
-        {
-            UserName = "mr. test",
-            Email = "test@test.com"
-        };
+        Author testAuthor = TestUtils.CreateTestAuthor("Mr. test");
         context.Authors.Add(testAuthor);
 
         for (var i = 0; i < 33; i++)
@@ -128,18 +120,8 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         var context = razorFactory.GetDbContext();
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
-        Author realTestAuthor = new Author
-        {
-            UserName = "mr. test",
-            Email = "realtest@test.com"
-        };
-        realTestAuthor.NormalizedUserName = realTestAuthor.UserName.ToUpper();
-        Author fakeTestAuthor = new Author
-        {
-            UserName = "fake mr. test",
-            Email = "faketest@test.com"
-        };
-        fakeTestAuthor.NormalizedUserName = fakeTestAuthor.UserName.ToUpper();
+        Author realTestAuthor = TestUtils.CreateTestAuthor("Mr. test");
+        Author fakeTestAuthor = TestUtils.CreateTestAuthor("Mr. fake");
 
         context.Authors.Add(realTestAuthor);
         context.Authors.Add(fakeTestAuthor);
@@ -189,19 +171,15 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task CheepBoxVisibleWhileLoggedIn()
     {
-        var user = new Author
-        {
-            UserName = "Mathias",
-            Email = "mlao@itu.dk"
-        };
+        var user = TestUtils.CreateTestAuthor("Mr. test");
         var password = "Password123!";
 
         await Page.GotoAsync("/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName);
+        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName!);
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email);
+        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email!);
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
         await Page.GetByLabel("Confirm Password").ClickAsync();
@@ -212,7 +190,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
-        await Page.GetByPlaceholder("Username").FillAsync(user.UserName);
+        await Page.GetByPlaceholder("Username").FillAsync(user.UserName!);
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync(password);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
@@ -227,11 +205,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     {
         //arrange
         var context = razorFactory.GetDbContext();
-        Author testAuthor = new Author
-        {
-            UserName = "mr. test",
-            Email = "test@test.com"
-        };
+        Author testAuthor = TestUtils.CreateTestAuthor("Mr. test");
         context.Authors.Add(testAuthor);
 
         for (var i = 0; i < 65; i++)
@@ -262,12 +236,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         #region Arrange
 
         var context = razorFactory.GetDbContext();
-        var author = new Author
-        {
-            UserName = "MR. tESt",
-            Email = "test@test.com"
-        };
-        author.NormalizedUserName = author.UserName.ToUpper();
+        var author = TestUtils.CreateTestAuthor("MR. tESt");
         context.Authors.Add(author);
 
         var cheep = new Cheep

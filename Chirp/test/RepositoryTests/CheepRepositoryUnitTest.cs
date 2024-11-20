@@ -5,6 +5,7 @@ using Chirp.Infrastructure.Model;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using RepositoryTests.Utils;
+using TestUtilities;
 
 namespace RepositoryTests;
 
@@ -28,7 +29,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var author = new Author { Id = "1", UserName = "Bill", Email = "Bill@email", Cheeps = [] };
+        var author = TestUtils.CreateTestAuthor("Mr. test");
         for (int i = 0; i < 7; i++)
         {
             var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now };
@@ -51,7 +52,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var author = new Author { UserName = "mr. test", Email = "test@test.test" };
+        var author = TestUtils.CreateTestAuthor("Mr. test");
         var cheep = new Cheep { Author = author, Message = "test", TimeStamp = DateTime.Now };
         chirpContext.Cheeps.Add(cheep);
         await chirpContext.SaveChangesAsync();
@@ -69,7 +70,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var author = new Author { Id = "1", UserName = "Bill", Email = "Bill@email", Cheeps = [] };
+        var author = TestUtils.CreateTestAuthor("Mr. test");
         List<Cheep> cheeps = [];
         for (int i = 0; i < 7; i++)
         {
@@ -121,7 +122,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var author = new Author { Id = "1", UserName = "Bill", Email = "Bill@email.com", Cheeps = [] };
+        var author = TestUtils.CreateTestAuthor("Mr. test");
         var timeStamp = new DateTime(2000, 01, 01);
         var cheep = new Cheep { Author = author, Message = "test", TimeStamp = timeStamp };
         chirpContext.Cheeps.Add(cheep);
@@ -135,7 +136,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
         Assert.NotNull(result);
 
         var resultList = result.ToList();
-        var expected = new CheepDTO("Bill", "test", ((DateTimeOffset)timeStamp).ToUnixTimeSeconds());
+        var expected = new CheepDTO(author.UserName!, cheep.Message, ((DateTimeOffset)timeStamp).ToUnixTimeSeconds());
         Assert.Single(resultList);
 
         var singleCheep = resultList.ElementAt(0);
@@ -217,10 +218,8 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var authorA = new Author { Id = "1", UserName = "Bill", Email = "Bill@email.com", Cheeps = [] };
-        var authorB = new Author { Id = "2", UserName = "Amy", Email = "Amy@email.com", Cheeps = [] };
-        authorA.NormalizedUserName = authorA.UserName.ToUpper();
-        authorB.NormalizedUserName = authorB.UserName.ToUpper();
+        var authorA = TestUtils.CreateTestAuthor("Mr. test");
+        var authorB = TestUtils.CreateTestAuthor("Mr. fake");
         
         var authTotal = 0;
         var rand = new Random();
@@ -249,7 +248,7 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
         int totalCount = 0;
         while (true)
         {
-            var result = await cheepRepo.GetCheepsFromAuthorByPage("Bill", pageNo, 20);
+            var result = await cheepRepo.GetCheepsFromAuthorByPage(authorA.UserName!, pageNo, 20);
             var count = result.ToList().Count;
             if (count == 0)
                 break;
@@ -268,12 +267,12 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
     {
         //arrange
         var chirpContext = _fixture.GetContext();
-        var author = new Author { UserName = "John Doe", Email = "JohnDoe@gmail.com" };
+        var author = TestUtils.CreateTestAuthor("Mr. test");
         chirpContext.Authors.Add(author);
         await chirpContext.SaveChangesAsync();
 
         var unixTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        var newCheep = new CheepDTO("John Doe", "message", unixTimestamp);
+        var newCheep = new CheepDTO(author.UserName!, "message", unixTimestamp);
 
         var cheepRepo = new CheepRepository(chirpContext);
 
