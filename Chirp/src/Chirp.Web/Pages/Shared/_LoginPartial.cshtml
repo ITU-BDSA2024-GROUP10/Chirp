@@ -9,7 +9,8 @@
         <div>
             <a href="/@(User.Identity.Name)">my timeline</a> |
             <a href="/">public timeline</a> |
-            <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" >logout [@(User.Identity.Name)]</a>
+            <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" >logout [@(User.Identity.Name)]</a> |
+            <a href="/AboutMe">About Me</a>
         </div>
     }
     else
