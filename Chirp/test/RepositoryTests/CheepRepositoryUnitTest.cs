@@ -345,4 +345,32 @@ public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
         //Assert
         Assert.Equal(authTotal, totalCount);
     }
+
+    [Fact]
+    public async Task GetCheepsFromAuthorsByPage_ReturnsNoCheepsFromAuthorWithNoCheeps()
+    {
+        //Arrange
+        var chirpContext = _fixture.GetContext();
+        var author1 = new Author { UserName = "Mr. Test", Email = "test@email.com"};
+        var author2 = new Author { UserName = "Mr. Test2", Email = "test2@email.com"};
+
+        author1.NormalizedUserName = author1.UserName.ToUpper();
+        author2.NormalizedUserName = author1.UserName.ToUpper();
+
+        List<string> authors = new();
+        List<Cheep> cheeps = [];
+        authors.Add(author1.UserName);
+        authors.Add(author2.UserName);
+
+        chirpContext.Cheeps.AddRange(cheeps);
+        
+        await chirpContext.SaveChangesAsync();
+        var cheepRepo = new CheepRepository(chirpContext);
+        
+        //Act
+        var result = await cheepRepo.GetCheepsFromAuthorsByPage(authors, 1, 20);
+        
+        //Assert
+        Assert.Empty(result.ToList());
+    }
 }
