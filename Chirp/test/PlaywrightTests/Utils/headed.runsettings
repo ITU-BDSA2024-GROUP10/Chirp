@@ -1,3 +1,5 @@
+<!-- Modefied from -->
+<!-- https://stackoverflow.com/questions/71636577/microsoft-playwright-for-net-nunit-cant-launch-tests-in-headed-mode -->
 <!-- headed-e2e.runsettings -->
 <RunSettings>
     <!-- NUnit adapter -->
@@ -17,7 +19,7 @@
         <ExpectTimeout>5000</ExpectTimeout>
         <LaunchOptions>
             <Headless>false</Headless>
-            <SlowMo>10</SlowMo>
+            <SlowMo>1000</SlowMo>
             <Channel>chrome</Channel>
         </LaunchOptions>
     </Playwright>

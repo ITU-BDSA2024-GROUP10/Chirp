@@ -40,6 +40,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
     {
         if (currentUser == userToFollow) throw new ArgumentException("You cannot follow yourself");
         if (!await UserExists(currentUser)) throw new UserDoesNotExist();
+        if (!await UserExists(userToFollow)) throw new UserDoesNotExist("User to follow does not exist");
         if (await DoesFollow(currentUser, userToFollow)) return false;
         
         var authorToFollow = await GetAuthor(userToFollow);
@@ -55,9 +56,10 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         userToUnfollow = userToUnfollow.ToUpper();
         if (currentUser == userToUnfollow) throw new ArgumentException("You cannot unfollow yourself");
         if (!await UserExists(currentUser)) throw new UserDoesNotExist();
+        if (!await UserExists(userToUnfollow)) throw new UserDoesNotExist("User to unfollow does not exist");
         if (!await DoesFollow(currentUser, userToUnfollow)) return false;
-        var authorToUnfollow = await GetAuthor(userToUnfollow);
         
+        var authorToUnfollow = await GetAuthor(userToUnfollow);
         GetAuthor(currentUser).Result.Follows.Remove(authorToUnfollow);
         
         await context.SaveChangesAsync();
