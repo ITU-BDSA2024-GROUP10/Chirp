@@ -14,7 +14,7 @@ public class SQLInjectionTests : PageTestWithRazorPlaywrightWebApplicationFactor
         //arrange
         var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
             .WithDefault()
-            .Create(RazorFactory.GetDbContext());
+            .Create();
        
         await RazorPageUtils.Login(testAuthor);
         

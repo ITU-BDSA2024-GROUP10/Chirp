@@ -36,7 +36,7 @@ public class TestAuthorBuilder
         return this;
     }
 
-    public TestAuthor Create(ChirpDBContext context = null)
+    public TestAuthor Create()
     {
         _userManager.CreateAsync(_testAuthor.author, _testAuthor.Password).Wait();
         return _testAuthor;
