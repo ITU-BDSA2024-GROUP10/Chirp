@@ -223,7 +223,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     }
 
     [Test]
-    public async Task PageButtons_FirstMiddleEndPages()
+    public async Task PageButtons_FormatingTest()
     {
         //arrange
         var context = razorFactory.GetDbContext();
@@ -234,7 +234,7 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         };
         context.Authors.Add(testAuthor);
 
-        for (var i = 0; i < 65; i++)
+        for (var i = 0; i < 32*5+1; i++)
         {
             context.Cheeps.Add(new Cheep()
             {
@@ -245,15 +245,26 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         }
 
         await context.SaveChangesAsync();
+        
         //first
-        await Page.GotoAsync("/");
-        await Expect(Page.Locator("body")).ToContainTextAsync("1 Next");
+        await Page.GotoAsync("/?page=1");
+        await Expect(Page.Locator("body")).ToContainTextAsync("1 2 .. 5 Next >");
+        
+        //second
+        await Page.GotoAsync("/?page=2");
+        await Expect(Page.Locator("body")).ToContainTextAsync("< Prev 1 2 3 .. 5 Next >");
+        
         //middle
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Next" }).First.ClickAsync();
+        await Page.GotoAsync("/?page=3");
         await Expect(Page.Locator("body")).ToContainTextAsync("Previous 2 Next");
+        
+        //second to last
+        await Page.GotoAsync("/?page=4");
+        await Expect(Page.Locator("body")).ToContainTextAsync("< Prev 1 .. 3 4 5 Next >");
+        
         //end
-        await Page.GotoAsync("/?page=9999");
-        await Expect(Page.Locator("body")).ToContainTextAsync("Previous 9999");
+        await Page.GotoAsync("/?page=5");
+        await Expect(Page.Locator("body")).ToContainTextAsync("< Prev 1 .. 4 5");
     }
 
     [Test]
