@@ -29,12 +29,22 @@ jobs:
         run: |
           echo "The pull request needs a label."
           exit 1 # This fails the action
+
+      - name: Check if it contains not allowed labels
+        run: |
+          NOT_ALLOWED_LABELS="extra"
+          if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
+            echo "the following labels, are not allowed on a pull request, '$NOT_ALLOWED_LABELS'."
+            exit 1;
+          fi
       
       - name: Check if pull request labels combination is okay
         run: |
           # If it has exactly one label, there is no combination issue
-          if [ "$LABEL_COUNT" -eq 1 ]; then exit 0; fi
-
+          if [ "$LABEL_COUNT" -eq 1 ]; then 
+            exit 0; 
+          fi
+          
           # E allows for use of OR operators
           # breaking
           if echo "$PR_LABELS" | grep -q "\bbreaking\b"; then
@@ -56,5 +66,11 @@ jobs:
             if echo "$PR_LABELS" | grep -qE "\b($NOT_ALLOWED_LABELS)\b"; then
               echo "Combination of 'feature' with '$NOT_ALLOWED_LABELS' is not allowed."
               exit 1
+            fi
+          # documentation
+          elif echo "$PR_LABELS" | grep -q "\bdocumentation\b"; then
+            if [ "$LABEL_COUNT" -gt 1 ]; then 
+              echo "documentation, is only allowed as a label, if its the only thing the pull request adds."
+              exit 1; 
             fi
           fi
