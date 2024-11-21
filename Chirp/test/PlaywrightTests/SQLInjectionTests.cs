@@ -11,29 +11,12 @@ public class SQLInjectionTests : PageTestWithRazorPlaywrightWebApplicationFactor
     [Test]
     public async Task SQLInjectionInCheepTextBox()
     {
-        var user = TestUtils.CreateTestAuthor("Mr. test");
-        var password = "Password123!";
-        
-        //act
-        await Page.GotoAsync("/");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName!);
-        await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email!);
-        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
-        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
-        await Page.GetByLabel("Confirm Password").ClickAsync();
-        await Page.GetByLabel("Confirm Password").FillAsync(password);
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync(); 
-        
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
-        await Page.GetByPlaceholder("Username").ClickAsync();
-        await Page.GetByPlaceholder("Username").FillAsync(user.UserName!);
-        await Page.GetByPlaceholder("password").ClickAsync();
-        await Page.GetByPlaceholder("password").FillAsync(password);
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        //arrange
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .Create(RazorFactory.GetDbContext());
+       
+        await RazorPageUtils.Login(testAuthor);
         
         await Page.Locator("#Message").ClickAsync();
         await Page.Locator("#Message").FillAsync("105; DROP TABLE Cheeps;");
