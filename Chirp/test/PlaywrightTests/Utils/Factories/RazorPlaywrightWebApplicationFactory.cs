@@ -1,10 +1,12 @@
 using Chirp.Infrastructure;
+using Chirp.Infrastructure.Model;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TestUtilities;
 
-namespace PlaywrightTests.Utils;
+namespace PlaywrightTests.Utils.Factories;
 
 //Adapted from microsofts test guide, for clarification:
 //https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0#customize-webapplicationfactory
@@ -12,7 +14,7 @@ namespace PlaywrightTests.Utils;
 //https://medium.com/younited-tech-blog/end-to-end-test-a-blazor-app-with-playwright-part-3-48c0edeff4b6
 //The db connection string "DataSource=file::memory:?cache=shared" is used to create an in-memory database
 //that is shared between the test host and the Kestrel host.
-public class RazorPlaywrightWebApplicationFactory(string baseUrl) 
+public class RazorPlaywrightWebApplicationFactory(string baseUrl)
     : InMemoryCostumeWebApplicationFactory("DataSource=file::memory:?cache=shared")
 {
     protected override IHost CreateHost(IHostBuilder builder)
@@ -23,7 +25,7 @@ public class RazorPlaywrightWebApplicationFactory(string baseUrl)
 
         return CreateHostUsingKestrel.CreateHost(builder, testHost, baseUrl);
     }
-    
+
     //This is overriding the default ResetDB method from InMemoryCostumeWebApplicationFactory
     //because when the db is shared between the test host and the Kestrel host
     //using ensure deleted, wont clear the database properly.
@@ -53,5 +55,11 @@ public class RazorPlaywrightWebApplicationFactory(string baseUrl)
 
             context.SaveChanges();
         }
+    }
+
+    public UserManager<Author> GetUserManager()
+    {
+        var scope = Services.CreateScope();
+        return scope.ServiceProvider.GetRequiredService<UserManager<Author>>();
     }
 }

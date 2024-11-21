@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Hosting;
 using TestUtilities;
 
-namespace PlaywrightTests.Utils;
+namespace PlaywrightTests.Utils.Factories;
 
 public class DuendePlaywrightWebAppFactory(string baseUrl) : DuendeWebAppFactory()
 {

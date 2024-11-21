@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using Chirp.Infrastructure.Model;
 using Microsoft.Playwright;
 using PlaywrightTests.Utils;
+using PlaywrightTests.Utils.PageTests;
 using TestUtilities;
 
 namespace PlaywrightTests;
@@ -71,44 +72,26 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     public async Task PaginationOfUserTimeline(string expectedEndpoint, string page)
     {
         //arrange
-        var context = razorFactory.GetDbContext();
-        Author testAuthor = TestUtils.CreateTestAuthor("test");
-        context.Authors.Add(testAuthor);
-        await context.SaveChangesAsync();
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .WithUsername("Mr.test")
+            .Create();
         
         //act
         await Page.GotoAsync($"/{testAuthor.UserName!.ToLower()}?page={page}");
 
         //assert
-        await Expect(Page).ToHaveURLAsync($"{RazorBaseUrl}/{testAuthor.UserName}{expectedEndpoint}");
+        await Expect(Page).ToHaveURLAsync($"{RazorBaseUrl}/{testAuthor.UserName.ToLower()}{expectedEndpoint}");
     }
 
     [Test]
     public async Task CanSeeAboutMeLinkWhenRegistered()
     {
-        var user = TestUtils.CreateTestAuthor("Mr. test");
-        var password = "Password123!";
-
-        await Page.GotoAsync("/");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName!);
-        await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email!);
-        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
-        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
-        await Page.GetByLabel("Confirm Password").ClickAsync();
-        await Page.GetByLabel("Confirm Password").FillAsync(password);
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
-        await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
-
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
-        await Page.GetByPlaceholder("Username").ClickAsync();
-        await Page.GetByPlaceholder("Username").FillAsync(user.UserName!);
-        await Page.GetByPlaceholder("password").ClickAsync();
-        await Page.GetByPlaceholder("password").FillAsync(password);
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .Create();
+        
+        await RazorPageUtils.Login(testAuthor);
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "About Me" })).ToBeVisibleAsync();
         
     }
@@ -123,32 +106,15 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task AboutMePageShowsUserInfo()
     {
-        var user = TestUtils.CreateTestAuthor("Mr. test");
-        var password = "Password123!";
-
-        await Page.GotoAsync("/");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName!);
-        await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email!);
-        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
-        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
-        await Page.GetByLabel("Confirm Password").ClickAsync();
-        await Page.GetByLabel("Confirm Password").FillAsync(password);
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
-        await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
-
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
-        await Page.GetByPlaceholder("Username").ClickAsync();
-        await Page.GetByPlaceholder("Username").FillAsync(user.UserName!);
-        await Page.GetByPlaceholder("password").ClickAsync();
-        await Page.GetByPlaceholder("password").FillAsync(password);
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .Create();
+        
+        await RazorPageUtils.Login(testAuthor);
+        
         await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Name: Mr. test" })).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Email: Mr.test@test.test" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"Name: {testAuthor.UserName}" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"Email: {testAuthor.Email}" })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "You have Cheep'd: 0 times" })).ToBeVisibleAsync();
     }
 
@@ -156,21 +122,10 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     public async Task SeeCorrectNumberOfCheepsOnPublicTimeline()
     {
         //arrange
-        var context = razorFactory.GetDbContext();
-        Author testAuthor = TestUtils.CreateTestAuthor("Mr. test");
-        context.Authors.Add(testAuthor);
-
-        for (var i = 0; i < 33; i++)
-        {
-            context.Cheeps.Add(new Cheep()
-            {
-                Author = testAuthor,
-                Message = "test",
-                TimeStamp = DateTime.Now.AddHours(i),
-            });
-        }
-
-        await context.SaveChangesAsync();
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .Create();
+        await GenerateCheeps(testAuthor.author, 33);
 
         //act
         await Page.GotoAsync("/");
@@ -185,37 +140,16 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     public async Task SeeCorrectNumberOfCheepsOnPrivateTimeline()
     {
         #region Arrange
-
-        var context = razorFactory.GetDbContext();
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-        Author realTestAuthor = TestUtils.CreateTestAuthor("Mr. test");
-        Author fakeTestAuthor = TestUtils.CreateTestAuthor("Mr. fake");
-
-        context.Authors.Add(realTestAuthor);
-        context.Authors.Add(fakeTestAuthor);
-
-        for (var i = 0; i < 33; i++)
-        {
-            context.Cheeps.Add(new Cheep()
-            {
-                Author = realTestAuthor,
-                Message = "real test",
-                TimeStamp = DateTime.Now.AddHours(i),
-            });
-        }
-
-        for (var i = 0; i < 33; i++)
-        {
-            context.Cheeps.Add(new Cheep()
-            {
-                Author = fakeTestAuthor,
-                Message = "fake test",
-                TimeStamp = DateTime.Now.AddHours(i),
-            });
-        }
-
-        await context.SaveChangesAsync();
+        var realTestAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .WithUsername("Mr. real")
+            .Create();
+        var fakeTestAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .WithUsername("Mr. fake")
+            .Create();
+        await GenerateCheeps(realTestAuthor.author, 33);
+        await GenerateCheeps(fakeTestAuthor.author, 33);
 
         #endregion
 
@@ -240,31 +174,13 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task CheepBoxVisibleWhileLoggedIn()
     {
-        var user = TestUtils.CreateTestAuthor("Mr. test");
-        var password = "Password123!";
-
-        await Page.GotoAsync("/");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(user.UserName!);
-        await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync(user.Email!);
-        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
-        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
-        await Page.GetByLabel("Confirm Password").ClickAsync();
-        await Page.GetByLabel("Confirm Password").FillAsync(password);
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
-        await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
-
-        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
-        await Page.GetByPlaceholder("Username").ClickAsync();
-        await Page.GetByPlaceholder("Username").FillAsync(user.UserName!);
-        await Page.GetByPlaceholder("password").ClickAsync();
-        await Page.GetByPlaceholder("password").FillAsync(password);
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"What's on your mind {user.UserName}?" }))
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .Create();
+        
+        await RazorPageUtils.Login(testAuthor);
+        
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"What's on your mind {testAuthor.UserName}?" }))
             .ToBeVisibleAsync();
         await Expect(Page.Locator("#Message")).ToBeVisibleAsync();
     }
@@ -273,21 +189,11 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     public async Task PageButtons_FirstMiddleEndPages()
     {
         //arrange
-        var context = razorFactory.GetDbContext();
-        Author testAuthor = TestUtils.CreateTestAuthor("Mr. test");
-        context.Authors.Add(testAuthor);
-
-        for (var i = 0; i < 65; i++)
-        {
-            context.Cheeps.Add(new Cheep()
-            {
-                Author = testAuthor,
-                Message = "test",
-                TimeStamp = DateTime.Now.AddHours(i),
-            });
-        }
-
-        await context.SaveChangesAsync();
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .Create();
+        await GenerateCheeps(testAuthor.author, 65);
+        
         //first
         await Page.GotoAsync("/");
         await Expect(Page.Locator("body")).ToContainTextAsync("1 Next");
@@ -303,32 +209,25 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     public async Task ThePrivateTimeLineIsCaseInSensitive()
     {
         #region Arrange
-
-        var context = razorFactory.GetDbContext();
-        var author = TestUtils.CreateTestAuthor("MR. tESt");
-        context.Authors.Add(author);
-
-        var cheep = new Cheep
-        {
-            Author = author,
-            Message = "test",
-            TimeStamp = DateTime.Now
-        };
-        context.Cheeps.Add(cheep);
-        await context.SaveChangesAsync();
-
+        
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .WithUsername("MR. tESt")
+            .Create();
+        var cheep = await GenerateCheep(testAuthor.author);
+        
         #endregion
 
         //act
-        await Page.GotoAsync($"/{author.UserName!.ToUpper()}");
+        await Page.GotoAsync($"/{testAuthor.UserName!.ToUpper()}");
         await Expect(Page.Locator("#messagelist"))
             .ToContainTextAsync(cheep.Message);
         
-        await Page.GotoAsync($"/{author.UserName.ToLower()}");
+        await Page.GotoAsync($"/{testAuthor.UserName.ToLower()}");
         await Expect(Page.Locator("#messagelist"))
             .ToContainTextAsync(cheep.Message);
         
-        await Page.GotoAsync($"/{author.UserName}");
+        await Page.GotoAsync($"/{testAuthor.UserName}");
         await Expect(Page.Locator("#messagelist"))
             .ToContainTextAsync(cheep.Message);
     }
