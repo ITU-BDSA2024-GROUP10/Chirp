@@ -50,6 +50,22 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     }
 
     [Test]
+    public async Task CantSeeFollowButtonWhenNotLoggedIn()
+    {
+        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
+        await Expect(followButton).ToBeHiddenAsync();
+    }
+
+    [Test]
+    public async Task CanSeeFollowButtonWhenLoggedIn()
+    {
+        await RazorPageUtils.Login(_testFollower);
+        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
+        await Expect(followButton).ToBeVisibleAsync();
+    }
+        
+    
+    [Test]
     public async Task UserCanFollowAuthor()
     {
         await RazorPageUtils.Login(_testFollower);
