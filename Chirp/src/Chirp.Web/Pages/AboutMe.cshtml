@@ -24,6 +24,9 @@
     {
         <h4>You have Cheep'd: @Model.Cheeps.Count times</h4>
     }
+    <form method="post" asp-page="/AboutMe">
+        <button type="submit" name="button">Forget Me</button> 
+    </form>
     
     
     @await Component.InvokeAsync("CheepList", new {cheeps = Model.Cheeps, targetPage = "/AboutMe"})
