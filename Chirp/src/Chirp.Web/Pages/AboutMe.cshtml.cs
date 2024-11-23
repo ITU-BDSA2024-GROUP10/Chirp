@@ -2,7 +2,10 @@ using Chirp.Core;
 using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Chirp.Web.Pages;
 
@@ -14,5 +17,11 @@ public class AboutMe(IAuthorRepository authorRepository, ICheepRepository cheepR
     {
         Author = await authorRepository.GetAuthorByName(User.Identity!.Name!);
         Cheeps = (await cheepRepository.GetCheepsFromAuthor(Author!.Name)).ToList();
+    }
+
+    public ActionResult OnPost()
+    {
+        Console.WriteLine($"Button clicked with value");
+        return LocalRedirect("/");
     }
 }
