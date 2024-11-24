@@ -232,7 +232,40 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
         Assert.Equal(following.UserName, authorsFollowing[0].UserName);
         
     }
-
+    
+    [Fact]
+    public async Task Follow_MultipelAuthorsFollowTheSameAuthor_ReturnsTrue()
+    {
+        //Arrange
+        var context = fixture.GetContext();
+        var authorRepo = new AuthorRepository(context);
+        
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var following = TestUtils.CreateTestAuthor("mr. follow");
+        var following2 = TestUtils.CreateTestAuthor("mr. follow2");
+        
+        context.Authors.Add(following);
+        context.Authors.Add(following2);
+        context.Authors.Add(author);
+        
+        await context.SaveChangesAsync();
+        
+        //Act
+        var result = await authorRepo.Follow(following.UserName!, author.UserName!);
+        var result2 = await authorRepo.Follow(following2.UserName!, author.UserName!);
+        var authorsFollowers = context.Authors
+            .Where(a => a.NormalizedUserName == author.NormalizedUserName)
+            .SelectMany(a => a.Followers).ToList();
+        
+        //Assert
+        Assert.True(result);
+        Assert.True(result2);
+        Assert.NotEmpty(authorsFollowers);
+        Assert.Equal(2, authorsFollowers.Count);
+        Assert.Contains(authorsFollowers, a => a.UserName == following.UserName);
+        Assert.Contains(authorsFollowers, a => a.UserName == following2.UserName);
+    }
+    
     #endregion
 
     #region UnFollow tests
