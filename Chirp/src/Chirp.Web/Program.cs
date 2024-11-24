@@ -30,7 +30,8 @@ builder.Services.AddDefaultIdentity<Author>(options =>
         options.SignIn.RequireConfirmedAccount = true;
         options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._ ";
     })
-    .AddEntityFrameworkStores<ChirpDBContext>();
+    .AddEntityFrameworkStores<ChirpDBContext>()
+    .AddDefaultTokenProviders();;
 
 // Add authentication service
 builder.Services.AddAuthentication( /*options =>
