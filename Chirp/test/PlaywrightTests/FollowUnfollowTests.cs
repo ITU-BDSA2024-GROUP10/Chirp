@@ -113,6 +113,20 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     [Test]
     public async Task ForgetMeLogsOutUserAndRemovesData()
     {
+        await GenerateCheep(_testAuthor.author, "this is author");
+        await GenerateCheep(_testFollower.author, "this is follower");
+        await RazorPageUtils.Login(_testFollower);
+        await GoToPublicTimeline();
+        await FollowAuthor("author follow test");
+        await RazorPageUtils.Logout(_testFollower.UserName!);
+        await Page.GotoAsync("/");
+        await RazorPageUtils.Login(_testAuthor);
+        await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me" }).ClickAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = "this is author" })).ToBeHiddenAsync();
+        Assert.That(_testFollower.Follows.IsNullOrEmpty());
+
+
     }
 
     [Test]
