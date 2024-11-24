@@ -165,10 +165,18 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task CheepBoxNotVisibleWhileLoggedOut()
     {
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .Create();
+        
         await Page.GotoAsync("/");
 
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Log in to post Cheeps!" }))
             .ToBeVisibleAsync();
+        
+        await Page.GotoAsync($"/{testAuthor.UserName}");
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Log in to post Cheeps!" }))
+            .Not.ToBeVisibleAsync();
     }
 
     [Test]
@@ -183,6 +191,13 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"What's on your mind {testAuthor.UserName}?" }))
             .ToBeVisibleAsync();
         await Expect(Page.Locator("#Message")).ToBeVisibleAsync();
+
+        await Page.GotoAsync($"/{testAuthor.UserName}");
+        
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"What's on your mind {testAuthor.UserName}?" }))
+            .ToBeVisibleAsync();
+        await Expect(Page.Locator("#Message")).ToBeVisibleAsync();
+    }
     }
 
     [Test]
