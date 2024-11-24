@@ -14,7 +14,7 @@
 </head>
 <body>
 <div>
-    <h2>Name: @Model.Author!.Name</h2>
+    <h2>Name: @Model.Author!.UserName</h2>
     <h3>Email: @Model.Author.Email</h3>
     @if (Model.Cheeps.Count == 1)
     {
@@ -24,7 +24,7 @@
     {
         <h4>You have Cheep'd: @Model.Cheeps.Count times</h4>
     }
-    <form method="post" asp-page="/AboutMe">
+    <form method="post" asp-page="/AboutMe" >
         <button type="submit" name="button">Forget Me</button> 
     </form>
     

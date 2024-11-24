@@ -11,12 +11,12 @@ namespace Chirp.Web.Pages;
 
 public class AboutMe(IAuthorRepository authorRepository, ICheepRepository cheepRepository) : PageModel
 {
-    public AuthorDTO? Author { get; set; }
+    public Author Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; } = [];
     public async void OnGet()
     {
-        Author = await authorRepository.GetAuthorByName(User.Identity!.Name!);
         Cheeps = (await cheepRepository.GetCheepsFromAuthor(Author!.Name)).ToList();
+        Author = await userManager.FindByNameAsync(User.Identity!.Name!);
     }
 
     public ActionResult OnPost()
