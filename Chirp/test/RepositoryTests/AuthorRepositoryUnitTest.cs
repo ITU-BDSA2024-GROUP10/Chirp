@@ -113,7 +113,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
         var following = TestUtils.CreateTestAuthor("mr. follow");
         var notFollowing = TestUtils.CreateTestAuthor("mr. not follow");
         
-        author.Follows.Add(following);
+        author.Following.Add(following);
 
         context.Authors.Add(notFollowing);
         context.Authors.Add(following);
@@ -190,7 +190,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
         
         var author = TestUtils.CreateTestAuthor("mr. test");
         var following = TestUtils.CreateTestAuthor("mr. follow");
-        author.Follows.Add(following);
+        author.Following.Add(following);
         
         context.Authors.Add(following);
         context.Authors.Add(author);
@@ -223,7 +223,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
         var result = await authorRepo.Follow(author.UserName!, following.UserName!);
         var authorsFollowing = context.Authors
             .Where(a => a.NormalizedUserName == author.NormalizedUserName)
-            .SelectMany(a => a.Follows).ToList();
+            .SelectMany(a => a.Following).ToList();
         
         //Assert
         Assert.True(result);
@@ -313,7 +313,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
         
         var author = TestUtils.CreateTestAuthor("mr. test");
         var following = TestUtils.CreateTestAuthor("mr. follow");
-        author.Follows.Add(following);
+        author.Following.Add(following);
         
         context.Authors.Add(following);
         context.Authors.Add(author);
@@ -324,7 +324,7 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
         var result = await authorRepo.UnFollow(author.UserName!, following.UserName!);
         var authorsFollowing = context.Authors
             .Where(a => a.NormalizedUserName == author.NormalizedUserName)
-            .SelectMany(a => a.Follows).ToList();
+            .SelectMany(a => a.Following).ToList();
         
         //Assert
         Assert.True(result);

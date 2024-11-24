@@ -44,7 +44,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         if (await DoesFollow(currentUser, userToFollow)) return false;
         
         var authorToFollow = await GetAuthor(userToFollow);
-        GetAuthor(currentUser).Result.Follows.Add(authorToFollow);
+        GetAuthor(currentUser).Result.Following.Add(authorToFollow);
         
         await context.SaveChangesAsync();
         return true;
@@ -60,7 +60,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         if (!await DoesFollow(currentUser, userToUnfollow)) return false;
         
         var authorToUnfollow = await GetAuthor(userToUnfollow);
-        GetAuthor(currentUser).Result.Follows.Remove(authorToUnfollow);
+        GetAuthor(currentUser).Result.Following.Remove(authorToUnfollow);
         
         await context.SaveChangesAsync();
         return true;
@@ -86,7 +86,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         userToFollow = userToFollow.ToUpper();
          var list = await context.Authors
                 .Where(a => a.NormalizedUserName == currentUser)
-                .Select(a => a.Follows).FirstOrDefaultAsync();
+                .Select(a => a.Following).FirstOrDefaultAsync();
          
          return list != null && list.Any(a => a.NormalizedUserName == userToFollow);
     }
@@ -96,6 +96,6 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         currentUser = currentUser.ToUpper();
         return await context.Authors
             .Where(a => a.NormalizedUserName == currentUser)
-            .Select(a => a.Follows).FirstOrDefaultAsync() ?? new List<Author>();
+            .Select(a => a.Following).FirstOrDefaultAsync() ?? new List<Author>();
     }
 }

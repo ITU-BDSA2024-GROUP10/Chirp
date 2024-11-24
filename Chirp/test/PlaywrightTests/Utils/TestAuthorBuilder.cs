@@ -15,7 +15,7 @@ public class TestAuthor
 
     public string? UserName => author.UserName;
     public string? Email => author.Email;
-    public List<Author> Follows => author.Follows;
+    public List<Author> Follows => author.Following;
 }
 
 public class TestAuthorBuilder
@@ -76,13 +76,13 @@ public class TestAuthorBuilder
 
     public TestAuthorBuilder WithFollows(Author author)
     {
-        _testAuthor.author.Follows.Add(author);
+        _testAuthor.author.Following.Add(author);
         return this;
     }
 
     public TestAuthorBuilder WithFollows(IEnumerable<Author> authors)
     {
-        _testAuthor.author.Follows.AddRange(authors);
+        _testAuthor.author.Following.AddRange(authors);
         return this;
     }
 }
