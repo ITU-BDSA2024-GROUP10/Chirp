@@ -60,7 +60,10 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         if (!await DoesFollow(currentUser, userToUnfollow)) return false;
         
         var authorToUnfollow = await GetAuthor(userToUnfollow);
-        GetAuthor(currentUser).Result.Following.Remove(authorToUnfollow);
+        context.Authors
+            .Where(a => a.NormalizedUserName == currentUser)
+            .Include(a => a.Following)
+            .FirstOrDefault()!.Following.Remove(authorToUnfollow);
         
         await context.SaveChangesAsync();
         return true;
