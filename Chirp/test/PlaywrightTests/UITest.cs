@@ -198,6 +198,24 @@ public class UITest : PageTestWithRazorPlaywrightWebApplicationFactory
             .ToBeVisibleAsync();
         await Expect(Page.Locator("#Message")).ToBeVisibleAsync();
     }
+    
+    [Test]
+    public async Task CheepBoxNotVisibelOnOtherAuthorsTimeline()
+    {
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .Create();
+        var otherAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .WithUsername("Mr. other")
+            .Create();
+        
+        await RazorPageUtils.Login(testAuthor);
+        await Page.GotoAsync($"/{otherAuthor.UserName}");
+        
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"What's on your mind {testAuthor.UserName}?" }))
+            .Not.ToBeVisibleAsync();
+        await Expect(Page.Locator("#Message")).Not.ToBeVisibleAsync();
     }
 
     [Test]
