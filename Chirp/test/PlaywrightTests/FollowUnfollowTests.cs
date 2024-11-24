@@ -1,3 +1,4 @@
+using Duende.IdentityServer.Extensions;
 using Microsoft.Playwright;
 using NUnit.Framework.Internal;
 using PlaywrightTests.Utils;
