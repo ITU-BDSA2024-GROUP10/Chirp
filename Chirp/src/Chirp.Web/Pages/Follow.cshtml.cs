@@ -14,8 +14,9 @@ public class Follow(IAuthorService authorService) : PageModel
         }
         else
         {
-            authorService.Unfollow(User.Identity!.Name!,followName);
+            authorService.Unfollow(User.Identity!.Name!, followName);
         }
+
         return LocalRedirect(returnUrl);
     }
 }
