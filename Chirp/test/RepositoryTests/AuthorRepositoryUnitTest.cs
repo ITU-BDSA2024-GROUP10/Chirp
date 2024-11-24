@@ -3,6 +3,7 @@ using Chirp.Core.CustomException;
 using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
+using Duende.IdentityServer.Extensions;
 using RepositoryTests.Utils;
 using TestUtilities;
 
@@ -313,6 +314,11 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
         
         //Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => authorRepo.UnFollow(author.UserName!, author.UserName!));
+    }
+
+    [Fact]
+    public async Task MakeFollowersUnfollow_RemovesFollowers_ReturnsTrue()
+    {
     }
 
     [Fact]
