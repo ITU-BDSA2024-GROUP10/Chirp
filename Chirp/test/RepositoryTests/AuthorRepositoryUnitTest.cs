@@ -319,6 +319,23 @@ public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
     [Fact]
     public async Task MakeFollowersUnfollow_RemovesFollowers_ReturnsTrue()
     {
+        var context = fixture.GetContext();
+        var authorRepo = new AuthorRepository(context);
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var following = TestUtils.CreateTestAuthor("mr. follow");
+        
+        following.Following.Add(author);
+        context.Authors.Add(following);
+        context.Authors.Add(author);
+        
+        await context.SaveChangesAsync();
+        
+        var result = await authorRepo.MakeFollowersUnfollow(author.UserName!);
+        
+        Assert.True(following.Following.IsNullOrEmpty());
+        
+        Assert.True(result);
+        
     }
 
     [Fact]
