@@ -9,7 +9,7 @@
 <div>
     <h2> @Model.NormalizeForDisplay(routeName?.ToString() ?? throw new InvalidOperationException())'s Timeline </h2>
 
-    @if (User.Identity is { IsAuthenticated: true } && User.Identity.Name == (string?)routeName)
+    @if (User.Identity is { IsAuthenticated: true } && string.Equals(User.Identity.Name, routeName.ToString(), StringComparison.CurrentCultureIgnoreCase))
     {
         @await Component.InvokeAsync("SubmitCheep", new { Model.MessageModel, targetPage = $"/{routeName}" })
     }
