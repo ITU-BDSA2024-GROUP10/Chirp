@@ -3,6 +3,7 @@ using Chirp.Core.CustomException;
 using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
+using Duende.IdentityServer.Extensions;
 using RepositoryTests.Utils;
 using TestUtilities;
 
@@ -108,7 +109,7 @@ public class AuthorRepositoryUnitTest
         var following = TestUtils.CreateTestAuthor("mr. follow");
         var notFollowing = TestUtils.CreateTestAuthor("mr. not follow");
         
-        author.Follows.Add(following);
+        author.Following.Add(following);
 
         Context.Authors.Add(notFollowing);
         Context.Authors.Add(following);
@@ -173,7 +174,7 @@ public class AuthorRepositoryUnitTest
         //Arrange
         var author = TestUtils.CreateTestAuthor("mr. test");
         var following = TestUtils.CreateTestAuthor("mr. follow");
-        author.Follows.Add(following);
+        author.Following.Add(following);
         
         Context.Authors.Add(following);
         Context.Authors.Add(author);
@@ -203,7 +204,7 @@ public class AuthorRepositoryUnitTest
         var result = await AuthorRepository.Follow(author.UserName!, following.UserName!);
         var authorsFollowing = Context.Authors
             .Where(a => a.NormalizedUserName == author.NormalizedUserName)
-            .SelectMany(a => a.Follows).ToList();
+            .SelectMany(a => a.Following).ToList();
         
         //Assert
         Assert.True(result);
@@ -212,7 +213,40 @@ public class AuthorRepositoryUnitTest
         Assert.Equal(following.UserName, authorsFollowing[0].UserName);
         
     }
-
+    
+    [Fact]
+    public async Task Follow_MultipelAuthorsFollowTheSameAuthor_ReturnsTrue()
+    {
+        //Arrange
+        var context = fixture.GetContext();
+        var authorRepo = new AuthorRepository(context);
+        
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var following = TestUtils.CreateTestAuthor("mr. follow");
+        var following2 = TestUtils.CreateTestAuthor("mr. follow2");
+        
+        context.Authors.Add(following);
+        context.Authors.Add(following2);
+        context.Authors.Add(author);
+        
+        await context.SaveChangesAsync();
+        
+        //Act
+        var result = await authorRepo.Follow(following.UserName!, author.UserName!);
+        var result2 = await authorRepo.Follow(following2.UserName!, author.UserName!);
+        var authorsFollowers = context.Authors
+            .Where(a => a.NormalizedUserName == author.NormalizedUserName)
+            .SelectMany(a => a.Followers).ToList();
+        
+        //Assert
+        Assert.True(result);
+        Assert.True(result2);
+        Assert.NotEmpty(authorsFollowers);
+        Assert.Equal(2, authorsFollowers.Count);
+        Assert.Contains(authorsFollowers, a => a.UserName == following.UserName);
+        Assert.Contains(authorsFollowers, a => a.UserName == following2.UserName);
+    }
+    
     #endregion
 
     #region UnFollow tests
@@ -254,6 +288,28 @@ public class AuthorRepositoryUnitTest
     }
 
     [Fact]
+    public async Task MakeFollowersUnfollow_RemovesFollowers_ReturnsTrue()
+    {
+        var context = fixture.GetContext();
+        var authorRepo = new AuthorRepository(context);
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var following = TestUtils.CreateTestAuthor("mr. follow");
+        
+        following.Following.Add(author);
+        context.Authors.Add(following);
+        context.Authors.Add(author);
+        
+        await context.SaveChangesAsync();
+        
+        var result = await authorRepo.MakeFollowersUnfollow(author.UserName!);
+        
+        Assert.True(following.Following.IsNullOrEmpty());
+        
+        Assert.True(result);
+        
+    }
+
+    [Fact]
     public async Task UnFollow_UserToUnfollowIsNotFollowed_ReturnsFalse()
     {
         //Arrange
@@ -278,7 +334,7 @@ public class AuthorRepositoryUnitTest
         //Arrange
         var author = TestUtils.CreateTestAuthor("mr. test");
         var following = TestUtils.CreateTestAuthor("mr. follow");
-        author.Follows.Add(following);
+        author.Following.Add(following);
         
         Context.Authors.Add(following);
         Context.Authors.Add(author);
@@ -289,7 +345,7 @@ public class AuthorRepositoryUnitTest
         var result = await AuthorRepository.UnFollow(author.UserName!, following.UserName!);
         var authorsFollowing = Context.Authors
             .Where(a => a.NormalizedUserName == author.NormalizedUserName)
-            .SelectMany(a => a.Follows).ToList();
+            .SelectMany(a => a.Following).ToList();
         
         //Assert
         Assert.True(result);

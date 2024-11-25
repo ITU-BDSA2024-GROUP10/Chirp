@@ -1,3 +1,4 @@
+using Duende.IdentityServer.Extensions;
 using Microsoft.Playwright;
 using NUnit.Framework.Internal;
 using PlaywrightTests.Utils;
@@ -109,6 +110,25 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await GoToPrivateTimeline();
         await Expect(Page.Locator("li").Filter(new() { HasText = "author2 follow this is author2's cheep" })).ToBeHiddenAsync();
         await Expect(Page.Locator("li").Filter(new() { HasText = "author unfollow test" })).ToBeVisibleAsync();
+    }
+    [Test]
+    public async Task ForgetMeLogsOutUserAndRemovesData()
+    {
+        await GenerateCheep(_testAuthor.author, "this is author");
+        await GenerateCheep(_testFollower.author, "this is follower");
+        await RazorPageUtils.Login(_testFollower);
+        await GoToPublicTimeline();
+        await FollowAuthor("author follow test");
+        await RazorPageUtils.Logout(_testFollower.UserName!);
+        await Page.GotoAsync("/");
+        await RazorPageUtils.Login(_testAuthor);
+        await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Yes, Delete" }).ClickAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = "this is author" })).ToBeHiddenAsync();
+        Assert.That(_testFollower.Follows.IsNullOrEmpty());
+
+
     }
 
     [Test]

@@ -46,6 +46,9 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
             entity.HasIndex(a => a.UserName)
                 .IsUnique();
             entity.HasIndex(a => a.Email);
+
+            entity.HasMany(a => a.Following)
+                .WithMany(a => a.Followers);
         });
 
         
