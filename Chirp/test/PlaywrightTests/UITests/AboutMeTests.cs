@@ -40,4 +40,19 @@ public class AboutMeTests : PageTestWithRazorPlaywrightWebApplicationFactory
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"Email: {testAuthor.Email}" })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "You have Cheep'd: 0 times" })).ToBeVisibleAsync();
     }
+    
+    [Test]
+    public async Task ConfirmationPopupAppearsAndDisappears()
+    {
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .Create();
+        await RazorPageUtils.Login(testAuthor);
+        await Page.GotoAsync($"/AboutMe");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me" }).ClickAsync();
+        await Expect(Page.GetByText("Are you sure you want to delete your account? This action cannot be undone.")).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Cancel" }).ClickAsync();
+        await Expect(Page.GetByText("Are you sure you want to delete your account? This action cannot be undone.")).ToBeHiddenAsync();
+        
+    }
 }
