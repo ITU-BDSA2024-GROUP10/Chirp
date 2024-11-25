@@ -128,8 +128,6 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await Page.GetByRole(AriaRole.Button, new() { Name = "Yes, Delete" }).ClickAsync();
         await Expect(Page.Locator("li").Filter(new() { HasText = "this is author" })).ToBeHiddenAsync();
         Assert.That(_testFollower.Follows.IsNullOrEmpty());
-
-
     }
 
     [Test]
@@ -156,21 +154,32 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
 
     [Test]
     public async Task FollowUnfollowMaintainsScrollPosition()
-    {   
+    {
         // generate more cheeps such that scrolling is possible
         int cheepAmount = 20;
-        for (int i = 0; i < cheepAmount; i++) await GenerateCheep(_testAuthor.author);
+        for (int i = 0; i < cheepAmount; i++) 
+            await GenerateCheep(_testAuthor.author);
 
         await RazorPageUtils.Login(_testFollower);
         await GoToPublicTimeline();
-        await Page.EvaluateAsync("() => window.scrollTo(0, 500)");
-        var initialScrollPosition = await Page.EvaluateAsync<int>("() => window.scrollY");
-        await FollowAuthor("author follow test");
 
-        // assert scroll position unchanged
+        // scroll down to the 17th cheep
+        await Page.Locator("li").Nth(17).ScrollIntoViewIfNeededAsync();
+        var initialScrollPosition = await Page.EvaluateAsync<int>("() => window.scrollY");
+
+        // follow the 17th author
+        var followButton = Page.Locator("li").Nth(10).Locator("button", new() { HasText = "follow" });
+        await followButton.ClickAsync();
+
+        // sssert position is unchanged
         var scrollPositionAfterFollow = await Page.EvaluateAsync<int>("() => window.scrollY");
         Assert.That(scrollPositionAfterFollow, Is.EqualTo(initialScrollPosition));
-        await UnfollowAuthor("author unfollow test");
+
+        // unfollow
+        var unfollowButton = Page.Locator("li").Nth(10).Locator("button", new() { HasText = "unfollow" });
+        await unfollowButton.ClickAsync();
+
+        // sssert position is unchanged
         var scrollPositionAfterUnfollow = await Page.EvaluateAsync<int>("() => window.scrollY");
         Assert.That(scrollPositionAfterUnfollow, Is.EqualTo(initialScrollPosition));
     }
