@@ -85,6 +85,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await FollowAuthor("author follow test");
         await GoToPrivateTimeline();
         await UnfollowAuthor("author unfollow test");
+        await Page.ReloadAsync();
         await Expect(Page.GetByText("There are no cheeps so far.")).ToBeVisibleAsync();
     }
 
