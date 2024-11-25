@@ -124,6 +124,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await RazorPageUtils.Login(_testAuthor);
         await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Yes, Delete" }).ClickAsync();
         await Expect(Page.Locator("li").Filter(new() { HasText = "this is author" })).ToBeHiddenAsync();
         Assert.That(_testFollower.Follows.IsNullOrEmpty());
 
