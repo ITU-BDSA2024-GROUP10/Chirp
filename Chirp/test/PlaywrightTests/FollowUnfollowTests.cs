@@ -163,25 +163,25 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await RazorPageUtils.Login(_testFollower);
         await GoToPublicTimeline();
 
-        // scroll down to the 17th cheep
-        await Page.Locator("li").Nth(17).ScrollIntoViewIfNeededAsync();
+        // scroll down by 1 pixel
+        await Page.EvaluateAsync("() => window.scrollTo(0, 1)");
         var initialScrollPosition = await Page.EvaluateAsync<int>("() => window.scrollY");
 
-        // follow the 17th author
-        var followButton = Page.Locator("li").Nth(10).Locator("button", new() { HasText = "follow" });
+        // follow first button
+        var followButton = Page.Locator("li").Nth(1).Locator("button", new() { HasText = "follow" });
         await followButton.ClickAsync();
 
         // sssert position is unchanged
         var scrollPositionAfterFollow = await Page.EvaluateAsync<int>("() => window.scrollY");
-        Assert.That(scrollPositionAfterFollow, Is.EqualTo(initialScrollPosition));
+        Assert.That(scrollPositionAfterFollow, Is.EqualTo(initialScrollPosition), "Scroll position changed after follow action.");
 
-        // unfollow
-        var unfollowButton = Page.Locator("li").Nth(10).Locator("button", new() { HasText = "unfollow" });
+        // unfollow 1st button
+        var unfollowButton = Page.Locator("li").Nth(1).Locator("button", new() { HasText = "unfollow" });
         await unfollowButton.ClickAsync();
 
-        // sssert position is unchanged
+        // assert position is unchanged
         var scrollPositionAfterUnfollow = await Page.EvaluateAsync<int>("() => window.scrollY");
-        Assert.That(scrollPositionAfterUnfollow, Is.EqualTo(initialScrollPosition));
+        Assert.That(scrollPositionAfterUnfollow, Is.EqualTo(initialScrollPosition), "Scroll position changed after unfollow action.");
     }
 
     [Test]
