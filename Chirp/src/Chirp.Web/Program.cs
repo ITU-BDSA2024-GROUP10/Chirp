@@ -82,6 +82,7 @@ if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("te
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddAntiforgery(); // anti forgery for follow updates
 builder.Services.AddScoped<ICheepService, CheepService>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();

@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<Author> SignInManager
 @inject UserManager<Author> UserManager
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <!DOCTYPE html>
 <html lang="en">
@@ -9,6 +10,7 @@
     <title>@ViewData["Title"]</title>
     <link href="/css/style.css" rel="stylesheet" type="text/css"/>
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
+    <meta name="csrf-token" content="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
 </head>
 <body>
 <div class=page>
@@ -23,6 +25,7 @@
     </div>
 </div>
 
-</body>
+<script src="/js/follow.js"></script>
 @await RenderSectionAsync("Scripts", required: false)
+</body>
 </html>
