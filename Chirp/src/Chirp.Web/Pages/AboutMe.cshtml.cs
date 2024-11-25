@@ -27,7 +27,13 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
         ShowPopup = true;
         return Page(); 
     }
-    public async Task<ActionResult> OnPost()
+
+    public IActionResult OnPostCancelPopup()
+    {
+        ShowPopup = false;
+        return Page();
+    }
+    
     {
         await SignOutAndDeleteUser();
         return Redirect("/");
