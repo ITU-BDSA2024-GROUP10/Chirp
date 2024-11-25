@@ -15,25 +15,11 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
 {
     public Author? Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; } = [];
-    public bool ShowPopup { get; set; }
     public async void OnGet()
     {
         Author = await userManager.FindByNameAsync(User.Identity!.Name!);
         Cheeps = (cheepService.GetCheepsFromAuthor(Author!.UserName!)).ToList();
     }
-    
-    public IActionResult OnPostShowPopup()
-    {
-        ShowPopup = true;
-        return Page(); 
-    }
-
-    public IActionResult OnPostCancelPopup()
-    {
-        ShowPopup = false;
-        return Page();
-    }
-    
     
     public async Task<ActionResult> OnPostConfirmDelete()
     {
