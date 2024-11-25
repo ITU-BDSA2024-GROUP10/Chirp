@@ -8,9 +8,20 @@ using TestUtilities;
 
 namespace RepositoryTests;
 
-public class AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
+public class AuthorRepositoryUnitTest
     : IClassFixture<InMemoryDBFixture<ChirpDBContext>>
 {
+    protected ChirpDBContext Context { get; }
+    protected IAuthorRepository AuthorRepository { get; }
+    
+    
+    public AuthorRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
+    {
+        fixture.ResetDatabase();
+        Context = fixture.GetContext();
+        AuthorRepository = new AuthorRepository(fixture.GetContext());
+    }
+    
     [Fact]
     public async Task GetAuthorByName_NameCantBeFound_ThrowsException()
     {
