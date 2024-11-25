@@ -157,10 +157,10 @@ public class CheepRepositoryUnitTest
 
         for (int i = 0; i < 5; i++)
         {
-            var author = new Author { UserName = $"name{i}", Email = $"{i}@mail.com", Cheeps = [] };
-            author.NormalizedUserName = author.UserName.ToUpper();
+            var author = TestUtils.CreateTestAuthor($"name{i}");
             authors.Add(author);
-            var cheep = new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now };
+            
+            var cheep = new Cheep { Author = author, Message = $"test{i}", TimeStamp = DateTime.Now };
             cheeps.Add(cheep);
         }
 
@@ -215,9 +215,10 @@ public class CheepRepositoryUnitTest
 
         for (int i = 0; i < 5; i++)
         {
-            var author = new Author { UserName = $"name{i}", Email = $"{i}@mail.com" };
+            var author = TestUtils.CreateTestAuthor($"name{i}");
             authors.Add(author);
-            var cheep = new Cheep { Author = authors.ElementAt(i), Message = $"test{i}", TimeStamp = DateTime.Now };
+            
+            var cheep = new Cheep { Author = author, Message = $"test{i}", TimeStamp = DateTime.Now };
             cheeps.Add(cheep);
         }
 
@@ -305,17 +306,14 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsFromAuthorsByPage_ReturnsAllCheepsFromAuthorsFromMultiplePages()
     {
         //Arrange
-        var author1 = new Author { UserName = "Mr. Test", Email = "test@email.com" };
-        var author2 = new Author { UserName = "Mr. Test2", Email = "test2@email.com" };
-        
-        author1.NormalizedUserName = author1.UserName.ToUpper();
-        author2.NormalizedUserName = author2.UserName.ToUpper();
+        var author1 = TestUtils.CreateTestAuthor("Mr. Test");
+        var author2 = TestUtils.CreateTestAuthor("Mr. Test2");
 
         List<string> authors = new();
         
         
-        authors.Add(author1.UserName);
-        authors.Add(author2.UserName);
+        authors.Add(author1.UserName!);
+        authors.Add(author2.UserName!);
         
         var authTotal = 0;
         var rand = new Random();
@@ -361,16 +359,13 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsFromAuthorsByPage_ReturnsNoCheepsFromAuthorWithNoCheeps()
     {
         //Arrange
-        var author1 = new Author { UserName = "Mr. Test", Email = "test@email.com"};
-        var author2 = new Author { UserName = "Mr. Test2", Email = "test2@email.com"};
-
-        author1.NormalizedUserName = author1.UserName.ToUpper();
-        author2.NormalizedUserName = author1.UserName.ToUpper();
+        var author1 = TestUtils.CreateTestAuthor("Mr. Test");
+        var author2 = TestUtils.CreateTestAuthor("Mr. Test2");
 
         List<string> authors = new();
         List<Cheep> cheeps = [];
-        authors.Add(author1.UserName);
-        authors.Add(author2.UserName);
+        authors.Add(author1.UserName!);
+        authors.Add(author2.UserName!);
 
         Context.Cheeps.AddRange(cheeps);
         for (int i = 0; i < 7; i++)
@@ -394,12 +389,10 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsFromAuthorsByPage_ReturnsInChronologicalOrder()
     {
         //Arrange
-        var author1 = new Author { UserName = "Mr. Test", Email = "test@email.com" };
-
-        author1.NormalizedUserName = author1.UserName.ToUpper();
+        var author1 = TestUtils.CreateTestAuthor("Mr. Test");
 
         List<string> authors = new();
-        authors.Add(author1.UserName);
+        authors.Add(author1.UserName!);
 
         for (var i = 0; i < 5; i++)
         {
