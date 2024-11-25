@@ -169,4 +169,22 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         var scrollPositionAfterUnfollow = await Page.EvaluateAsync<int>("() => window.scrollY");
         Assert.That(scrollPositionAfterUnfollow, Is.EqualTo(initialScrollPosition));
     }
+
+    [Test]
+    public async Task FollowUnfollowUpdatesButtonCorrectly()
+    {
+        await RazorPageUtils.Login(_testFollower);
+        await GoToPublicTimeline();
+        await FollowAuthor("author follow test");
+
+        // assert follow button changed to unfollow
+        var unfollowButton = Page.Locator("li").Filter(new() { HasText = "author unfollow test" }).GetByRole(AriaRole.Button);
+        await Expect(unfollowButton).ToBeVisibleAsync();
+
+        await UnfollowAuthor("author unfollow test");
+
+        // assert unfollow button changed back
+        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
+        await Expect(followButton).ToBeVisibleAsync();
+    }
 }
