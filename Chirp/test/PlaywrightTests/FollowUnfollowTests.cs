@@ -152,4 +152,21 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await UnfollowAuthor("author unfollow test");
         Assert.That(Page.Url, Is.EqualTo($"{RazorBaseUrl}/?page=1"));
     }
+
+    [Test]
+    public async Task FollowUnfollowMaintainsScrollPosition()
+    {
+        await RazorPageUtils.Login(_testFollower);
+        await GoToPublicTimeline();
+        await Page.EvaluateAsync("() => window.scrollTo(0, 500)");
+        var initialScrollPosition = await Page.EvaluateAsync<int>("() => window.scrollY");
+        await FollowAuthor("author follow test");
+
+        // assert scroll position unchanged
+        var scrollPositionAfterFollow = await Page.EvaluateAsync<int>("() => window.scrollY");
+        Assert.That(scrollPositionAfterFollow, Is.EqualTo(initialScrollPosition));
+        await UnfollowAuthor("author unfollow test");
+        var scrollPositionAfterUnfollow = await Page.EvaluateAsync<int>("() => window.scrollY");
+        Assert.That(scrollPositionAfterUnfollow, Is.EqualTo(initialScrollPosition));
+    }
 }
