@@ -3,6 +3,10 @@
 
 <script>
     async function toggleFollow(button, followName, shouldFollow) {
-        
+        const response = await fetch('/follow', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `followName=${followName}&shouldFollow=${shouldFollow}&returnUrl=${window.location.pathname}`
+        });
     }
 </script>
