@@ -9,9 +9,18 @@ using TestUtilities;
 
 namespace RepositoryTests;
 
-public class CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> _fixture)
+public class CheepRepositoryUnitTest
     : IClassFixture<InMemoryDBFixture<ChirpDBContext>>
 {
+    protected ChirpDBContext Context { get; }
+    protected ICheepRepository CheepRepository { get; }
+    
+    public CheepRepositoryUnitTest(InMemoryDBFixture<ChirpDBContext> fixture)
+    {
+        fixture.ResetDatabase();
+        Context = fixture.GetContext();
+        CheepRepository = new CheepRepository(fixture.GetContext());
+    }
 
     #region get cheeps
 
