@@ -34,6 +34,8 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
         return Page();
     }
     
+    
+    public async Task<ActionResult> OnPostConfirmDelete()
     {
         await SignOutAndDeleteUser();
         return Redirect("/");
