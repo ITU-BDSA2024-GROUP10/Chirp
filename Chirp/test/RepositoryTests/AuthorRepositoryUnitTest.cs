@@ -218,23 +218,20 @@ public class AuthorRepositoryUnitTest
     public async Task Follow_MultipelAuthorsFollowTheSameAuthor_ReturnsTrue()
     {
         //Arrange
-        var context = fixture.GetContext();
-        var authorRepo = new AuthorRepository(context);
-        
         var author = TestUtils.CreateTestAuthor("mr. test");
         var following = TestUtils.CreateTestAuthor("mr. follow");
         var following2 = TestUtils.CreateTestAuthor("mr. follow2");
         
-        context.Authors.Add(following);
-        context.Authors.Add(following2);
-        context.Authors.Add(author);
+        Context.Authors.Add(following);
+        Context.Authors.Add(following2);
+        Context.Authors.Add(author);
         
-        await context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
         
         //Act
-        var result = await authorRepo.Follow(following.UserName!, author.UserName!);
-        var result2 = await authorRepo.Follow(following2.UserName!, author.UserName!);
-        var authorsFollowers = context.Authors
+        var result = await AuthorRepository.Follow(following.UserName!, author.UserName!);
+        var result2 = await AuthorRepository.Follow(following2.UserName!, author.UserName!);
+        var authorsFollowers = Context.Authors
             .Where(a => a.NormalizedUserName == author.NormalizedUserName)
             .SelectMany(a => a.Followers).ToList();
         
@@ -290,18 +287,16 @@ public class AuthorRepositoryUnitTest
     [Fact]
     public async Task MakeFollowersUnfollow_RemovesFollowers_ReturnsTrue()
     {
-        var context = fixture.GetContext();
-        var authorRepo = new AuthorRepository(context);
         var author = TestUtils.CreateTestAuthor("mr. test");
         var following = TestUtils.CreateTestAuthor("mr. follow");
         
         following.Following.Add(author);
-        context.Authors.Add(following);
-        context.Authors.Add(author);
+        Context.Authors.Add(following);
+        Context.Authors.Add(author);
         
-        await context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
         
-        var result = await authorRepo.MakeFollowersUnfollow(author.UserName!);
+        var result = await AuthorRepository.MakeFollowersUnfollow(author.UserName!);
         
         Assert.True(following.Following.IsNullOrEmpty());
         
