@@ -155,7 +155,11 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
 
     [Test]
     public async Task FollowUnfollowMaintainsScrollPosition()
-    {
+    {   
+        // generate more cheeps such that scrolling is possible
+        int cheepAmount = 20;
+        for (int i = 0; i < cheepAmount; i++) await GenerateCheep(_testAuthor.author);
+
         await RazorPageUtils.Login(_testFollower);
         await GoToPublicTimeline();
         await Page.EvaluateAsync("() => window.scrollTo(0, 500)");
