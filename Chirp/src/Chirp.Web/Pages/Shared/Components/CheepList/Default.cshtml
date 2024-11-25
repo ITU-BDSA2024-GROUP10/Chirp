@@ -19,20 +19,20 @@
                 <strong>
                     <a href="/@cheep.Author">@cheep.Author</a>
                     @if (User.Identity!.IsAuthenticated && User.Identity!.Name != cheep.Author)
-                    {    
-                        if (Follows.Any(a => a.Name == cheep.Author))
+                    {
+                        @if (Follows.Any(a => a.Name == cheep.Author))
                         {
-                            <button class="follow-btn" data-author="@cheep.Author" onclick="toggleFollow(this, '@cheep.Author', false)">unfollow</button>
+                            <button onclick="toggleFollow(this, '@cheep.Author', false)">unfollow</button>
                         }
                         else
                         {
-                            <button class="follow-btn" data-author="@cheep.Author" onclick="toggleFollow(this, '@cheep.Author', true)">follow</button>
+                            <button onclick="toggleFollow(this, '@cheep.Author', true)">follow</button>
                         }
                     }
                 </strong>
-                @cheep.Message
-                <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss")</small>
             </p>
+            <p>@cheep.Message</p>
+            <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss")</small>
         </li>
     }
 </ul>
