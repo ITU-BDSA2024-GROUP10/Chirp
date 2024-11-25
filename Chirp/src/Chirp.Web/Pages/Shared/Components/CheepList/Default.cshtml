@@ -22,11 +22,11 @@
                     {    
                         if (Follows.Any(a => a.Name == cheep.Author))
                         {
-                            <button onclick="toggleFollow(this, '@cheep.Author', false)">unfollow</button>
+                            <button class="follow-btn" data-author="@cheep.Author" onclick="toggleFollow(this, '@cheep.Author', false)">unfollow</button>
                         }
                         else
                         {
-                            <button onclick="toggleFollow(this, '@cheep.Author', true)">follow</button>
+                            <button class="follow-btn" data-author="@cheep.Author" onclick="toggleFollow(this, '@cheep.Author', true)">follow</button>
                         }
                     }
                 </strong>
