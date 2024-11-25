@@ -85,6 +85,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await FollowAuthor("author follow test");
         await GoToPrivateTimeline();
         await UnfollowAuthor("author unfollow test");
+        await Page.ReloadAsync();
         await Expect(Page.GetByText("There are no cheeps so far.")).ToBeVisibleAsync();
     }
 
@@ -127,8 +128,6 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await Page.GetByRole(AriaRole.Button, new() { Name = "Yes, Delete" }).ClickAsync();
         await Expect(Page.Locator("li").Filter(new() { HasText = "this is author" })).ToBeHiddenAsync();
         Assert.That(_testFollower.Follows.IsNullOrEmpty());
-
-
     }
 
     [Test]
@@ -151,5 +150,55 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         Assert.That(Page.Url, Is.EqualTo($"{RazorBaseUrl}/?page=1"));
         await UnfollowAuthor("author unfollow test");
         Assert.That(Page.Url, Is.EqualTo($"{RazorBaseUrl}/?page=1"));
+    }
+
+    [Test]
+    public async Task FollowUnfollowMaintainsScrollPosition()
+    {
+        // generate more cheeps such that scrolling is possible
+        int cheepAmount = 20;
+        for (int i = 0; i < cheepAmount; i++) 
+            await GenerateCheep(_testAuthor.author);
+
+        await RazorPageUtils.Login(_testFollower);
+        await GoToPublicTimeline();
+
+        // scroll down by 1 pixel
+        await Page.EvaluateAsync("() => window.scrollTo(0, 1)");
+        var initialScrollPosition = await Page.EvaluateAsync<int>("() => window.scrollY");
+
+        // follow first button
+        var followButton = Page.Locator("li").Nth(1).Locator("button", new() { HasText = "follow" });
+        await followButton.ClickAsync();
+
+        // sssert position is unchanged
+        var scrollPositionAfterFollow = await Page.EvaluateAsync<int>("() => window.scrollY");
+        Assert.That(scrollPositionAfterFollow, Is.EqualTo(initialScrollPosition), "Scroll position changed after follow action.");
+
+        // unfollow 1st button
+        var unfollowButton = Page.Locator("li").Nth(1).Locator("button", new() { HasText = "unfollow" });
+        await unfollowButton.ClickAsync();
+
+        // assert position is unchanged
+        var scrollPositionAfterUnfollow = await Page.EvaluateAsync<int>("() => window.scrollY");
+        Assert.That(scrollPositionAfterUnfollow, Is.EqualTo(initialScrollPosition), "Scroll position changed after unfollow action.");
+    }
+
+    [Test]
+    public async Task FollowUnfollowUpdatesButtonCorrectly()
+    {
+        await RazorPageUtils.Login(_testFollower);
+        await GoToPublicTimeline();
+        await FollowAuthor("author follow test");
+
+        // assert follow button changed to unfollow
+        var unfollowButton = Page.Locator("li").Filter(new() { HasText = "author unfollow test" }).GetByRole(AriaRole.Button);
+        await Expect(unfollowButton).ToBeVisibleAsync();
+
+        await UnfollowAuthor("author unfollow test");
+
+        // assert unfollow button changed back
+        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
+        await Expect(followButton).ToBeVisibleAsync();
     }
 }
