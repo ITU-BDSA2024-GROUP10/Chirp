@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Chirp.Web.Pages;
 
-public class AboutMe(IAuthorService authorService, ICheepService cheepService, SignInManager<Author> signInManager, UserManager<Author?> userManager) : PageModel
+public class AboutMe(IAuthorService authorService, ICheepService cheepService, SignInManager<Author> signInManager, UserManager<Author> userManager) : PageModel
 {
     public Author? Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; } = [];
