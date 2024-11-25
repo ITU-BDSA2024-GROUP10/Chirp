@@ -105,12 +105,10 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
     public async Task<bool> MakeFollowersUnfollow(string user)
     {
         if (!await UserExists(user)) throw new UserDoesNotExist();
-        var author = await GetAuthor(user);
-        var authors = await context.Authors.Where(a => a.Following.Contains(author)).ToListAsync();
-        foreach (var a in authors)
-        {
-            a.Following.Remove(author);
-        }
+        context.Authors.Where(a => a.NormalizedUserName == user.ToUpper())
+            .Include(a => a.Followers)
+            .FirstOrDefaultAsync()
+            .Result!.Followers.Clear();
         await context.SaveChangesAsync();
         return true;
     }
