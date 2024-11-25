@@ -37,19 +37,17 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsByPage_ReturnsCorrectNumberOfCheeps(int page, int pageSize, int? expected)
     {
         //arrange
-        var chirpContext = _fixture.GetContext();
         var author = TestUtils.CreateTestAuthor("Mr. test");
         for (int i = 0; i < 7; i++)
         {
             var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now };
-            chirpContext.Cheeps.Add(cheep);
+            Context.Cheeps.Add(cheep);
         }
 
-        await chirpContext.SaveChangesAsync();
-        var cheepRepo = new CheepRepository(chirpContext);
+        await Context.SaveChangesAsync();
 
         //act
-        var result = await cheepRepo.GetCheepsByPage(page, pageSize);
+        var result = await CheepRepository.GetCheepsByPage(page, pageSize);
 
         //assert
         Assert.NotNull(result);
@@ -60,15 +58,14 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsByPage_NegativePageSize_ReturnsNull()
     {
         //arrange
-        var chirpContext = _fixture.GetContext();
         var author = TestUtils.CreateTestAuthor("Mr. test");
         var cheep = new Cheep { Author = author, Message = "test", TimeStamp = DateTime.Now };
-        chirpContext.Cheeps.Add(cheep);
-        await chirpContext.SaveChangesAsync();
-        var cheepRepo = new CheepRepository(chirpContext);
+       
+        Context.Cheeps.Add(cheep);
+        await Context.SaveChangesAsync();
 
         //act
-        var result = await cheepRepo.GetCheepsByPage(1, -1);
+        var result = await CheepRepository.GetCheepsByPage(1, -1);
 
         //assert
         Assert.Null(result);
@@ -78,7 +75,6 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsByPage_ReturnsCorrectCheepsFromMiddlePages()
     {
         //arrange
-        var chirpContext = _fixture.GetContext();
         var author = TestUtils.CreateTestAuthor("Mr. test");
         List<Cheep> cheeps = [];
         for (int i = 0; i < 7; i++)
@@ -88,12 +84,11 @@ public class CheepRepositoryUnitTest
         }
 
         cheeps.Reverse();
-        chirpContext.Cheeps.AddRange(cheeps);
-        await chirpContext.SaveChangesAsync();
-        var cheepRepo = new CheepRepository(chirpContext);
+        Context.Cheeps.AddRange(cheeps);
+        await Context.SaveChangesAsync();
 
         //act
-        var result = await cheepRepo.GetCheepsByPage(2, 3);
+        var result = await CheepRepository.GetCheepsByPage(2, 3);
 
         //assert
         Assert.NotNull(result);
@@ -111,15 +106,11 @@ public class CheepRepositoryUnitTest
     }
 
     [Theory]
-    [InlineData(3, 3)]
+    [InlineData(1, 3)]
     public async Task GetCheepsByPage_ReturnsNoCheepsForEmptyRepository(int page, int pageSize)
     {
-        //arrange
-        var chirpContext = _fixture.GetContext();
-        var cheepRepo = new CheepRepository(chirpContext);
-
         //act
-        var result = await cheepRepo.GetCheepsByPage(page, pageSize);
+        var result = await CheepRepository.GetCheepsByPage(page, pageSize);
 
         //assert
         Assert.NotNull(result);
@@ -130,16 +121,15 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsByPage_ReturnsCorrectSingleCheep()
     {
         //arrange
-        var chirpContext = _fixture.GetContext();
         var author = TestUtils.CreateTestAuthor("Mr. test");
         var timeStamp = new DateTime(2000, 01, 01);
         var cheep = new Cheep { Author = author, Message = "test", TimeStamp = timeStamp };
-        chirpContext.Cheeps.Add(cheep);
-        await chirpContext.SaveChangesAsync();
-        var cheepRepo = new CheepRepository(chirpContext);
+        
+        Context.Cheeps.Add(cheep);
+        await Context.SaveChangesAsync();
 
         //act
-        var result = await cheepRepo.GetCheepsByPage(1, 1);
+        var result = await CheepRepository.GetCheepsByPage(1, 1);
 
         //assert
         Assert.NotNull(result);
@@ -162,7 +152,6 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsFromAuthorByPage_ReturnsCorrectCheepWhenMultipleAuthorsInDB()
     {
         //arrange
-        var chirpContext = _fixture.GetContext();
         List<Author> authors = [];
         List<Cheep> cheeps = [];
 
@@ -175,15 +164,14 @@ public class CheepRepositoryUnitTest
             cheeps.Add(cheep);
         }
 
-        chirpContext.Authors.AddRange(authors);
-        chirpContext.Cheeps.AddRange(cheeps);
-        await chirpContext.SaveChangesAsync();
-
-        var cheepRepo = new CheepRepository(chirpContext);
+        Context.Authors.AddRange(authors);
+        Context.Cheeps.AddRange(cheeps);
+        await Context.SaveChangesAsync();
+        
         for (int i = 0; i < 5; i++)
         {
             //act
-            var result = await cheepRepo.GetCheepsFromAuthorByPage(authors[i].UserName!, 1, 1);
+            var result = await CheepRepository.GetCheepsFromAuthorByPage(authors[i].UserName!, 1, 1);
             var resultDTO = result.ToList().ElementAt(0);
 
             //arrange
@@ -196,7 +184,6 @@ public class CheepRepositoryUnitTest
     [Fact]
     public async Task GetCheepsFromAuthor_ReturnsAllCheeps()
     {
-        var chirpContext = _fixture.GetContext();
         var author = TestUtils.CreateTestAuthor("Mr. test");
         List<Cheep> cheeps = [];
         for (int i = 0; i < 5; i++)
@@ -204,12 +191,11 @@ public class CheepRepositoryUnitTest
             cheeps.Add(new Cheep{ Author = author, Message = "test" + i, TimeStamp = DateTime.Now });
         }
 
-        chirpContext.Authors.Add(author);
-        chirpContext.Cheeps.AddRange(cheeps);
-        await chirpContext.SaveChangesAsync();
+        Context.Authors.Add(author);
+        Context.Cheeps.AddRange(cheeps);
+        await Context.SaveChangesAsync();
         
-        var cheepRepo = new CheepRepository(chirpContext);
-        var result = (await cheepRepo.GetCheepsFromAuthor(author.UserName!)).ToList();
+        var result = (await CheepRepository.GetCheepsFromAuthor(author.UserName!)).ToList();
         cheeps.Reverse();
         Assert.Equal(5, result.Count);
         for (int i = 0; i < 5; i++)
@@ -224,7 +210,6 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsFromAuthorByPage_ReturnsNoCheepsForNonexistentAuthor()
     {
         //arrange
-        var chirpContext = _fixture.GetContext();
         List<Author> authors = [];
         List<Cheep> cheeps = [];
 
@@ -236,14 +221,12 @@ public class CheepRepositoryUnitTest
             cheeps.Add(cheep);
         }
 
-        chirpContext.Authors.AddRange(authors);
-        chirpContext.Cheeps.AddRange(cheeps);
-        await chirpContext.SaveChangesAsync();
-
-        var cheepRepo = new CheepRepository(chirpContext);
+        Context.Authors.AddRange(authors);
+        Context.Cheeps.AddRange(cheeps);
+        await Context.SaveChangesAsync();
 
         //act
-        var result = await cheepRepo.GetCheepsFromAuthorByPage("Bill", 1, 5);
+        var result = await CheepRepository.GetCheepsFromAuthorByPage("Bill", 1, 5);
 
         //assert
         Assert.Empty(result.ToList());
@@ -253,7 +236,6 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsFromAuthorByPage_ReturnsAllCheepsFromAuthorForLargeNumberOfCheepsOnMultiplePages()
     {
         //arrange
-        var chirpContext = _fixture.GetContext();
         var authorA = TestUtils.CreateTestAuthor("Mr. test");
         var authorB = TestUtils.CreateTestAuthor("Mr. fake");
         
@@ -266,25 +248,24 @@ public class CheepRepositoryUnitTest
             if (r == 1)
             {
                 var cheep = new Cheep { Author = authorB, Message = "", TimeStamp = DateTime.Now };
-                chirpContext.Cheeps.Add(cheep);
+                Context.Cheeps.Add(cheep);
             }
             else
             {
                 var cheep = new Cheep { Author = authorA, Message = "", TimeStamp = DateTime.Now };
-                chirpContext.Cheeps.Add(cheep);
+                Context.Cheeps.Add(cheep);
                 authTotal++;
             }
         }
 
-        await chirpContext.SaveChangesAsync();
-        var cheepRepo = new CheepRepository(chirpContext);
+        await Context.SaveChangesAsync();
 
         //act
         int pageNo = 1;
         int totalCount = 0;
         while (true)
         {
-            var result = await cheepRepo.GetCheepsFromAuthorByPage(authorA.UserName!, pageNo, 20);
+            var result = await CheepRepository.GetCheepsFromAuthorByPage(authorA.UserName!, pageNo, 20);
             var count = result.ToList().Count;
             if (count == 0)
                 break;
@@ -302,23 +283,20 @@ public class CheepRepositoryUnitTest
     public async Task CreateCheep()
     {
         //arrange
-        var chirpContext = _fixture.GetContext();
         var author = TestUtils.CreateTestAuthor("Mr. test");
-        chirpContext.Authors.Add(author);
-        await chirpContext.SaveChangesAsync();
+        Context.Authors.Add(author);
+        await Context.SaveChangesAsync();
 
         var unixTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         var newCheep = new CheepDTO(author.UserName!, "message", unixTimestamp);
 
-        var cheepRepo = new CheepRepository(chirpContext);
-
         //act
-        var result = await cheepRepo.CreateCheep(newCheep);
+        var result = await CheepRepository.CreateCheep(newCheep);
 
         //Assert
         Assert.True(result);
-        Assert.Equal(1, chirpContext.Cheeps.Count());
-        var cheep = chirpContext.Cheeps.FirstOrDefault();
+        Assert.Equal(1, Context.Cheeps.Count());
+        var cheep = Context.Cheeps.FirstOrDefault();
         Assert.NotNull(cheep);
         Assert.Equal(newCheep.Message, cheep.Message);
     }
@@ -327,7 +305,6 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsFromAuthorsByPage_ReturnsAllCheepsFromAuthorsFromMultiplePages()
     {
         //Arrange
-        var chirpContext = _fixture.GetContext();
         var author1 = new Author { UserName = "Mr. Test", Email = "test@email.com" };
         var author2 = new Author { UserName = "Mr. Test2", Email = "test2@email.com" };
         
@@ -349,19 +326,18 @@ public class CheepRepositoryUnitTest
             if (r == 1)
             {
                 var cheep = new Cheep { Author = author1, Message = "", TimeStamp = DateTime.Now };
-                chirpContext.Cheeps.Add(cheep);
+                Context.Cheeps.Add(cheep);
                 authTotal++;
             }
             else
             {
                 var cheep = new Cheep { Author = author2, Message = "", TimeStamp = DateTime.Now };
-                chirpContext.Cheeps.Add(cheep);
+                Context.Cheeps.Add(cheep);
                 authTotal++;
             }
         }
         
-        await chirpContext.SaveChangesAsync();
-        var cheepRepo = new CheepRepository(chirpContext);
+        await Context.SaveChangesAsync();
         
         int pageNo = 1;
         int totalCount = 0;
@@ -369,7 +345,7 @@ public class CheepRepositoryUnitTest
         //Act
         while (true)
         {
-            var result = await cheepRepo.GetCheepsFromAuthorsByPage(authors, pageNo, 20);
+            var result = await CheepRepository.GetCheepsFromAuthorsByPage(authors, pageNo, 20);
             var count = result.ToList().Count;
             if (count == 0)
                 break;
@@ -385,7 +361,6 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsFromAuthorsByPage_ReturnsNoCheepsFromAuthorWithNoCheeps()
     {
         //Arrange
-        var chirpContext = _fixture.GetContext();
         var author1 = new Author { UserName = "Mr. Test", Email = "test@email.com"};
         var author2 = new Author { UserName = "Mr. Test2", Email = "test2@email.com"};
 
@@ -397,7 +372,7 @@ public class CheepRepositoryUnitTest
         authors.Add(author1.UserName);
         authors.Add(author2.UserName);
 
-        chirpContext.Cheeps.AddRange(cheeps);
+        Context.Cheeps.AddRange(cheeps);
         for (int i = 0; i < 7; i++)
         {
             var cheep1 = new Cheep { Author = author1, Message = $"test_{i}", TimeStamp = DateTime.Now };
@@ -406,11 +381,10 @@ public class CheepRepositoryUnitTest
             cheeps.Add(cheep2);
         }
         
-        await chirpContext.SaveChangesAsync();
-        var cheepRepo = new CheepRepository(chirpContext);
+        await Context.SaveChangesAsync();
         
         //Act
-        var result = await cheepRepo.GetCheepsFromAuthorsByPage(authors, 1, 20);
+        var result = await CheepRepository.GetCheepsFromAuthorsByPage(authors, 1, 20);
         
         //Assert
         Assert.Empty(result.ToList());
@@ -420,7 +394,6 @@ public class CheepRepositoryUnitTest
     public async Task GetCheepsFromAuthorsByPage_ReturnsInChronologicalOrder()
     {
         //Arrange
-        var chirpContext = _fixture.GetContext();
         var author1 = new Author { UserName = "Mr. Test", Email = "test@email.com" };
 
         author1.NormalizedUserName = author1.UserName.ToUpper();
@@ -431,14 +404,13 @@ public class CheepRepositoryUnitTest
         for (var i = 0; i < 5; i++)
         {
             var cheep = new Cheep { Author = author1, Message = $"{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i * 60).DateTime };
-            chirpContext.Cheeps.Add(cheep);
+            Context.Cheeps.Add(cheep);
         }
         
-        await chirpContext.SaveChangesAsync();
-        var cheepRepo = new CheepRepository(chirpContext);
+        await Context.SaveChangesAsync();
         
         //Act
-        var result = await cheepRepo.GetCheepsFromAuthorsByPage(authors, 1, 20);
+        var result = await CheepRepository.GetCheepsFromAuthorsByPage(authors, 1, 20);
         var resultArray = result.ToArray();
 
         //Assert
