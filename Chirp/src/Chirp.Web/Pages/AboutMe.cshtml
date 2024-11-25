@@ -5,16 +5,17 @@
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
 }
+<script type="text/javascript">
+    function showPopup() {
+        document.getElementById('popup').style.display = 'flex';
+    }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+    function cancelPopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+</script>
 <div>
-    <h2>Name: @Model.Author!.Name</h2>
+    <h2>Name: @Model.Author!.UserName</h2>
     <h3>Email: @Model.Author.Email</h3>
     @if (Model.Cheeps.Count == 1)
     {
@@ -25,8 +26,18 @@
         <h4>You have Cheep'd: @Model.Cheeps.Count times</h4>
     }
     
+    <button onclick="showPopup()" type="submit">Forget Me</button>
+    <div id="popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background-color: white; padding: 20px; border-radius: 5px; text-align: center; min-width: 300px;">
+            <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+            <button type="button" onclick="cancelPopup()">Cancel</button>
+            <form method="post" asp-page-handler="ConfirmDelete">
+                <button type="submit">Yes, Delete</button>
+            </form>
+        </div>
+    </div>
+    
     
     @await Component.InvokeAsync("CheepList", new {cheeps = Model.Cheeps, targetPage = "/AboutMe"})
 </div>
-</body>
-</html>
+

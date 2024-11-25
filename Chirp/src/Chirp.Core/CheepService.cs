@@ -7,7 +7,7 @@ public interface ICheepService
     public List<CheepDTO> GetCheepsByPage(int page, int pageSize);
     public List<CheepDTO> GetCheepsFromAuthorByPage(string author, int page, int pageSize);
     public List<CheepDTO> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page, int pageSize);
-
+    public List<CheepDTO> GetCheepsFromAuthor(string author);
     public bool CreateCheep(CheepDTO cheep);
 }
 
@@ -20,6 +20,11 @@ public class CheepService(ICheepRepository db) : ICheepService
         var result = db.GetCheepsByPage(page, pageSize).Result ?? throw new ArgumentNullException(nameof(db.GetCheepsByPage));
         
         return result.ToList();
+    }
+
+    public List<CheepDTO> GetCheepsFromAuthor(string author)
+    {
+        return db.GetCheepsFromAuthor(author).Result.ToList();
     }
 
     public List<CheepDTO> GetCheepsFromAuthorByPage(string author, int page, int pageSize)

@@ -19,4 +19,11 @@ public class PageUtils(IPage page)
         await page.GetByPlaceholder("password").FillAsync(password);
         await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
     }
+
+    public async Task Logout(string userName)
+    {
+        await page.GotoAsync("/");
+        await page.GetByRole(AriaRole.Link, new() { Name = "logout ["+userName+"]" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
+    }
 }
