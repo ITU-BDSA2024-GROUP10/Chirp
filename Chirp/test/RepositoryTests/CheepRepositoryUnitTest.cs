@@ -241,12 +241,10 @@ public class CheepRepositoryUnitTest
         var authorB = TestUtils.CreateTestAuthor("Mr. fake");
         
         var authTotal = 0;
-        var rand = new Random();
 
         for (int i = 0; i < 100; i++)
         {
-            int r = rand.Next(2);
-            if (r == 1)
+            if (i % 2 == 0)
             {
                 var cheep = new Cheep { Author = authorB, Message = "", TimeStamp = DateTime.Now };
                 Context.Cheeps.Add(cheep);
@@ -315,23 +313,17 @@ public class CheepRepositoryUnitTest
         authors.Add(author1.UserName!);
         authors.Add(author2.UserName!);
         
-        var authTotal = 0;
-        var rand = new Random();
-        
         for (var i = 0; i < 100; i++)
         {
-            int r = rand.Next(2);
-            if (r == 1)
+            if (i % 2 == 0)
             {
                 var cheep = new Cheep { Author = author1, Message = "", TimeStamp = DateTime.Now };
                 Context.Cheeps.Add(cheep);
-                authTotal++;
             }
             else
             {
                 var cheep = new Cheep { Author = author2, Message = "", TimeStamp = DateTime.Now };
                 Context.Cheeps.Add(cheep);
-                authTotal++;
             }
         }
         
@@ -352,7 +344,7 @@ public class CheepRepositoryUnitTest
         }
         
         //Assert
-        Assert.Equal(authTotal, totalCount);
+        Assert.Equal(100, totalCount);
     }
 
     [Fact]
