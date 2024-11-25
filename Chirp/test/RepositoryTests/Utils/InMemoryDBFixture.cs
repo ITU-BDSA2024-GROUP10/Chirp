@@ -18,12 +18,15 @@ public class InMemoryDBFixture<T> : IDisposable
     {
         var context = (T)Activator.CreateInstance(typeof(T), new DbContextOptionsBuilder<T>()
             .UseSqlite(Connection).Options)!;
-        
-        // Clean up all data
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
 
         return context;
+    }
+    
+    public void ResetDatabase()
+    {
+        using var context = GetContext();
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
     }
 
     public void Dispose()
