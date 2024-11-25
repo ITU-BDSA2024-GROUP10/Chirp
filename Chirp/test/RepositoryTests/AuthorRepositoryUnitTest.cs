@@ -297,8 +297,10 @@ public class AuthorRepositoryUnitTest
         await Context.SaveChangesAsync();
         
         var result = await AuthorRepository.MakeFollowersUnfollow(author.UserName!);
+
+        var test = await AuthorRepository.GetAuthorFollows(following.NormalizedUserName);
         
-        Assert.True(following.Following.IsNullOrEmpty());
+        Assert.True(test.IsNullOrEmpty());
         
         Assert.True(result);
         
