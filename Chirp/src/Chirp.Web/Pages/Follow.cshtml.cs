@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
+[ValidateAntiForgeryToken]
 public class Follow(IAuthorService authorService) : PageModel
 {
     public ActionResult OnPost(string followName, bool shouldFollow, string? returnUrl)
