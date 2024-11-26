@@ -13,7 +13,7 @@ public class PageButtonsTests : PageTestWithRazorPlaywrightWebApplicationFactory
         var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
             .WithDefault()
             .Create();
-        await GenerateCheeps(testAuthor.author, 33);
+        await GenerateCheeps(testAuthor.author, 32*5);
         
         //first
         await Page.GotoAsync("/?page=1");
@@ -25,7 +25,7 @@ public class PageButtonsTests : PageTestWithRazorPlaywrightWebApplicationFactory
         
         //middle
         await Page.GotoAsync("/?page=3");
-        await Expect(Page.Locator("body")).ToContainTextAsync("Previous 2 Next");
+        await Expect(Page.Locator("body")).ToContainTextAsync("< Prev 1 .. 2 3 4 .. 5 Next >");
         
         //second to last
         await Page.GotoAsync("/?page=4");
