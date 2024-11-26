@@ -57,4 +57,10 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
         //assert
         await Expect(Page.GetByText("You have successfully logged")).ToBeVisibleAsync();
     }
+
+    [Test]
+    public async Task ClickingChirpIconRedirectsToMainPage()
+    {
+        
+    }
 }
