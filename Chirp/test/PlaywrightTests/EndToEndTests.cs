@@ -66,6 +66,7 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GetByRole(AriaRole.Img, new() { Name = "Icon1" }).ClickAsync();
 
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
+        Assert.That(Page.Url, Is.EqualTo($"{RazorBaseUrl}/?page=1"));
     }
 
     [Test]
@@ -76,5 +77,6 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GetByRole(AriaRole.Heading, new() { Name = "Icon1Chirp!" }).ClickAsync();
 
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
+        Assert.That(Page.Url, Is.EqualTo($"{RazorBaseUrl}/?page=1"));
     }
 }
