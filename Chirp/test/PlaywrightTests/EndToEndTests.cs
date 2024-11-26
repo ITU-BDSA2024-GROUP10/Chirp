@@ -61,6 +61,18 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task ClickingChirpIconRedirectsToMainPage()
     {
-        
+        await Page.GotoAsync("http://localhost:5273/?page=1");
+        await Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Img, new() { Name = "Icon1" }).ClickAsync();
+
+        // assert clicking chirp icon returns to public timeline
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Heading, new() { Name = "Icon1Chirp!" }).ClickAsync();
+
+        // assert clicking chirp text returns to public timeline
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
     }
 }
