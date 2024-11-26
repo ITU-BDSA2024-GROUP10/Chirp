@@ -68,4 +68,51 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
         Assert.That(Page.Url, Is.EqualTo($"{RazorBaseUrl}/?page=1"));
     }
+
+    [Test]
+    public async Task ForgetMe()
+    {
+        #region Arrange
+
+        var testAuthor1 = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithUsernameAndEmail("mr. test1")
+            .GetTestAuthor();
+            
+        var testAuthor2 = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithUsernameAndEmail("mr. test2")
+            .GetTestAuthor();
+            
+        var testAuthor3 = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithUsernameAndEmail("mr. test3")
+            .GetTestAuthor();
+        
+        testAuthor1.AddFollow(testAuthor2);
+        testAuthor3.AddFollow(testAuthor1);
+        
+        //because of the following relation, the other testauthors gets created when we create testAuthor1
+        testAuthor1.Create(); 
+
+        #endregion
+        
+        await RazorPageUtils.Login(testAuthor1);
+        await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Yes, Delete" }).ClickAsync();
+        
+        var author1 = await RazorFactory.GetDbContext().Authors.FindAsync(testAuthor1.UserName);
+        var author2Followers = RazorFactory.GetDbContext().Authors
+            .Where(a => a.NormalizedUserName == testAuthor2.UserName!.ToUpper())
+            .SelectMany(a => a.Followers);
+        
+        var author3Following = RazorFactory.GetDbContext().Authors
+            .Where(a => a.NormalizedUserName == testAuthor3.UserName!.ToUpper())
+            .SelectMany(a => a.Following);
+        
+        await Expect(Page.Locator("body")).ToContainTextAsync("login");
+        Assert.That(Page.Url, Is.EqualTo($"{RazorBaseUrl}/?page=1"));
+        Assert.That(author1, Is.Null);
+        Assert.That(author2Followers, Is.Empty);
+        Assert.That(author3Following, Is.Empty);
+        
+    }
 }
