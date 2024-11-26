@@ -57,4 +57,15 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
         //assert
         await Expect(Page.GetByText("You have successfully logged")).ToBeVisibleAsync();
     }
+
+    [Test]
+    public async Task ChirpTextRedirectsToMainPage()
+    {
+        await Page.GotoAsync("http://localhost:5273/?page=1");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Icon1 Chirp!" }).ClickAsync();
+
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
+        Assert.That(Page.Url, Is.EqualTo($"{RazorBaseUrl}/?page=1"));
+    }
 }
