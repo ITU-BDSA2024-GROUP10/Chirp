@@ -52,6 +52,7 @@ public class InMemoryCostumeWebApplicationFactory : WebApplicationFactory<Chirp.
             {
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
+                options.EnableSensitiveDataLogging();
             });
         });
 

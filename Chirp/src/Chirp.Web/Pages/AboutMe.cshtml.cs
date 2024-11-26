@@ -8,6 +8,7 @@ using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.AspNetCore.Authentication;
+using NUnit.Framework;
 
 namespace Chirp.Web.Pages;
 
@@ -15,27 +16,51 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
 {
     public Author? Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; } = [];
+    public int AmountYouFollow { get; set; } = 0;
+    public int AmountOfFollowers { get; set; } = 0;
     public async void OnGet()
     {
         Author = await userManager.FindByNameAsync(User.Identity!.Name!);
-        Cheeps = (cheepService.GetCheepsFromAuthor(Author!.UserName!)).ToList();
+        if (Author?.UserName == null)
+        {
+            Redirect("/NotFound");
+            return;
+        }
+        
+        SetUserInfo(Author.UserName);
     }
     
     public async Task<ActionResult> OnPostConfirmDelete()
     {
-        await SignOutAndDeleteUser();
+        try
+        {
+            await SignOutAndDeleteUser();
+        }
+        catch
+        {
+            return Redirect("/NotFound");
+        }
+        
         return Redirect("/");
     }
 
     public async Task SignOutAndDeleteUser()
     {
         var authorName = User.Identity!.Name!;
-        await signInManager.SignOutAsync();
+        
         Author = await userManager.FindByNameAsync(authorName);
-        if (Author != null)
+        if (Author?.UserName != null)
         {
-            authorService.MakeFollowersUnfollow(Author.UserName!);
+            await signInManager.SignOutAsync();
+            authorService.MakeFollowersUnfollow(Author.UserName);
             await userManager.DeleteAsync(Author);
-        } else throw new Exception("Author could not be found");
+        } else throw new Exception("Author data is not valid");
+    }
+
+    private void SetUserInfo(string authorUsername)
+    {
+        Cheeps = cheepService.GetCheepsFromAuthor(authorUsername);
+        AmountYouFollow = authorService.GetFollows(authorUsername).Count;
+        AmountOfFollowers = authorService.GetFollowers(authorUsername).Count;
     }
 }

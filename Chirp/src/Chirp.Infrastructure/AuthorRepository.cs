@@ -36,6 +36,17 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         return GetFollowing(username).Result.Select(a => new AuthorDTO(a.UserName!, a.Email!)).ToList();
     }
 
+    public async Task<List<AuthorDTO>> GetAuthorFollowers(string username)
+    {
+        if (!await UserExists(username)) throw new UserDoesNotExist();
+        var followers = await context.Authors
+            .Where(a => a.NormalizedUserName == username.ToUpper())
+            .Select(a => a.Followers)
+            .FirstOrDefaultAsync() ?? new List<Author>();
+        
+        return followers.Select(a => new AuthorDTO(a.UserName!, a.Email!)).ToList();
+    }
+
     public async Task<bool> Follow(string currentUser, string userToFollow)
     {
         if (currentUser == userToFollow) throw new ArgumentException("You cannot follow yourself");

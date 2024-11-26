@@ -6,8 +6,10 @@ namespace PlaywrightTests.Utils;
 
 public class TestAuthor
 {
-    public TestAuthor()
+    private TestAuthorBuilder _testAuthorBuilder { get; set; }
+    public TestAuthor(TestAuthorBuilder testAuthorBuilder)
     {
+        _testAuthorBuilder = testAuthorBuilder;
     }
 
     public Author author { get; set; } = new Author();
@@ -16,6 +18,18 @@ public class TestAuthor
     public string? UserName => author.UserName;
     public string? Email => author.Email;
     public List<Author> Follows => author.Following;
+    public List<Author> Followers => author.Followers;
+    
+    public void AddFollow(TestAuthor testAuthor)
+    {
+        testAuthor.Followers.Add(author);
+        author.Following.Add(testAuthor.author);
+    }
+
+    public void Create()
+    {
+        _testAuthorBuilder.Create();
+    }
 }
 
 public class TestAuthorBuilder
@@ -25,7 +39,7 @@ public class TestAuthorBuilder
 
     public TestAuthorBuilder(UserManager<Author> userManager)
     {
-        _testAuthor = new TestAuthor();
+        _testAuthor = new TestAuthor(this);
         _userManager = userManager;
         _testAuthor.Password = "Password123!";
     }
@@ -39,6 +53,11 @@ public class TestAuthorBuilder
     public TestAuthor Create()
     {
         _userManager.CreateAsync(_testAuthor.author, _testAuthor.Password).Wait();
+        return _testAuthor;
+    }
+    
+    public TestAuthor GetTestAuthor()
+    {
         return _testAuthor;
     }
 

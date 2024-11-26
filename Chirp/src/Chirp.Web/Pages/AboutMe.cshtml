@@ -17,6 +17,12 @@
 <div>
     <h2>Name: @Model.Author!.UserName</h2>
     <h3>Email: @Model.Author.Email</h3>
+    <div style="display: flex;">
+        <h4>Following: @Model.AmountYouFollow</h4>
+        <div style="margin-right: 25px"></div>
+        <h4>Followers: @Model.AmountOfFollowers</h4>
+    </div>
+    
     @if (Model.Cheeps.Count == 1)
     {
         <h4>You have Cheep'd: @Model.Cheeps.Count time</h4>
@@ -40,4 +46,3 @@
     
     @await Component.InvokeAsync("CheepList", new {cheeps = Model.Cheeps, targetPage = "/AboutMe"})
 </div>
-

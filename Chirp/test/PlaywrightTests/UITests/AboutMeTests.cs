@@ -29,16 +29,33 @@ public class AboutMeTests : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task AboutMePageShowsUserInfo()
     {
-        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
-            .WithDefault()
-            .Create();
+        var testAuthor1 = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithUsernameAndEmail("mr. test1")
+            .GetTestAuthor();
+        var testAuthor2 = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithUsernameAndEmail("mr. test2")
+            .GetTestAuthor();
         
-        await RazorPageUtils.Login(testAuthor);
+        var testAuthorMain = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithUsernameAndEmail("mr. testMain")
+            .GetTestAuthor();
+        
+        testAuthorMain.AddFollow(testAuthor1);
+        testAuthorMain.AddFollow(testAuthor2);
+        testAuthor1.AddFollow(testAuthorMain);
+        
+        testAuthorMain.Create();
+        
+        await GenerateCheeps(testAuthorMain.author, 365);
+        
+        await RazorPageUtils.Login(testAuthorMain);
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"Name: {testAuthor.UserName}" })).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"Email: {testAuthor.Email}" })).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "You have Cheep'd: 0 times" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"Name: {testAuthorMain.UserName}" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"Email: {testAuthorMain.Email}" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "You have Cheep'd: 365 times" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Following: 2" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Followers: 1" })).ToBeVisibleAsync();
     }
     
     [Test]
