@@ -13,6 +13,8 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
     protected readonly ICheepService CheepService = cheepService;
     
     public int PageNumber = 1;
+    public int LastPageNumber = 1;
+    protected const int PageSize = 32;
 
     [BindProperty] 
     public MessageModel MessageModel { get; set; } = new MessageModel();

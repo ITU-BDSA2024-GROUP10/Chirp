@@ -20,6 +20,7 @@ public class PublicModel(ICheepService cheepService) : TimeLinePageModel(cheepSe
 
     protected override void LoadCheeps(int page)
     {
-        Cheeps = CheepService.GetCheepsByPage(page, 32);
+        LastPageNumber = CheepService.GetAmountOfCheepPages(PageSize);
+        Cheeps = CheepService.GetCheepsByPage(page, PageSize);
     }
 }

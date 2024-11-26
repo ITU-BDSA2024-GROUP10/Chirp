@@ -1,17 +1,35 @@
 @{
-    var targetPage = ViewBag.TargetPage as string ?? "/";
-    var pageNumber = ViewBag.PageNumber as int? ?? 1;
-    var isLastPage = ViewBag.IsLastPage as bool? ?? false;
+    var targetPageUrl = ViewBag.TargetPageUrl as string ?? "/";
+    var currentPageNumber = ViewBag.CurrentPageNumber as int? ?? 1;
+    var lastPageNumber = ViewBag.LastPageNumber as int? ?? 1;
 }
 
-<div style="display: flex; align-items: center;">
-    @if (pageNumber > 1)
+<div style="display: flex; align-items: baseline;" class="page-buttons">
+    @if (currentPageNumber > 1)
     {
-        <a href="@targetPage?page=@(pageNumber - 1)">Previous</a>
+        <a style="background-color: #cc6e6e; color: white; padding: 8px 16px; text-align: center; text-decoration: none; margin-right: 8px;" href="@targetPageUrl?page=@(currentPageNumber - 1)">&lt; Prev</a>
     }
-    <p style="margin: 10px">@pageNumber</p>
-    @if (!isLastPage)
+    @if (currentPageNumber != 1)
     {
-        <a href="@targetPage?page=@(pageNumber + 1)">Next</a>
+        <a style="margin: 5px" href="@targetPageUrl?page=1">1</a>
+        @if (currentPageNumber != 2)
+        {
+            <p style="margin: 5px">..</p>
+            <a style="margin: 5px" href="@targetPageUrl?page=@(currentPageNumber - 1)">@(currentPageNumber - 1)</a>
+        }
+    }
+    <p style="margin: 5px">@currentPageNumber</p>
+    @if (currentPageNumber != lastPageNumber)
+    {
+        @if (currentPageNumber != lastPageNumber-1)
+        {
+            <a style="margin: 5px" href="@targetPageUrl?page=@(currentPageNumber + 1)">@(currentPageNumber + 1)</a>
+            <p style="margin: 5px">..</p>
+        }
+        <a style="margin: 5px" href="@targetPageUrl?page=@lastPageNumber">@lastPageNumber</a>
+    }
+    @if (currentPageNumber < lastPageNumber)
+    {
+        <a style="background-color: #cc6e6e; color: white; padding: 8px 16px; text-align: center; text-decoration: none; margin-left: 8px;" href="@targetPageUrl?page=@(currentPageNumber + 1)">Next &gt;</a>
     }
 </div>
