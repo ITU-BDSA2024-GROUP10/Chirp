@@ -16,16 +16,18 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
 {
     public Author? Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; } = [];
+    public int AmountYouFollow { get; set; } = 0;
+    public int AmountOfFollowers { get; set; } = 0;
     public async void OnGet()
     {
         Author = await userManager.FindByNameAsync(User.Identity!.Name!);
-        if (Author == null)
+        if (Author?.UserName == null)
         {
             Redirect("/NotFound");
             return;
         }
         
-        Cheeps = cheepService.GetCheepsFromAuthor(Author.UserName!).ToList();
+        SetUserInfo(Author.UserName);
     }
     
     public async Task<ActionResult> OnPostConfirmDelete()
@@ -53,5 +55,12 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
             authorService.MakeFollowersUnfollow(Author.UserName);
             await userManager.DeleteAsync(Author);
         } else throw new Exception("Author data is not valid");
+    }
+
+    private void SetUserInfo(string authorUsername)
+    {
+        Cheeps = cheepService.GetCheepsFromAuthor(authorUsername);
+        AmountYouFollow = authorService.GetFollows(authorUsername).Count;
+        AmountOfFollowers = authorService.GetFollowers(authorUsername).Count;
     }
 }
