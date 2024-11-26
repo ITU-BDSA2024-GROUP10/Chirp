@@ -63,7 +63,7 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
     {
         await Page.GotoAsync("http://localhost:5273/?page=1");
         await Page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Heading, new() { Name = "Icon1Chirp!" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Icon1 Chirp!" }).ClickAsync();
 
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
         Assert.That(Page.Url, Is.EqualTo($"{RazorBaseUrl}/?page=1"));
