@@ -1,5 +1,6 @@
 using Chirp.Core;
 using Chirp.Core.DTO;
+using Chirp.Web.Pages.BindingModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -10,6 +11,9 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
     public CheepDTO Cheep { get; set; } = null!;
     public int CommentCount { get; set; }
     public List<CommentDTO> Comments { get; set; } = [];
+    
+    [BindProperty] 
+    public MessageModel MessageModel { get; set; } = new MessageModel();
     public void OnGet(int cheepId)
     {
         Cheep = cheepService.GetCheepFromId(cheepId);
@@ -52,5 +56,12 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
         }
        
         return RedirectToPage("/SpecificCheep", new { cheepId = cheepId });
+    }
+
+    private void Reload(int cheepId)
+    {
+        Cheep = cheepService.GetCheepFromId(cheepId);
+        CommentCount = cheepService.GetCommentAmountOnCheep(cheepId);
+        Comments = cheepService.GetCommentsFromCheep(cheepId);
     }
 }
