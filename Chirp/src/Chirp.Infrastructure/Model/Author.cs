@@ -8,6 +8,8 @@ public sealed class Author : IdentityUser
     public List<Cheep> Cheeps { get; set; } = [];
     public List<Author> Following { get; set; } = [];
     public List<Author> Followers { get; set; } = [];
+    
+    public List<Comment> Comments { get; set; } = [];
 
     public Author()
     {
