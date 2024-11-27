@@ -1,6 +1,7 @@
 ﻿@using Chirp.Core
 @using Chirp.Core.DTO
 @inject IAuthorService service
+@inject ICheepService CheepService
 @{
     var targetPage = ViewBag.TargetPage as string ?? "";
     IEnumerable<CheepDTO> cheeps = ViewBag.Cheeps;
@@ -10,6 +11,16 @@
         Follows = service.GetFollows(User.Identity!.Name!);
     }
 }
+
+<script type="text/javascript">
+    function showPopup() {
+        document.getElementById('popup').style.display = 'flex';
+    }
+
+    function cancelPopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+</script>
 
 <ul id="messagelist" class="cheeps">
     @foreach (var cheep in cheeps)
@@ -32,7 +43,31 @@
                 </strong>
             </p>
             <p>@cheep.Message</p>
-            <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss")</small>
+            <div style="display: flex; align-items: center;">
+                <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss")</small>
+                <a href="#" onclick="showPopup()">
+                    <img src="images/comment.png" alt="Comment Icon" style="width: 18px; height: 18px; margin-left: 15px; vertical-align: middle"/>
+                    
+                </a>
+                <small style="margin-left: -5px">@CheepService.GetCommentAmountOnCheep(cheep.Id)</small>
+            </div>
         </li>
+        <div id="popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center">
+            <div style="background-color: white; padding: 20px; border-radius: 5px; text-align: center; min-width: 300px; position: relative;">
+                <a href="#" onclick="cancelPopup()" style="position: absolute; top: 10px; left: 10px; font-size: 20px; text-decoration: none;">X</a>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px">
+                    <div>
+                        <h3>Add your comment to @cheep.Author</h3>
+                        <form method="post" asp-page-handler="Comment">
+                            <input style="float: left" type="text" name="comment"/>
+                            <input type="hidden" name="author" value="@User.Identity.Name"/>
+                            <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                            <span></span>
+                            <input type="submit" value="Comment">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 </ul>
