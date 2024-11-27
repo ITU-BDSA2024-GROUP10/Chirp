@@ -108,13 +108,15 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             .Where(c => c.Id == cheepId)
             .FirstOrDefaultAsync();
 
-        if (query.Result != null)
-        {
-            var commentCount = query.Result.Comments.Count();
+    public async Task<CheepDTO> GetCheepById(int cheepId)
+    {
+        var cheep = await context.Cheeps
+            .Where(c => c.Id == cheepId)
+            .Select(cheep => new { cheep.Id, cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
+            .FirstOrDefaultAsync();
         
-            return commentCount;
-        }
-        return 0;
+        return new CheepDTO(cheep!.Id, cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds());;
+    }
     }
     
 }

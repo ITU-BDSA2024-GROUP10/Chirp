@@ -11,9 +11,9 @@ public interface ICheepService
     public int GetAmountOfCheepPages(int pageSize);
     public int GetAmountOfCheepPagesFromAuthors(IEnumerable<String> authors, int pageSize);
     public bool CreateCheep(CheepDTO cheep);
-    
     public bool AddCommentToCheep(CommentDTO comment);
     public int GetCommentAmountOnCheep(int? cheepId);
+    public CheepDTO GetCheepFromId(int cheepId);
 }
 
 public class CheepService(ICheepRepository db) : ICheepService
@@ -65,5 +65,10 @@ public class CheepService(ICheepRepository db) : ICheepService
     public int GetCommentAmountOnCheep(int? cheepId)
     {
         return db.GetCommentAmountOnCheep(cheepId).Result;
+    }
+
+    public CheepDTO GetCheepFromId(int cheepId)
+    {
+        return db.GetCheepById(cheepId).Result;
     }
 }

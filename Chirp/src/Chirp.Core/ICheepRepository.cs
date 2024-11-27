@@ -1,4 +1,5 @@
-﻿using Chirp.Core.DTO;
+﻿using System.Collections;
+using Chirp.Core.DTO;
 
 namespace Chirp.Core;
 
@@ -11,8 +12,7 @@ public interface ICheepRepository
     public Task<bool> CreateCheep(CheepDTO cheep);
     public Task<int> GetAmountOfCheeps();
     public Task<int> GetAmountOfCheepsFromAuthors(IEnumerable<String> authors);
-
     public Task<bool> AddCommentToCheep(CommentDTO comment);
-
     public Task<int> GetCommentAmountOnCheep(int? cheepId);
+    public Task<CheepDTO> GetCheepById(int cheepId);
 }
