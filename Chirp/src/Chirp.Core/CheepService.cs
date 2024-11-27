@@ -13,6 +13,7 @@ public interface ICheepService
     public bool CreateCheep(CheepDTO cheep);
     
     public bool AddCommentToCheep(CommentDTO comment);
+    public int GetCommentAmountOnCheep(int? cheepId);
 }
 
 public class CheepService(ICheepRepository db) : ICheepService
@@ -59,5 +60,10 @@ public class CheepService(ICheepRepository db) : ICheepService
     public bool AddCommentToCheep(CommentDTO comment)
     {
         return db.AddCommentToCheep(comment).Result;
+    }
+
+    public int GetCommentAmountOnCheep(int? cheepId)
+    {
+        return db.GetCommentAmountOnCheep(cheepId).Result;
     }
 }
