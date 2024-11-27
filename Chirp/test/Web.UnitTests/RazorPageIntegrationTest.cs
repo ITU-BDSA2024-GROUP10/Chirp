@@ -19,7 +19,9 @@ public class RazorPageIntegrationTest(RazorWebApplicationFactory factory)
         for (int i = 0; i < 10; i++)
         {
             cheeps.Add(
-                new CheepDTO("mr. " + i + "test",
+                new CheepDTO(
+                    null,
+                    "mr. " + i + "test",
                     "test: " + i + "test!",
                     new DateTimeOffset(DateTime.Now.AddHours(i)).ToUnixTimeSeconds()));
         }

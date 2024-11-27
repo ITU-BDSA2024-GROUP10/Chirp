@@ -135,7 +135,7 @@ public class CheepRepositoryUnitTest
         Assert.NotNull(result);
 
         var resultList = result.ToList();
-        var expected = new CheepDTO(author.UserName!, cheep.Message, ((DateTimeOffset)timeStamp).ToUnixTimeSeconds());
+        var expected = new CheepDTO(null, author.UserName!, cheep.Message, ((DateTimeOffset)timeStamp).ToUnixTimeSeconds());
         Assert.Single(resultList);
 
         var singleCheep = resultList.ElementAt(0);
@@ -287,7 +287,7 @@ public class CheepRepositoryUnitTest
         await Context.SaveChangesAsync();
 
         var unixTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        var newCheep = new CheepDTO(author.UserName!, "message", unixTimestamp);
+        var newCheep = new CheepDTO(null, author.UserName!, "message", unixTimestamp);
 
         //act
         var result = await CheepRepository.CreateCheep(newCheep);
