@@ -406,6 +406,8 @@ public class CheepRepositoryUnitTest
             Assert.True(resultArray[i-1].UnixTimestamp >= resultArray[i].UnixTimestamp);
         }
     }
+    
+    #region comments
 
     [Fact]
     public async Task GetCheepById_ReturnsCorrectCheep()
@@ -504,4 +506,5 @@ public class CheepRepositoryUnitTest
         Assert.Equal(comment1.Author, first.Author);
     }
     
+    #endregion
 }
