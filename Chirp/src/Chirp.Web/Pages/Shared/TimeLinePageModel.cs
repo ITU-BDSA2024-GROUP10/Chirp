@@ -34,6 +34,7 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
         if (User.Identity != null)
         {
             var cheep = new CheepDTO (
+                null,
                 User.Identity.Name ?? "no name",
                 MessageModel.Message!,
                 dt.ToUnixTimeSeconds()
