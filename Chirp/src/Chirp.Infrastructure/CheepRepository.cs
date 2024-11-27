@@ -14,7 +14,7 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         if (pageSize < 0) return null;
             
         var query = context.Cheeps
-            .Select(cheep => new { cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
+            .Select(cheep => new {cheep.Id, cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip((page - 1) * pageSize)
             .Take(pageSize);
@@ -22,7 +22,7 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         var cheeps = await query.ToListAsync();
 
         return cheeps.Select(cheep =>
-            new CheepDTO(cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
+            new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
 
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorByPage(string author, int page, int pageSize)
@@ -35,12 +35,12 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         author = author.ToUpper();
         var query = context.Cheeps
             .Where(cheep => cheep.Author.NormalizedUserName == author)
-            .Select(cheep => new { cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
+            .Select(cheep => new { cheep.Id, cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
             .OrderByDescending(cheep => cheep.TimeStamp);
         var cheeps = await query.ToListAsync();
 
         return cheeps.Select(cheep =>
-            new CheepDTO(cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
+            new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
     
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page, int pageSize)
@@ -48,7 +48,7 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         authors = authors.Select(author => author.ToUpper());
         var query = context.Cheeps
             .Where(cheep => authors.Contains(cheep.Author.NormalizedUserName!))
-            .Select(cheep => new { cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
+            .Select(cheep => new { cheep.Id, cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip((page - 1) * pageSize)
             .Take(pageSize);
@@ -56,7 +56,7 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         var cheeps = await query.ToListAsync();
 
         return cheeps.Select(cheep =>
-            new CheepDTO(cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
+            new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
 
     public Task<int> GetAmountOfCheeps()
