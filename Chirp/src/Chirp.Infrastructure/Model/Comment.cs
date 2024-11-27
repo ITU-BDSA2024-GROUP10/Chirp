@@ -13,12 +13,12 @@ public class Comment
         
     }
 
-    public Comment(int id, Author author, Cheep cheep, string content, DateTime timeStamp)
+    public Comment(int id, Author author, Cheep cheep, string message, DateTime timeStamp)
     {
         Id = id;
         Author = author;
         Cheep = cheep;
-        Message = content;
+        Message = message;
         TimeStamp = timeStamp;
     }
 }
