@@ -99,4 +99,22 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         await context.SaveChangesAsync();
         return true; 
     }
+
+    public async Task<int> GetCommentAmountOnCheep(int? cheepId)
+    {
+        if (cheepId == null) return 0; 
+        var query = context.Cheeps
+            .Include(c => c.Comments)
+            .Where(c => c.Id == cheepId)
+            .FirstOrDefaultAsync();
+
+        if (query.Result != null)
+        {
+            var commentCount = query.Result.Comments.Count();
+        
+            return commentCount;
+        }
+        return 0;
+    }
+    
 }

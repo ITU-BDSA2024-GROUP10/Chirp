@@ -13,4 +13,6 @@ public interface ICheepRepository
     public Task<int> GetAmountOfCheepsFromAuthors(IEnumerable<String> authors);
 
     public Task<bool> AddCommentToCheep(CommentDTO comment);
+
+    public Task<int> GetCommentAmountOnCheep(int? cheepId);
 }
