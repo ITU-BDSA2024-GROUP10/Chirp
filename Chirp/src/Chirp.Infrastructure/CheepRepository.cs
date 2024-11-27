@@ -103,10 +103,13 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
     public async Task<int> GetCommentAmountOnCheep(int? cheepId)
     {
         if (cheepId == null) return 0; 
-        var query = context.Cheeps
+        var query = await context.Cheeps
             .Include(c => c.Comments)
             .Where(c => c.Id == cheepId)
             .FirstOrDefaultAsync();
+        var commentCount = query!.Comments.Count;
+        return commentCount;
+    }
 
     public async Task<CheepDTO> GetCheepById(int cheepId)
     {
