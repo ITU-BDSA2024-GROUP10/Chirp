@@ -16,8 +16,8 @@
 
     @if (Model.Cheeps.Any())
     {
-        @await Component.InvokeAsync("CheepList", new { cheeps = Model.Cheeps, targetPage = $"/{routeName}" })
         @await Component.InvokeAsync("PageButtons", new { currentPageNumber = Model.PageNumber, lastPageNumber = Model.LastPageNumber, targetPageUrl = $"/{routeName}" })
+        @await Component.InvokeAsync("CheepList", new { cheeps = Model.Cheeps, targetPage = $"/{routeName}" })
     }
     else
     {
