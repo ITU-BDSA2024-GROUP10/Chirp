@@ -11,4 +11,6 @@ public interface ICheepRepository
     public Task<bool> CreateCheep(CheepDTO cheep);
     public Task<int> GetAmountOfCheeps();
     public Task<int> GetAmountOfCheepsFromAuthors(IEnumerable<String> authors);
+
+    public Task<bool> AddCommentToCheep(CommentDTO comment);
 }

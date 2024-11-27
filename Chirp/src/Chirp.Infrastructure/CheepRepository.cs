@@ -82,4 +82,21 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         await context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<bool> AddCommentToCheep(CommentDTO comment)
+    {
+        var author = await context.Authors
+            .Where(a => a.UserName == comment.Author)
+            .FirstOrDefaultAsync();
+        if (author == null) return false;
+        var cheep = await context.Cheeps
+            .Where(c => c.Id == comment.CheepId)
+            .Include(c => c.Comments)
+            .FirstOrDefaultAsync();
+        if (cheep == null) return false;
+        var newComment = new Comment {Author = author, Cheep = cheep, Message = comment.Message, TimeStamp = DateTimeOffset.FromUnixTimeSeconds(comment.UnixTimestamp).DateTime};
+        cheep.Comments.Add(newComment);
+        await context.SaveChangesAsync();
+        return true; 
+    }
 }
