@@ -19,10 +19,10 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
 
     public string TimeSinceComment(long timeStamp)
     {
-        var utcThen = DateTimeOffset.FromUnixTimeSeconds(timeStamp).UtcDateTime.AddHours(1);
+        var utcThen =  DateTimeOffset.FromUnixTimeSeconds(timeStamp);
         var localTimeZone = TimeZoneInfo.Local;
-        var then = TimeZoneInfo.ConvertTimeFromUtc(utcThen, localTimeZone);
-        var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, localTimeZone);
+        var then = TimeZoneInfo.ConvertTime(utcThen, localTimeZone);
+        var now = TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, localTimeZone);
         
         var timesince = (now - then) switch
         {
@@ -37,7 +37,7 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
     
     public IActionResult OnPostComment(string author, int cheepId, string comment)
     {
-        var dt = (DateTimeOffset)DateTime.UtcNow;
+        var dt = DateTimeOffset.UtcNow;
         var commentDTO = new CommentDTO
         (
             author, 

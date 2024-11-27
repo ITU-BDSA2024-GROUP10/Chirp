@@ -53,7 +53,7 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
     public IActionResult OnPostComment(string author, int cheepId, string comment)
     {
         Console.WriteLine("ASDHAJSHDKJASDKHJSADKJHSAKJHSKDJHSKAHDJ " + author + ": " + comment + " (" + cheepId + ")");
-        var dt = (DateTimeOffset)DateTime.UtcNow;
+        var dt = DateTimeOffset.UtcNow;
         var commentDTO = new CommentDTO
         (
             author, 
