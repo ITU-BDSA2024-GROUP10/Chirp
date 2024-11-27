@@ -429,4 +429,31 @@ public class CheepRepositoryUnitTest
         Assert.Equal(cheep.Id, result.Id);
         Assert.Equal(cheep.Message, result.Message);
     }
+    [Fact]
+    public async Task GetCommentAmountOnCheep_ReturnsCorrectAmount()
+    {
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var author2 = TestUtils.CreateTestAuthor("mr. comment");
+        var cheep = new Cheep
+        {
+            Id = 0,
+            Message = "test",
+            TimeStamp = DateTime.Now,
+            Author = author
+        };
+        Context.Authors.Add(author);
+        Context.Authors.Add(author2);
+        Context.Cheeps.Add(cheep);
+        await Context.SaveChangesAsync();
+
+        var comment1 = new CommentDTO(author2.UserName!, cheep.Id, "test comment", 1234);
+        await CheepRepository.AddCommentToCheep(comment1);
+        var count = await CheepRepository.GetCommentAmountOnCheep(cheep.Id);
+        Assert.Equal(1, count);
+        
+        comment1 = new CommentDTO(author2.UserName!, cheep.Id, "test comment", 1234);
+        await CheepRepository.AddCommentToCheep(comment1);
+        count = await CheepRepository.GetCommentAmountOnCheep(cheep.Id);
+        Assert.Equal(2, count);
+    }
 }
