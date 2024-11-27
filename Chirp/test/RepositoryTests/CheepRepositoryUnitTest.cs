@@ -406,4 +406,27 @@ public class CheepRepositoryUnitTest
             Assert.True(resultArray[i-1].UnixTimestamp >= resultArray[i].UnixTimestamp);
         }
     }
+
+    [Fact]
+    public async Task GetCheepById_ReturnsCorrectCheep()
+    {
+        // Arrange TEST nr 100 lez gooo
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var cheep = new Cheep
+        {
+            Id = 0,
+            Message = "test",
+            TimeStamp = DateTime.Now,
+            Author = author
+        };
+        
+        Context.Authors.Add(author);
+        Context.Cheeps.Add(cheep);
+        await Context.SaveChangesAsync();
+        
+        var result = await CheepRepository.GetCheepById(cheep.Id);
+        Assert.NotNull(result);
+        Assert.Equal(cheep.Id, result.Id);
+        Assert.Equal(cheep.Message, result.Message);
+    }
 }
