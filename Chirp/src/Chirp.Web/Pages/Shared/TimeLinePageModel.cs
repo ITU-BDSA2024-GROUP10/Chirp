@@ -61,7 +61,7 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
             dt.ToUnixTimeSeconds()
         );
 
-        if (!cheepService.AddCommentToCheep(commentDTO))
+        if (!CheepService.AddCommentToCheep(commentDTO))
         {
             throw new ApplicationException("Failed to add comment");
         }
