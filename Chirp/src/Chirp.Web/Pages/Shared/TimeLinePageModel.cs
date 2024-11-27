@@ -50,5 +50,25 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
         return RedirectToPage(null); //redirects to the same page
     }
 
+    public IActionResult OnPostComment(string author, int cheepId, string comment)
+    {
+        Console.WriteLine("ASDHAJSHDKJASDKHJSADKJHSAKJHSKDJHSKAHDJ " + author + ": " + comment + " (" + cheepId + ")");
+        var dt = (DateTimeOffset)DateTime.UtcNow;
+        var commentDTO = new CommentDTO
+        (
+            author, 
+            cheepId, 
+            comment, 
+            dt.ToUnixTimeSeconds()
+        );
+
+        if (!cheepService.AddCommentToCheep(commentDTO))
+        {
+            throw new ApplicationException("Failed to add comment");
+        }
+       
+        return RedirectToPage(null);
+    }
+
     protected abstract void LoadCheeps(int page);
 }
