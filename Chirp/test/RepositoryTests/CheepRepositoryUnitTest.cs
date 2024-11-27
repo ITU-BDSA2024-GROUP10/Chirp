@@ -479,4 +479,29 @@ public class CheepRepositoryUnitTest
 
     }
 
+    [Fact]
+    public async Task GetCommentsFromCheep_ReturnsCorrectComments()
+    {
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var author2 = TestUtils.CreateTestAuthor("mr. comment");
+        var cheep = new Cheep
+        {
+            Id = 0,
+            Message = "test",
+            TimeStamp = DateTime.Now,
+            Author = author
+        };
+        Context.Authors.Add(author);
+        Context.Authors.Add(author2);
+        Context.Cheeps.Add(cheep);
+        await Context.SaveChangesAsync();
+        var comment1 = new CommentDTO(author2.UserName!, cheep.Id, "test comment", 1234);
+        await CheepRepository.AddCommentToCheep(comment1);
+        var comments = await CheepRepository.GetCommentsForCheep(cheep.Id);
+        var first = comments.First();
+        Assert.Single(comments);
+        Assert.Equal(comment1.Message, first.Message);
+        Assert.Equal(comment1.Author, first.Author);
+    }
+    
 }
