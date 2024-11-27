@@ -105,7 +105,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
          return list != null && list.Any(a => a.NormalizedUserName == userToFollow);
     }
 
-    private async Task<List<Author>> GetFollowing(string currentUser)
+    private async Task<IEnumerable<Author>> GetFollowing(string currentUser)
     {
         currentUser = currentUser.ToUpper();
         return await context.Authors
