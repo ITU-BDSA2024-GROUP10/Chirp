@@ -456,4 +456,27 @@ public class CheepRepositoryUnitTest
         count = await CheepRepository.GetCommentAmountOnCheep(cheep.Id);
         Assert.Equal(2, count);
     }
+
+    [Fact]
+    public async Task AddCommentToCheep_AddsCommentToCheep()
+    {
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var author2 = TestUtils.CreateTestAuthor("mr. comment");
+        var cheep = new Cheep
+        {
+            Id = 0,
+            Message = "test",
+            TimeStamp = DateTime.Now,
+            Author = author
+        };
+        Context.Authors.Add(author);
+        Context.Authors.Add(author2);
+        Context.Cheeps.Add(cheep);
+        await Context.SaveChangesAsync();
+        var comment1 = new CommentDTO(author2.UserName!, cheep.Id, "test comment", 1234);
+        await CheepRepository.AddCommentToCheep(comment1);
+        Assert.True(Context.Comments.Count() == 1);
+
+    }
+
 }
