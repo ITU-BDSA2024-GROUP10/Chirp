@@ -15,4 +15,5 @@ public interface ICheepRepository
     public Task<bool> AddCommentToCheep(CommentDTO comment);
     public Task<int> GetCommentAmountOnCheep(int? cheepId);
     public Task<CheepDTO> GetCheepById(int cheepId);
+    public Task<IEnumerable<CommentDTO>> GetCommentsForCheep(int cheepId);
 }

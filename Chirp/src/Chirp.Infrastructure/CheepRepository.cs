@@ -120,6 +120,16 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         
         return new CheepDTO(cheep!.Id, cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds());;
     }
+
+    public async Task<IEnumerable<CommentDTO>> GetCommentsForCheep(int cheepId)
+    {
+        var query = await context.Cheeps
+            .Where(c => c.Id == cheepId)
+            .Include(c => c.Comments)
+            .ThenInclude(comment => comment.Author)
+            .FirstOrDefaultAsync();
+        var comments = query!.Comments.OrderByDescending(c => c.TimeStamp);
+        return comments.Select(comment =>
+            new CommentDTO(comment.Author.UserName!, comment.Id, comment.Message, new DateTimeOffset(comment.TimeStamp).ToUnixTimeSeconds()));
     }
-    
 }
