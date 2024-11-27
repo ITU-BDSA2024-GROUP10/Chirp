@@ -30,7 +30,7 @@
 <ul id="messagelist" class="cheeps">
     @foreach (var cheep in cheeps)
     {
-        <li onclick="goToSpecificCheep(@cheep.Id)">
+        <li>
             <p>
                 <strong>
                     <a href="/@cheep.Author">@cheep.Author</a>
@@ -38,11 +38,11 @@
                     {
                     @if (Follows.Any(a => a.Name == cheep.Author))
                     {
-                    <button onclick="stopPropagation(); toggleFollow(this, '@cheep.Author', false)">unfollow</button>
+                    <button onclick="toggleFollow(this, '@cheep.Author', false)">unfollow</button>
                     }
                     else
                     {
-                    <button onclick="stopPropagation(); toggleFollow(this, '@cheep.Author', true)">follow</button>
+                    <button onclick="toggleFollow(this, '@cheep.Author', true)">follow</button>
                     }
                     }
                 </strong>
@@ -50,16 +50,17 @@
             <p>@cheep.Message</p>
             <div style="display: flex; align-items: center;">
                 <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss")</small>
-                <a href="#" onclick="stopPropagation(); showPopup()">
+                <a href="#" onclick="showPopup()">
                     <img src="images/comment.png" alt="Comment Icon" style="width: 18px; height: 18px; margin-left: 15px; vertical-align: middle"/>
 
                 </a>
                 <small style="margin-left: -5px">@CheepService.GetCommentAmountOnCheep(cheep.Id)</small>
+                <small style="margin-left: 10px" onclick="goToSpecificCheep(@cheep.Id)">See Comments</small>
             </div>
         </li>
         <div id="popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center">
             <div style="background-color: white; padding: 20px; border-radius: 5px; text-align: center; min-width: 300px; position: relative;">
-                <a href="#" onclick="stopPropagation(); cancelPopup()" style="position: absolute; top: 10px; left: 10px; font-size: 20px; text-decoration: none;">X</a>
+                <a href="#" onclick="cancelPopup()" style="position: absolute; top: 10px; left: 10px; font-size: 20px; text-decoration: none;">X</a>
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px">
                     <div>
                         <h3>Add your comment to @cheep.Author</h3>
