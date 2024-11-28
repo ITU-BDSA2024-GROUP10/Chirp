@@ -46,6 +46,19 @@ public class CommentTests :  PageTestWithRazorPlaywrightWebApplicationFactory
     }
 
     [Test]
+    public async Task TestAddComment()
+    {
+        await GenerateCheep(_testAuthor.author, "this is author");
+        await RazorPageUtils.Login(_testAuthor);
+        await Page.GotoAsync("/");
+        await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First.ClickAsync();
+        await Page.GetByPlaceholder("Write a comment").ClickAsync();
+        await Page.GetByPlaceholder("Write a comment").FillAsync("This is a comment");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Post" }).ClickAsync();
+        await Expect(Page.GetByText("This is a comment")).ToBeVisibleAsync();
+    }
+
+    [Test]
     public async Task CannotPostCommentsWhenNotLoggedIn()
     {
         await GenerateCheep(_testAuthor.author, "this is author");
