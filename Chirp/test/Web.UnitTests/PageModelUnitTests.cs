@@ -17,7 +17,9 @@ public class PageModelUnitTests
         for (int i = 0; i < 10; i++)
         {
             cheeps.Add(
-                new CheepDTO("mr. test",
+                new CheepDTO(
+                    null,
+                    "mr. test",
                     "test",
                     new DateTimeOffset(DateTime.Now.AddHours(i)).ToUnixTimeSeconds()));
         }
