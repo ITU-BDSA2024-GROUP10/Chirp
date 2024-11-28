@@ -39,14 +39,28 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
         return timesince;
     }
     
-    public IActionResult OnPostComment(string author, int cheepId, string comment)
+    public IActionResult OnPostComment(string author, int cheepId)
     {
+        if (string.IsNullOrWhiteSpace(MessageModel.Message))
+        {
+            ModelState.AddModelError("Message", "Message cannot be empty");
+            Reload(cheepId);
+            return Page();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            Reload(cheepId);
+            return Page();
+        }
+        
+        
         var dt = DateTimeOffset.UtcNow;
         var commentDTO = new CommentDTO
         (
             author, 
             cheepId, 
-            comment, 
+            MessageModel.Message, 
             dt.ToUnixTimeSeconds()
         );
 
