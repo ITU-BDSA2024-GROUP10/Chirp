@@ -12,9 +12,9 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
     public async Task<IEnumerable<CheepDTO>?> GetCheepsByPage(int page, int pageSize)
     {
         if (pageSize < 0) return null;
-            
+
         var query = context.Cheeps
-            .Select(cheep => new {cheep.Id, cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
+            .Select(cheep => new { cheep.Id, cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip((page - 1) * pageSize)
             .Take(pageSize);
@@ -22,7 +22,8 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         var cheeps = await query.ToListAsync();
 
         return cheeps.Select(cheep =>
-            new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
+            new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message,
+                new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
 
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorByPage(string author, int page, int pageSize)
@@ -40,10 +41,12 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         var cheeps = await query.ToListAsync();
 
         return cheeps.Select(cheep =>
-            new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
+            new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message,
+                new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
-    
-    public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page, int pageSize)
+
+    public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page,
+        int pageSize)
     {
         authors = authors.Select(author => author.ToUpper());
         var query = context.Cheeps
@@ -56,7 +59,8 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         var cheeps = await query.ToListAsync();
 
         return cheeps.Select(cheep =>
-            new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
+            new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message,
+                new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
 
     public Task<int> GetAmountOfCheeps()
@@ -77,7 +81,11 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             .Where(a => a.UserName == cheep.Author)
             .FirstOrDefaultAsync();
         if (author == null) return false;
-        var cheep2 = new Cheep {Author = author, Message = cheep.Message, TimeStamp = DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime};
+        var cheep2 = new Cheep
+        {
+            Author = author, Message = cheep.Message,
+            TimeStamp = DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime
+        };
         context.Cheeps.Add(cheep2);
         await context.SaveChangesAsync();
         return true;
@@ -94,15 +102,19 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             .Include(c => c.Comments)
             .FirstOrDefaultAsync();
         if (cheep == null) return false;
-        var newComment = new Comment {Author = author, Cheep = cheep, Message = comment.Message, TimeStamp = DateTimeOffset.FromUnixTimeSeconds(comment.UnixTimestamp).DateTime};
+        var newComment = new Comment
+        {
+            Author = author, Cheep = cheep, Message = comment.Message,
+            TimeStamp = DateTimeOffset.FromUnixTimeSeconds(comment.UnixTimestamp).DateTime
+        };
         cheep.Comments.Add(newComment);
         await context.SaveChangesAsync();
-        return true; 
+        return true;
     }
 
     public async Task<int> GetCommentAmountOnCheep(int? cheepId)
     {
-        if (cheepId == null) return 0; 
+        if (cheepId == null) return 0;
         var query = await context.Cheeps
             .Include(c => c.Comments)
             .Where(c => c.Id == cheepId)
@@ -117,8 +129,10 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             .Where(c => c.Id == cheepId)
             .Select(cheep => new { cheep.Id, cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
             .FirstOrDefaultAsync();
-        
-        return new CheepDTO(cheep!.Id, cheep.UserName!, cheep.Message, new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds());;
+
+        return new CheepDTO(cheep!.Id, cheep.UserName!, cheep.Message,
+            new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds());
+        ;
     }
 
     public async Task<IEnumerable<CommentDTO>> GetCommentsForCheep(int cheepId)
@@ -130,6 +144,7 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             .FirstOrDefaultAsync();
         var comments = query!.Comments.OrderByDescending(c => c.TimeStamp);
         return comments.Select(comment =>
-            new CommentDTO(comment.Author.UserName!, comment.Id, comment.Message, new DateTimeOffset(comment.TimeStamp).ToUnixTimeSeconds()));
+            new CommentDTO(comment.Author.UserName!, comment.Id, comment.Message,
+                new DateTimeOffset(comment.TimeStamp).ToUnixTimeSeconds()));
     }
 }

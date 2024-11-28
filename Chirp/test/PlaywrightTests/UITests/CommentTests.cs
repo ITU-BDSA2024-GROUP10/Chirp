@@ -1,15 +1,13 @@
-using Duende.IdentityServer.Extensions;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Playwright;
-using NUnit.Framework.Internal;
 using PlaywrightTests.Utils;
 using PlaywrightTests.Utils.PageTests;
+
 namespace PlaywrightTests.UITests;
 
-public class CommentTests :  PageTestWithRazorPlaywrightWebApplicationFactory
+public class CommentTests : PageTestWithRazorPlaywrightWebApplicationFactory
 {
     private TestAuthor _testAuthor;
-    
+
     [SetUp]
     public async Task SetUp()
     {
@@ -17,16 +15,16 @@ public class CommentTests :  PageTestWithRazorPlaywrightWebApplicationFactory
             .WithUsernameAndEmail("author")
             .Create();
         await GenerateCheep(_testAuthor.author);
-
     }
-    
+
     [Test]
     public async Task SpecificCheepViewExists()
     {
         await GenerateCheep(_testAuthor.author, "this is author");
         await Page.GotoAsync("/");
-        await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First.ClickAsync();
-        await Expect( Page.GetByRole(AriaRole.Link, new() { Name = "author" })).ToBeVisibleAsync();
+        await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First
+            .ClickAsync();
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "author" })).ToBeVisibleAsync();
     }
 
     [Test]
@@ -37,7 +35,8 @@ public class CommentTests :  PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GotoAsync("/");
         await Expect(Page.Locator("li").Filter(new() { HasText = "author" }).Locator("small").Nth(1))
             .ToHaveTextAsync("0");
-        await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First.ClickAsync();
+        await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First
+            .ClickAsync();
         await Page.GetByPlaceholder("Write a comment").ClickAsync();
         await Page.GetByPlaceholder("Write a comment").FillAsync("This is a comment");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Post" }).ClickAsync();
@@ -51,7 +50,8 @@ public class CommentTests :  PageTestWithRazorPlaywrightWebApplicationFactory
         await GenerateCheep(_testAuthor.author, "this is author");
         await RazorPageUtils.Login(_testAuthor);
         await Page.GotoAsync("/");
-        await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First.ClickAsync();
+        await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First
+            .ClickAsync();
         await Page.GetByPlaceholder("Write a comment").ClickAsync();
         await Page.GetByPlaceholder("Write a comment").FillAsync("This is a comment");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Post" }).ClickAsync();
@@ -63,7 +63,8 @@ public class CommentTests :  PageTestWithRazorPlaywrightWebApplicationFactory
     {
         await GenerateCheep(_testAuthor.author, "this is author");
         await Page.GotoAsync("/");
-        await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First.ClickAsync();
+        await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First
+            .ClickAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Log in to comment on this" }))
             .ToBeVisibleAsync();
     }

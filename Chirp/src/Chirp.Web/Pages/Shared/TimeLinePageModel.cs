@@ -16,24 +16,25 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
     public int LastPageNumber = 1;
     protected const int PageSize = 32;
 
-    [BindProperty] 
-    public MessageModel MessageModel { get; set; } = new MessageModel();
-    
+    [BindProperty] public MessageModel MessageModel { get; set; } = new MessageModel();
+
     public ActionResult OnPost(string? author, [FromQuery] int page)
     {
-        if (string.IsNullOrWhiteSpace(MessageModel.Message)) {
+        if (string.IsNullOrWhiteSpace(MessageModel.Message))
+        {
             ModelState.AddModelError("Message", "Message cannot be empty");
         }
-        
-        if (!ModelState.IsValid) {
+
+        if (!ModelState.IsValid)
+        {
             LoadCheeps(page);
             return Page();
         }
-        
+
         var dt = (DateTimeOffset)DateTime.UtcNow;
         if (User.Identity != null)
         {
-            var cheep = new CheepDTO (
+            var cheep = new CheepDTO(
                 null,
                 User.Identity.Name ?? "no name",
                 MessageModel.Message!,
@@ -55,9 +56,9 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
         var dt = DateTimeOffset.UtcNow;
         var commentDTO = new CommentDTO
         (
-            author, 
-            cheepId, 
-            comment, 
+            author,
+            cheepId,
+            comment,
             dt.ToUnixTimeSeconds()
         );
 
@@ -65,7 +66,7 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
         {
             throw new ApplicationException("Failed to add comment");
         }
-       
+
         return RedirectToPage(null);
     }
 

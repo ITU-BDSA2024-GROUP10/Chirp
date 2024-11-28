@@ -11,9 +11,9 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
     public CheepDTO Cheep { get; set; } = null!;
     public int CommentCount { get; set; }
     public List<CommentDTO> Comments { get; set; } = [];
-    
-    [BindProperty] 
-    public MessageModel MessageModel { get; set; } = new MessageModel();
+
+    [BindProperty] public MessageModel MessageModel { get; set; } = new MessageModel();
+
     public void OnGet(int cheepId)
     {
         Cheep = cheepService.GetCheepFromId(cheepId);
@@ -23,11 +23,11 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
 
     public string TimeSinceComment(long timeStamp)
     {
-        var utcThen =  DateTimeOffset.FromUnixTimeSeconds(timeStamp);
+        var utcThen = DateTimeOffset.FromUnixTimeSeconds(timeStamp);
         var localTimeZone = TimeZoneInfo.Local;
         var then = TimeZoneInfo.ConvertTime(utcThen, localTimeZone);
         var now = TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, localTimeZone);
-        
+
         var timesince = (now - then) switch
         {
             { TotalMinutes: < 60 } ts => $"{ts.Minutes} minutes ago",
@@ -38,7 +38,7 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
         };
         return timesince;
     }
-    
+
     public IActionResult OnPostComment(string author, int cheepId)
     {
         if (string.IsNullOrWhiteSpace(MessageModel.Message))
@@ -53,14 +53,14 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
             Reload(cheepId);
             return Page();
         }
-        
-        
+
+
         var dt = DateTimeOffset.UtcNow;
         var commentDTO = new CommentDTO
         (
-            author, 
-            cheepId, 
-            MessageModel.Message, 
+            author,
+            cheepId,
+            MessageModel.Message,
             dt.ToUnixTimeSeconds()
         );
 
@@ -68,7 +68,7 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
         {
             throw new ApplicationException("Failed to add comment");
         }
-       
+
         return RedirectToPage("/SpecificCheep", new { cheepId = cheepId });
     }
 

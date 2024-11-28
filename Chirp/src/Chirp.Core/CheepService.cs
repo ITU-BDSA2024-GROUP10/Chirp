@@ -23,8 +23,9 @@ public class CheepService(ICheepRepository db) : ICheepService
     {
         ArgumentOutOfRangeException.ThrowIfNegative(pageSize);
 
-        var result = db.GetCheepsByPage(page, pageSize).Result ?? throw new ArgumentNullException(nameof(db.GetCheepsByPage));
-        
+        var result = db.GetCheepsByPage(page, pageSize).Result ??
+                     throw new ArgumentNullException(nameof(db.GetCheepsByPage));
+
         return result.ToList();
     }
 
@@ -37,7 +38,7 @@ public class CheepService(ICheepRepository db) : ICheepService
     {
         return db.GetCheepsFromAuthorByPage(author, page, pageSize).Result.ToList();
     }
-    
+
     public List<CheepDTO> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page, int pageSize)
     {
         return db.GetCheepsFromAuthorsByPage(authors, page, pageSize).Result.ToList();

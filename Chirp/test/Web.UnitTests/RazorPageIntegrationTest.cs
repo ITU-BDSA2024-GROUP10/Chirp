@@ -1,9 +1,7 @@
-﻿using System.Globalization;
-using Chirp.Core;
+﻿using Chirp.Core;
 using Chirp.Core.DTO;
 using Moq;
 using Web.UnitTests.Utils;
-using Program = Chirp.Web.Program;
 
 namespace Web.UnitTests;
 

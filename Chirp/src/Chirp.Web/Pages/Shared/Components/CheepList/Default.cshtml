@@ -1,10 +1,9 @@
 ﻿@using Chirp.Core
 @using Chirp.Core.DTO
-@using Chirp.Web.Pages.BindingModels
 @inject IAuthorService service
 @inject ICheepService CheepService
 
-private 
+private
 @{
     var targetPage = ViewBag.TargetPage as string ?? "";
     IEnumerable<CheepDTO> cheeps = ViewBag.Cheeps;
@@ -23,11 +22,11 @@ private
     function cancelPopup() {
         document.getElementById('popup').style.display = 'none';
     }
-    
+
     function goToSpecificCheep(cheepId) {
         window.location.href = `/SpecificCheep?cheepId=${cheepId}`;
     }
-    
+
 </script>
 
 <ul id="messagelist" class="cheeps">
@@ -39,14 +38,14 @@ private
                     <a href="/@cheep.Author">@cheep.Author</a>
                     @if (User.Identity!.IsAuthenticated && User.Identity!.Name != cheep.Author)
                     {
-                    @if (Follows.Any(a => a.Name == cheep.Author))
-                    {
-                    <button onclick="toggleFollow(this, '@cheep.Author', false)">unfollow</button>
-                    }
-                    else
-                    {
-                    <button onclick="toggleFollow(this, '@cheep.Author', true)">follow</button>
-                    }
+                        @if (Follows.Any(a => a.Name == cheep.Author))
+                        {
+                            <button onclick="toggleFollow(this, '@cheep.Author', false)">unfollow</button>
+                        }
+                        else
+                        {
+                            <button onclick="toggleFollow(this, '@cheep.Author', true)">follow</button>
+                        }
                     }
                 </strong>
             </p>
@@ -54,7 +53,8 @@ private
             <div style="display: flex; align-items: center;">
                 <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss")</small>
                 <a href="#" onclick="goToSpecificCheep(@cheep.Id)">
-                    <img src="images/comment.png" alt="Comment Icon" style="width: 18px; height: 18px; margin-left: 15px; vertical-align: middle"/>
+                    <img src="images/comment.png" alt="Comment Icon"
+                         style="width: 18px; height: 18px; margin-left: 15px; vertical-align: middle"/>
                 </a>
                 <small style="margin-left: -5px">@CheepService.GetCommentAmountOnCheep(cheep.Id)</small>
             </div>

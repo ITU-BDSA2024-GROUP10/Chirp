@@ -8,7 +8,6 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
 {
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
-    
     public DbSet<Comment> Comments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -52,14 +51,14 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
             entity.HasMany(a => a.Following)
                 .WithMany(a => a.Followers);
         });
-        
+
         //define comment entity constraints
         modelBuilder.Entity<Comment>(entity =>
         {
             entity.HasKey((c => c.Id));
             entity.Property(c => c.Id)
                 .ValueGeneratedOnAdd();
-            
+
             entity.Property(c => c.Message)
                 .IsRequired()
                 .HasMaxLength(160);
@@ -69,12 +68,11 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
                 .WithMany(a => a.Comments)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             entity.HasOne(c => c.Cheep)
                 .WithMany(c => c.Comments)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
         });
-
     }
 }
