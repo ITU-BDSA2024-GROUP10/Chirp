@@ -8,7 +8,7 @@ public sealed class Author : IdentityUser
     public List<Cheep> Cheeps { get; set; } = [];
     public List<Author> Following { get; set; } = [];
     public List<Author> Followers { get; set; } = [];
-    public byte[] ProfileImage { get; set; } = [];
+    public byte[]? ProfileImage { get; set; } = null;
 
     public Author()
     {
