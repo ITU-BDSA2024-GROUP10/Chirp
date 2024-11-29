@@ -11,6 +11,7 @@ public abstract class TimeLinePageModel(ICheepService cheepService, IAuthorServi
     public List<CheepDTO> Cheeps { get; set; } = [];
     
     protected readonly ICheepService CheepService = cheepService;
+    protected readonly IAuthorService AuthorService = authorService;
     
     public int PageNumber = 1;
     public int LastPageNumber = 1;
