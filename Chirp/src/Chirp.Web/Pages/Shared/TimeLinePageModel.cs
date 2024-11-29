@@ -9,6 +9,7 @@ namespace Chirp.Web.Pages.Shared;
 public abstract class TimeLinePageModel(ICheepService cheepService, IAuthorService authorService) : PageModel
 {
     public List<CheepDTO> Cheeps { get; set; } = [];
+    public Dictionary<string, byte[]> ImageMap = new();
     
     protected readonly ICheepService CheepService = cheepService;
     protected readonly IAuthorService AuthorService = authorService;
@@ -51,4 +52,14 @@ public abstract class TimeLinePageModel(ICheepService cheepService, IAuthorServi
     }
 
     protected abstract void LoadCheeps(int page);
+
+    protected void LoadProfileImages(IEnumerable<CheepDTO> cheeps)
+    {
+        var authors = AuthorService.GetAuthorsByNames(cheeps.Select(c => c.Author));
+        foreach (var author in authors)
+        {
+            if (author!.ProfileImage == null) continue;
+            ImageMap[author.Name] = author.ProfileImage;
+        }
+    }
 }
