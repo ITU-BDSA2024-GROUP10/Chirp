@@ -55,5 +55,5 @@
     </div>
     
     
-    @await Component.InvokeAsync("CheepList", new {cheeps = Model.Cheeps, targetPage = "/AboutMe"})
+    @await Component.InvokeAsync("CheepList", new {cheeps = Model.Cheeps, ImageMap = new Dictionary<string, byte[]> {{Model.Author.UserName!, Model.Author.ProfileImage!}}, targetPage = "/AboutMe"})
 </div>
