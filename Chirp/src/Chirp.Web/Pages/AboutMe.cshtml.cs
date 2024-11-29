@@ -18,6 +18,8 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
     public List<CheepDTO> Cheeps { get; set; } = [];
     public int AmountYouFollow { get; set; } = 0;
     public int AmountOfFollowers { get; set; } = 0;
+    [BindProperty]
+    public IFormFile? Avatar { get; set; }
     public async void OnGet()
     {
         Author = await userManager.FindByNameAsync(User.Identity!.Name!);
@@ -28,6 +30,25 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
         }
         
         SetUserInfo(Author.UserName);
+    }
+
+    public async Task<IActionResult> OnPostImage()
+    {
+        Author = await userManager.FindByNameAsync(User.Identity!.Name!);
+        if (Author == null)
+        {
+            return Redirect("/NotFound");
+        }
+
+        if (Avatar!.Length > 0)
+        {
+            using var memoryStream = new MemoryStream();
+            await Avatar.CopyToAsync(memoryStream);
+            Author.ProfileImage = memoryStream.ToArray();
+            await userManager.UpdateAsync(Author);
+        }
+
+        return RedirectToPage();
     }
     
     public async Task<ActionResult> OnPostConfirmDelete()

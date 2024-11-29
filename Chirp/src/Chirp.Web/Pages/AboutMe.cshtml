@@ -18,7 +18,15 @@
     <h2>Name: @Model.Author!.UserName</h2>
     <h3>Email: @Model.Author.Email</h3>
 
-    @if (Model.Author.ProfileImage != null && Model.Author.ProfileImage.Length > 0)
+    <form method="post" enctype="multipart/form-data" asp-page-handler="Image">
+        <div class="form-group">
+            <label asp-for="Avatar">Upload Profile Image</label>
+            <input asp-for="Avatar" type="file" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+
+    @if (Model.Author.ProfileImage.Length > 0)
     {
     <img src="data:image;base64,@Convert.ToBase64String(Model.Author.ProfileImage)" alt="Profile Image" style="max-width: 150px; max-height: 150px;" />
     }
