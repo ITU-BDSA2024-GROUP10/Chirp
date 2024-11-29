@@ -14,6 +14,13 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
     {
         var author = await GetAuthor(name);
         return new AuthorDTO(author.UserName!, author.Email!);
+    
+    public async Task<IEnumerable<AuthorDTO?>> GetAuthorsByNames(IEnumerable<string> names)
+    {
+        return await context.Authors
+            .Where(a => names.Contains(a.UserName))
+            .Select(a => new AuthorDTO(a.UserName!, a.Email!, a.ProfileImage))
+            .ToListAsync();
     }
 
     public async Task<bool> AddAuthor(AuthorDTO author)
