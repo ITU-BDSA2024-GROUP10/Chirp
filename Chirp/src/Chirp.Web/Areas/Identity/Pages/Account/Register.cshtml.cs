@@ -104,9 +104,6 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-            
-            [DataType(DataType.Upload)]
-            public IFormFile File { get; set; }
         }
 
 
@@ -125,13 +122,6 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 var user = CreateUser();
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                
-                if (Input.File is { Length: > 0 })
-                {
-                    using var memoryStream = new MemoryStream();
-                    await Input.File.CopyToAsync(memoryStream);
-                    user.ProfileImage = memoryStream.ToArray();
-                }
                 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 
