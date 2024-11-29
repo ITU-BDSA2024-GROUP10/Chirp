@@ -28,6 +28,7 @@ public class UserTimelineModel(ICheepService cheepService, IAuthorService author
         try
         {
             LoadCheeps(page);
+            LoadProfileImages(Cheeps);
         }
         catch (AggregateException ae)
         {

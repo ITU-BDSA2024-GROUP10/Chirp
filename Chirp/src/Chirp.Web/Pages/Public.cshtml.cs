@@ -15,6 +15,7 @@ public class PublicModel(ICheepService cheepService, IAuthorService authorServic
         }
         PageNumber = page;
         LoadCheeps(PageNumber);
+        LoadProfileImages(Cheeps);
         return Page();
     }
 
