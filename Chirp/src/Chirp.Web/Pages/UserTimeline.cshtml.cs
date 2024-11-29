@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Web.Pages;
 
-public class UserTimelineModel(ICheepService cheepService, IAuthorService authorService) : TimeLinePageModel(cheepService)
+public class UserTimelineModel(ICheepService cheepService, IAuthorService authorService) : TimeLinePageModel(cheepService, authorService)
 {
     protected readonly IAuthorService AuthorService = authorService;
     public ActionResult OnGet(string author, [FromQuery] int page)
