@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Web.Pages;
 
-public class PublicModel(ICheepService cheepService) : TimeLinePageModel(cheepService)
+public class PublicModel(ICheepService cheepService, IAuthorService authorService) : TimeLinePageModel(cheepService, authorService)
 {
     public ActionResult OnGet([FromQuery] int page)
     {

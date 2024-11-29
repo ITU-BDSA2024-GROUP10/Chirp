@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages.Shared;
 
-public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
+public abstract class TimeLinePageModel(ICheepService cheepService, IAuthorService authorService) : PageModel
 {
     public List<CheepDTO> Cheeps { get; set; } = [];
     
