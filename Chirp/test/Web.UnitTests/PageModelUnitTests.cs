@@ -23,9 +23,10 @@ public class PageModelUnitTests
         }
 
         var serviceMock = new Mock<ICheepService>();
+        var authorServiceMock = new Mock<IAuthorService>();
         serviceMock.Setup(x => x.GetCheepsByPage(It.IsAny<int>(), It.IsAny<int>())).Returns(cheeps);
 
-        var pageModel = new PublicModel(serviceMock.Object);
+        var pageModel = new PublicModel(serviceMock.Object, authorServiceMock.Object);
 
         // Act
         var result = pageModel.OnGet(1);
