@@ -30,6 +30,7 @@ public class PageTestWithRazorPlaywrightWebApplicationFactory : PageTest
     public void RazorSetup()
     {
         _razorClient = RazorFactory.CreateClient();
+        // Note this does not make a new database it just wipes the data 
         RazorFactory.ResetDB();
         RazorPageUtils = new PageUtils(Page);
     }

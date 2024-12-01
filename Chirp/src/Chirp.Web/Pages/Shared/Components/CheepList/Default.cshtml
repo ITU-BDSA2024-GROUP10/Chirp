@@ -1,6 +1,9 @@
 ﻿@using Chirp.Core
 @using Chirp.Core.DTO
 @inject IAuthorService service
+@inject ICheepService CheepService
+
+private
 @{
     var targetPage = ViewBag.TargetPage as string ?? "";
     IEnumerable<CheepDTO> cheeps = ViewBag.Cheeps;
@@ -14,45 +17,51 @@
     var videoListRight = ViewBag.videoListRight;
 }
 
-<div class="container">
-    <div id="videoLeftContainer" class="video-container">
-        <video id="leftVideo" autoplay muted disablePictureInPicture>
-            <source src="@videoListLeft[0]" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-    <ul id="messagelist" class="cheeps">
-        @foreach (var cheep in cheeps)
-        {
-            <li style="word-wrap: break-word;">
-                <p>
-                    <strong>
-                        <a href="/@cheep.Author">@cheep.Author</a>
-                        @if (User.Identity!.IsAuthenticated && User.Identity!.Name != cheep.Author)
-                        {
-                            @if (Follows.Any(a => a.Name == cheep.Author))
-                            {
-                                <button onclick="toggleFollow(this, '@cheep.Author', false)">unfollow</button>
-                            }
-                            else
-                            {
-                                <button onclick="toggleFollow(this, '@cheep.Author', true)">follow</button>
-                            }
-                        }
-                    </strong>
-                </p>
-                <p>@cheep.Message</p>
-                <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss")</small>
-            </li>
-        }
-    </ul>
+<div id="videoLeftContainer" class="video-container">
+    <video id="leftVideo" autoplay muted disablePictureInPicture>
+        <source src="@videoListLeft[0]" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
 
-    <div id="videoRightContainer" class="video-container">
-        <video id="rightVideo" autoplay muted disablePictureInPicture>
-            <source src="@videoListRight[0]" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
+<ul id="messagelist" class="cheeps">
+    @foreach (var cheep in cheeps)
+    {
+        <li style="word-wrap: break-word;">
+            <p>
+                <strong>
+                    <a href="/@cheep.Author">@cheep.Author</a>
+                    @if (User.Identity!.IsAuthenticated && User.Identity!.Name != cheep.Author)
+                    {
+                        @if (Follows.Any(a => a.Name == cheep.Author))
+                        {
+                            <button onclick="toggleFollow(this, '@cheep.Author', false)">unfollow</button>
+                        }
+                        else
+                        {
+                            <button onclick="toggleFollow(this, '@cheep.Author', true)">follow</button>
+                        }
+                    }
+                </strong>
+            </p>
+            <p>@cheep.Message</p>
+            <div style="display: flex; align-items: center;">
+                <small>&mdash; @DateTimeOffset.FromUnixTimeSeconds(cheep.UnixTimestamp).DateTime.ToString("dd/MM/yy H:mm:ss")</small>
+                <a href="#" onclick="goToSpecificCheep(@cheep.Id)">
+                    <img src="images/comment.png" alt="Comment Icon"
+                         style="width: 18px; height: 18px; margin-left: 15px; vertical-align: middle"/>
+                </a>
+                <small style="margin-left: -5px">@CheepService.GetCommentAmountOnCheep(cheep.Id)</small>
+            </div>
+        </li>
+    }
+</ul>
+
+<div id="videoRightContainer" class="video-container">
+    <video id="rightVideo" autoplay muted disablePictureInPicture>
+        <source src="@videoListRight[0]" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 </div>
 
 <script type="module">
@@ -66,4 +75,19 @@
     
     new VideoController(leftVideoElement, videoListLeft);
     new VideoController(rightVideoElement, videoListRight);
+</script>
+
+<script type="text/javascript">
+    function showPopup() {
+        document.getElementById('popup').style.display = 'flex';
+    }
+
+    function cancelPopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    function goToSpecificCheep(cheepId) {
+        window.location.href = `/SpecificCheep?cheepId=${cheepId}`;
+    }
+
 </script>

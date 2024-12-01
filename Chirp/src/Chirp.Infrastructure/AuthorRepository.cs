@@ -43,7 +43,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
             .Where(a => a.NormalizedUserName == username.ToUpper())
             .Select(a => a.Followers)
             .FirstOrDefaultAsync() ?? new List<Author>();
-        
+
         return followers.Select(a => new AuthorDTO(a.UserName!, a.Email!)).ToList();
     }
 
@@ -53,10 +53,10 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         if (!await UserExists(currentUser)) throw new UserDoesNotExist();
         if (!await UserExists(userToFollow)) throw new UserDoesNotExist("User to follow does not exist");
         if (await DoesFollow(currentUser, userToFollow)) return false;
-        
+
         var authorToFollow = await GetAuthor(userToFollow);
         GetAuthor(currentUser).Result.Following.Add(authorToFollow);
-        
+
         await context.SaveChangesAsync();
         return true;
     }
@@ -69,17 +69,17 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         if (!await UserExists(currentUser)) throw new UserDoesNotExist();
         if (!await UserExists(userToUnfollow)) throw new UserDoesNotExist("User to unfollow does not exist");
         if (!await DoesFollow(currentUser, userToUnfollow)) return false;
-        
+
         var authorToUnfollow = await GetAuthor(userToUnfollow);
         context.Authors
             .Where(a => a.NormalizedUserName == currentUser)
             .Include(a => a.Following)
             .FirstOrDefault()!.Following.Remove(authorToUnfollow);
-        
+
         await context.SaveChangesAsync();
         return true;
     }
-    
+
     private async Task<Author> GetAuthor(string username)
     {
         username = username.ToUpper();
@@ -98,14 +98,14 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
     {
         currentUser = currentUser.ToUpper();
         userToFollow = userToFollow.ToUpper();
-         var list = await context.Authors
-                .Where(a => a.NormalizedUserName == currentUser)
-                .Select(a => a.Following).FirstOrDefaultAsync();
-         
-         return list != null && list.Any(a => a.NormalizedUserName == userToFollow);
+        var list = await context.Authors
+            .Where(a => a.NormalizedUserName == currentUser)
+            .Select(a => a.Following).FirstOrDefaultAsync();
+
+        return list != null && list.Any(a => a.NormalizedUserName == userToFollow);
     }
 
-    private async Task<List<Author>> GetFollowing(string currentUser)
+    private async Task<IEnumerable<Author>> GetFollowing(string currentUser)
     {
         currentUser = currentUser.ToUpper();
         return await context.Authors
