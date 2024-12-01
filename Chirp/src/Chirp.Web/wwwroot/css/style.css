@@ -151,6 +151,7 @@ div.page ul.cheeps li {
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
+    /*-700 is from the page size, and the 30 is just margin*/
     width: calc(calc(var(--window-width) - 730px)/2);
 }
 
