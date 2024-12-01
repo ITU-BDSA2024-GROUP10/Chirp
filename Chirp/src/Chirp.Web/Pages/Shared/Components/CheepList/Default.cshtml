@@ -12,17 +12,10 @@ private
     {
         Follows = service.GetFollows(User.Identity!.Name!);
     }
-
-    var videoListLeft = ViewBag.videoListLeft;
-    var videoListRight = ViewBag.videoListRight;
 }
 
-<div id="videoLeftContainer" class="video-container">
-    <video id="leftVideo" autoplay muted disablePictureInPicture>
-        <source src="@videoListLeft[0]" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-</div>
+@await Component.InvokeAsync("SideVideo", new {isLeft = true})
+@await Component.InvokeAsync("SideVideo", new {isLeft = false})
 
 <ul id="messagelist" class="cheeps">
     @foreach (var cheep in cheeps)
@@ -56,26 +49,6 @@ private
         </li>
     }
 </ul>
-
-<div id="videoRightContainer" class="video-container">
-    <video id="rightVideo" autoplay muted disablePictureInPicture>
-        <source src="@videoListRight[0]" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-</div>
-
-<script type="module">
-    import VideoController from '/js/videoController.js';
-
-    const videoListLeft = @Html.Raw(Json.Serialize(videoListLeft));
-    const videoListRight = @Html.Raw(Json.Serialize(videoListRight));
-
-    const leftVideoElement = document.getElementById('leftVideo');
-    const rightVideoElement = document.getElementById('rightVideo')
-    
-    new VideoController(leftVideoElement, videoListLeft);
-    new VideoController(rightVideoElement, videoListRight);
-</script>
 
 <script type="text/javascript">
     function showPopup() {
