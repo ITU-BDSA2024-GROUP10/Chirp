@@ -5,6 +5,7 @@ using Chirp.Infrastructure.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.AspNetCore.Authentication;
@@ -19,6 +20,8 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
     public int AmountYouFollow { get; set; } = 0;
     public int AmountOfFollowers { get; set; } = 0;
     [BindProperty]
+    [Required(ErrorMessage = "Please upload an image.")]
+    [DataType(DataType.Upload)]
     public IFormFile? Avatar { get; set; }
     public async void OnGet()
     {
@@ -39,15 +42,18 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
         {
             return Redirect("/NotFound");
         }
-
-        if (Avatar!.Length > 0)
+        
+        if (Avatar == null || Avatar.Length == 0)
         {
-            using var memoryStream = new MemoryStream();
-            await Avatar.CopyToAsync(memoryStream);
-            Author.ProfileImage = memoryStream.ToArray();
-            await userManager.UpdateAsync(Author);
+            ModelState.AddModelError("Avatar", "Please upload a valid image.");
+            return Page();
         }
-
+        
+        using var memoryStream = new MemoryStream();
+        await Avatar.CopyToAsync(memoryStream);
+        Author.ProfileImage = memoryStream.ToArray();
+        await userManager.UpdateAsync(Author);
+        
         return RedirectToPage();
     }
     

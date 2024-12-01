@@ -22,6 +22,7 @@
         <div class="form-group">
             <label asp-for="Avatar">Upload Profile Image</label>
             <input asp-for="Avatar" type="file" class="form-control" />
+            <span asp-validation-for="@Model.Avatar" class="text-danger"></span>
         </div>
         <button type="submit" class="btn btn-primary">Upload</button>
     </form>
