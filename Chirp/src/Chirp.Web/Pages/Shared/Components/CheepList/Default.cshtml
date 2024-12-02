@@ -26,10 +26,7 @@ private
     function goToSpecificCheep(cheepId) {
         window.location.href = `/SpecificCheep?cheepId=${cheepId}`;
     }
-
 </script>
-
-<script src="/js/likes.js"></script>
 
 <ul id="messagelist" class="cheeps">
     @foreach (var cheep in cheeps)
@@ -70,9 +67,8 @@ private
 
                 <button 
                     onclick="toggleLike(this, @cheep.Id)" 
-                    class="like-button @(hasLiked ? "liked" : "")"
-                    style="margin-left: 10px;">
-                    Like (@likeCount)
+                    class="like-button @(cheep.HasLiked ? "liked" : "")">
+                    Like (@cheep.LikeCount)
                 </button>
             </div>
         </li>
