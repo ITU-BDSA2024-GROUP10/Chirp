@@ -147,4 +147,23 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             new CommentDTO(comment.Author.UserName!, comment.Id, comment.Message,
                 new DateTimeOffset(comment.TimeStamp).ToUnixTimeSeconds()));
     }
+
+    public async Task<bool> LikeCheep(int cheepId, string userName)
+    {
+        var author = await context.Authors
+            .FirstOrDefaultAsync(a => a.UserName == userName);
+        if (author == null) return false;
+
+        var cheep = await context.Cheeps
+            .Include(c => c.Likes)
+            .FirstOrDefaultAsync(c => c.Id == cheepId);
+        if (cheep == null) return false;
+
+        if (cheep.Likes.Any(l => l.Author.Id == author.Id)) return false; // already liked
+
+        var like = new Like { Author = author, Cheep = cheep };
+        cheep.Likes.Add(like);
+        await context.SaveChangesAsync();
+        return true;
+    }
 }
