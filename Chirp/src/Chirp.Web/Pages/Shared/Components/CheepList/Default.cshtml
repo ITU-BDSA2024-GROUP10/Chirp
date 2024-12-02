@@ -34,7 +34,15 @@ private
 <ul id="messagelist" class="cheeps">
     @foreach (var cheep in cheeps)
     {
-        <li style ="word-wrap: break-word;">
+        var likeCount = cheep.Id.HasValue 
+            ? CheepService.GetLikeCount(cheep.Id.Value).Result 
+            : 0;
+
+        var hasLiked = cheep.Id.HasValue && User.Identity!.IsAuthenticated 
+            ? CheepService.HasUserLikedCheep(cheep.Id.Value, User.Identity.Name!).Result 
+            : false;
+        
+        <li style="word-wrap: break-word;">
             <p>
                 <strong>
                     <a href="/@cheep.Author">@cheep.Author</a>
