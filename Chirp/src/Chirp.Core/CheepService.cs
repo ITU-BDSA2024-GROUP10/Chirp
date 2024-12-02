@@ -93,4 +93,9 @@ public class CheepService(ICheepRepository db) : ICheepService
     {
         return db.GetLikeCount(cheepId).Result;
     }
+
+    public bool HasUserLikedCheep(int cheepId, string userName)
+    {
+        return db.HasUserLikedCheep(cheepId, userName).Result;
+    }
 }
