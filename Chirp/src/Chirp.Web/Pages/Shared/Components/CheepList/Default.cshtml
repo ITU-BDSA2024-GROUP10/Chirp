@@ -67,21 +67,18 @@ private
                 <small style="margin-left: -5px">@CheepService.GetCommentAmountOnCheep(cheep.Id)</small>
 
             @if (User.Identity.IsAuthenticated)
-            {
-                <form method="post" asp-page-handler="ToggleLike" style="display:inline;">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="cheepId" value="@cheep.Id" />
+                {
                     <button 
+                        type="button"
                         onclick="toggleLike(this, @cheep.Id, @(JsonSerializer.Serialize(!hasLiked)))" 
                         class="like-button @(hasLiked ? "liked" : "")">
                         @(hasLiked ? "Unlike" : "Like") (@likeCount)
                     </button>
-                </form>
-            }
-            else
-            {
-                <button disabled>Like (@CheepService.GetLikeCount(cheep.Id.Value).Result)</button>
-            }
+                }
+                else
+                {
+                    <button disabled>Like (@likeCount)</button>
+                }
             </div>
         </li>
     }
