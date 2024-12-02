@@ -88,5 +88,23 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
         return RedirectToPage(null);
     }
 
+    public IActionResult OnPostUnlike(int cheepId)
+    {
+        if (User.Identity == null || !User.Identity.IsAuthenticated)
+        {
+            return Unauthorized();
+        }
+
+        var author = User.Identity.Name!;
+        var likeDto = new LikeDTO(author, cheepId);
+
+        if (!CheepService.UnlikeCheep(likeDto).Result)
+        {
+            throw new ApplicationException("Failed to unlike cheep");
+        }
+
+        return RedirectToPage(null);
+    }
+
     protected abstract void LoadCheeps(int page);
 }
