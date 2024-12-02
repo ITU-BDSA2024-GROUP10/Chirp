@@ -15,6 +15,11 @@ public interface ICheepService
     public int GetCommentAmountOnCheep(int? cheepId);
     public CheepDTO GetCheepFromId(int cheepId);
     public List<CommentDTO> GetCommentsFromCheep(int cheepId);
+    
+    public Task<bool> LikeCheep(int cheepId, string userName);
+    public Task<bool> UnlikeCheep(int cheepId, string userName);
+    public Task<int> GetLikeCount(int cheepId);
+    public Task<bool> HasUserLikedCheep(int cheepId, string userName);
 }
 
 public class CheepService(ICheepRepository db) : ICheepService
@@ -79,23 +84,23 @@ public class CheepService(ICheepRepository db) : ICheepService
         return db.GetCommentsForCheep(cheepId).Result.ToList();
     }
 
-    public bool LikeCheep(int cheepId, string userName)
+    public async Task<bool> LikeCheep(int cheepId, string userName)
     {
-        return db.LikeCheep(cheepId, userName).Result;
+        return await db.LikeCheep(cheepId, userName);
     }
 
-    public bool UnlikeCheep(int cheepId, string userName)
+    public async Task<bool> UnlikeCheep(int cheepId, string userName)
     {
-        return db.UnlikeCheep(cheepId, userName).Result;
+        return await db.UnlikeCheep(cheepId, userName);
     }
 
-    public int GetLikeCount(int cheepId)
+    public async Task<int> GetLikeCount(int cheepId)
     {
-        return db.GetLikeCount(cheepId).Result;
+        return await db.GetLikeCount(cheepId);
     }
 
-    public bool HasUserLikedCheep(int cheepId, string userName)
+    public async Task<bool> HasUserLikedCheep(int cheepId, string userName)
     {
-        return db.HasUserLikedCheep(cheepId, userName).Result;
+        return await db.HasUserLikedCheep(cheepId, userName);
     }
 }
