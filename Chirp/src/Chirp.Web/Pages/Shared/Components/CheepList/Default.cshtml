@@ -14,25 +14,13 @@ private
     }
 }
 
-<script type="text/javascript">
-    function showPopup() {
-        document.getElementById('popup').style.display = 'flex';
-    }
-
-    function cancelPopup() {
-        document.getElementById('popup').style.display = 'none';
-    }
-
-    function goToSpecificCheep(cheepId) {
-        window.location.href = `/SpecificCheep?cheepId=${cheepId}`;
-    }
-
-</script>
+@await Component.InvokeAsync("SideVideo", new {isLeft = true})
+@await Component.InvokeAsync("SideVideo", new {isLeft = false})
 
 <ul id="messagelist" class="cheeps">
     @foreach (var cheep in cheeps)
     {
-        <li style ="word-wrap: break-word;">
+        <li style="word-wrap: break-word;">
             <p>
                 <strong>
                     <a href="/@cheep.Author">@cheep.Author</a>
@@ -61,3 +49,18 @@ private
         </li>
     }
 </ul>
+
+<script type="text/javascript">
+    function showPopup() {
+        document.getElementById('popup').style.display = 'flex';
+    }
+
+    function cancelPopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    function goToSpecificCheep(cheepId) {
+        window.location.href = `/SpecificCheep?cheepId=${cheepId}`;
+    }
+
+</script>

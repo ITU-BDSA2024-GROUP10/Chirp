@@ -8,6 +8,9 @@
     var comments = Model.Comments;
 }
 
+@await Component.InvokeAsync("SideVideo", new {isLeft = true})
+@await Component.InvokeAsync("SideVideo", new {isLeft = false})
+
 <div style="padding: 10px;">
     <strong>
         <a href="/@cheep.Author">@cheep.Author</a>
