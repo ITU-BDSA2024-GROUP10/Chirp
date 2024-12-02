@@ -193,4 +193,12 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             .FirstOrDefaultAsync(c => c.Id == cheepId);
         return cheep?.Likes.Count ?? 0;
     }
+
+    public async Task<bool> HasUserLikedCheep(int cheepId, string userName)
+    {
+        var cheep = await context.Cheeps
+            .Include(c => c.Likes)
+            .FirstOrDefaultAsync(c => c.Id == cheepId);
+        return cheep?.Likes.Any(l => l.Author.UserName == userName) ?? false;
+    }
 }
