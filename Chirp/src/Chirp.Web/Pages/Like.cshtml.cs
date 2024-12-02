@@ -7,37 +7,42 @@ namespace Chirp.Web.Pages;
 
 public class LikeModel : PageModel
 {
-    private readonly ICheepService _cheepService;
+    private readonly ICheepService CheepService;
 
     public LikeModel(ICheepService cheepService)
     {
-        _cheepService = cheepService;
+        CheepService = cheepService;
     }
 
-    public async Task<IActionResult> OnPostAsync(int cheepId, bool isLiking, string? returnUrl)
+    public async Task<IActionResult> OnPostToggleLikeAsync(int cheepId, bool isLiking)
     {
-        if (string.IsNullOrWhiteSpace(returnUrl))
+        try
         {
-            returnUrl = "/";
-        }
+            if (!User.Identity?.IsAuthenticated ?? true)
+            {
+                return Unauthorized();
+            }
 
-        if (!User.Identity?.IsAuthenticated ?? true)
+            var author = User.Identity.Name;
+            var likeDto = new LikeDTO(author, cheepId);
+
+            if (isLiking)
+            {
+                await CheepService.LikeCheep(likeDto);
+            }
+            else
+            {
+                await CheepService.UnlikeCheep(likeDto);
+            }
+
+            var likeCount = await CheepService.GetLikeCount(cheepId);
+
+            return new JsonResult(new { likeCount });
+        }
+        catch (Exception ex)
         {
-            return Unauthorized();
+            Console.Error.WriteLine($"Error toggling like: {ex}");
+            return StatusCode(500, "An error occurred while toggling like.");
         }
-
-        var author = User.Identity.Name!;
-        var likeDto = new LikeDTO(author, cheepId);
-
-        if (isLiking)
-        {
-            await _cheepService.LikeCheep(likeDto);
-        }
-        else
-        {
-            await _cheepService.UnlikeCheep(likeDto);
-        }
-
-        return LocalRedirect(returnUrl);
     }
 }
