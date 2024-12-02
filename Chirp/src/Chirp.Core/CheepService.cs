@@ -89,4 +89,8 @@ public class CheepService(ICheepRepository db) : ICheepService
         return db.UnlikeCheep(cheepId, userName).Result;
     }
 
+    public int GetLikeCount(int cheepId)
+    {
+        return db.GetLikeCount(cheepId).Result;
+    }
 }
