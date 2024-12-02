@@ -148,57 +148,45 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
                 new DateTimeOffset(comment.TimeStamp).ToUnixTimeSeconds()));
     }
 
-    public async Task<bool> LikeCheep(int cheepId, string userName)
+    public async Task<bool> LikeCheep(LikeDTO like)
     {
-        var author = await context.Authors
-            .FirstOrDefaultAsync(a => a.UserName == userName);
+        var author = await context.Authors.FirstOrDefaultAsync(a => a.UserName == like.Author);
         if (author == null) return false;
 
-        var cheep = await context.Cheeps
-            .Include(c => c.Likes)
-            .FirstOrDefaultAsync(c => c.Id == cheepId);
+        var cheep = await context.Cheeps.Include(c => c.Likes).FirstOrDefaultAsync(c => c.Id == like.CheepId);
         if (cheep == null) return false;
 
-        if (cheep.Likes.Any(l => l.Author.Id == author.Id)) return false; // already liked
+        if (cheep.Likes.Any(l => l.Author.UserName == like.Author)) return false; // already liked
 
-        var like = new Like { Author = author, Cheep = cheep };
-        cheep.Likes.Add(like);
+        var likeEntity = new Like { Author = author, Cheep = cheep };
+        cheep.Likes.Add(likeEntity);
         await context.SaveChangesAsync();
         return true;
     }
 
-    public async Task<bool> UnlikeCheep(int cheepId, string userName)
+    public async Task<bool> UnlikeCheep(LikeDTO like)
     {
-        var author = await context.Authors.FirstOrDefaultAsync(a => a.UserName == userName);
-        if (author == null) return false;
-
-        var cheep = await context.Cheeps
-            .Include(c => c.Likes)
-            .FirstOrDefaultAsync(c => c.Id == cheepId);
+        var cheep = await context.Cheeps.Include(c => c.Likes).FirstOrDefaultAsync(c => c.Id == like.CheepId);
         if (cheep == null) return false;
 
-        var like = cheep.Likes.FirstOrDefault(l => l.Author.Id == author.Id);
-        if (like == null) return false;
+        var likeEntity = cheep.Likes.FirstOrDefault(l => l.Author.UserName == like.Author);
+        if (likeEntity == null) return false;
 
-        cheep.Likes.Remove(like);
-        context.Likes.Remove(like);
+        cheep.Likes.Remove(likeEntity);
+        context.Likes.Remove(likeEntity);
         await context.SaveChangesAsync();
         return true;
     }
 
     public async Task<int> GetLikeCount(int cheepId)
     {
-        var cheep = await context.Cheeps
-            .Include(c => c.Likes)
-            .FirstOrDefaultAsync(c => c.Id == cheepId);
+        var cheep = await context.Cheeps.Include(c => c.Likes).FirstOrDefaultAsync(c => c.Id == cheepId);
         return cheep?.Likes.Count ?? 0;
     }
 
-    public async Task<bool> HasUserLikedCheep(int cheepId, string userName)
+    public async Task<bool> HasUserLikedCheep(int cheepId, string authorName)
     {
-        var cheep = await context.Cheeps
-            .Include(c => c.Likes)
-            .FirstOrDefaultAsync(c => c.Id == cheepId);
-        return cheep?.Likes.Any(l => l.Author.UserName == userName) ?? false;
+        var cheep = await context.Cheeps.Include(c => c.Likes).FirstOrDefaultAsync(c => c.Id == cheepId);
+        return cheep?.Likes.Any(l => l.Author.UserName == authorName) ?? false;
     }
 }
