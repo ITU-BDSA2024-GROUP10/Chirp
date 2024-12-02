@@ -83,4 +83,10 @@ public class CheepService(ICheepRepository db) : ICheepService
     {
         return db.LikeCheep(cheepId, userName).Result;
     }
+
+    public bool UnlikeCheep(int cheepId, string userName)
+    {
+        return db.UnlikeCheep(cheepId, userName).Result;
+    }
+
 }
