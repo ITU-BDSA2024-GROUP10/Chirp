@@ -78,4 +78,9 @@ public class CheepService(ICheepRepository db) : ICheepService
     {
         return db.GetCommentsForCheep(cheepId).Result.ToList();
     }
+
+    public bool LikeCheep(int cheepId, string userName)
+    {
+        return db.LikeCheep(cheepId, userName).Result;
+    }
 }
