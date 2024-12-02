@@ -67,6 +67,13 @@ private
                          style="width: 18px; height: 18px; margin-left: 15px; vertical-align: middle"/>
                 </a>
                 <small style="margin-left: -5px">@CheepService.GetCommentAmountOnCheep(cheep.Id)</small>
+
+                <button 
+                    onclick="toggleLike(this, @cheep.Id)" 
+                    class="like-button @(hasLiked ? "liked" : "")"
+                    style="margin-left: 10px;">
+                    Like (@likeCount)
+                </button>
             </div>
         </li>
     }
