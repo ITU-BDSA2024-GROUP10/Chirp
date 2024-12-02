@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Chirp.Core;
 using Chirp.Core.DTO;
 using Chirp.Web.Pages.BindingModels;
@@ -17,7 +18,7 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
     protected const int PageSize = 32;
 
     [BindProperty] public MessageModel MessageModel { get; set; } = new MessageModel();
-
+    
     public ActionResult OnPost(string? author, [FromQuery] int page)
     {
         if (string.IsNullOrWhiteSpace(MessageModel.Message))
@@ -70,40 +71,47 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
         return RedirectToPage(null);
     }
 
-    public IActionResult OnPostLike(int cheepId)
+    public async Task<IActionResult> OnPostToggleLikeAsync()
     {
-        if (User.Identity == null || !User.Identity.IsAuthenticated)
+        try
         {
-            return Unauthorized();
+            if (!User.Identity?.IsAuthenticated ?? true)
+            {
+                return Unauthorized();
+            }
+
+            // Read and deserialize the request body
+            using var reader = new StreamReader(Request.Body);
+            var body = await reader.ReadToEndAsync();
+            var likeRequest = JsonSerializer.Deserialize<LikeRequest>(body);
+
+            var author = User.Identity.Name!;
+            var likeDto = new LikeDTO(author, likeRequest.CheepId);
+
+            if (likeRequest.IsLiking)
+            {
+                await CheepService.LikeCheep(likeDto);
+            }
+            else
+            {
+                await CheepService.UnlikeCheep(likeDto);
+            }
+
+            var likeCount = await CheepService.GetLikeCount(likeRequest.CheepId);
+
+            return new JsonResult(new { likeCount });
         }
-
-        var author = User.Identity.Name!;
-        var likeDto = new LikeDTO(author, cheepId);
-
-        if (!CheepService.LikeCheep(likeDto).Result)
+        catch (Exception ex)
         {
-            throw new ApplicationException("Failed to like cheep");
+            Console.Error.WriteLine($"Error toggling like: {ex.Message}");
+            return StatusCode(500, "An error occurred while toggling like.");
         }
-
-        return RedirectToPage(null);
     }
 
-    public IActionResult OnPostUnlike(int cheepId)
+    private class LikeRequest
     {
-        if (User.Identity == null || !User.Identity.IsAuthenticated)
-        {
-            return Unauthorized();
-        }
-
-        var author = User.Identity.Name!;
-        var likeDto = new LikeDTO(author, cheepId);
-
-        if (!CheepService.UnlikeCheep(likeDto).Result)
-        {
-            throw new ApplicationException("Failed to unlike cheep");
-        }
-
-        return RedirectToPage(null);
+        public int CheepId { get; set; }
+        public bool IsLiking { get; set; }
     }
 
     protected abstract void LoadCheeps(int page);
