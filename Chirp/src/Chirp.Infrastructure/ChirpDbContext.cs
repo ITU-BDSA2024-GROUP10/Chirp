@@ -75,5 +75,21 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
         });
+
+        modelBuilder.Entity<Like>(entity =>
+        {
+            entity.HasKey(l => l.Id);
+            entity.Property(l => l.Id).ValueGeneratedOnAdd();
+
+            entity.HasOne(l => l.Author)
+                .WithMany(a => a.Likes)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(l => l.Cheep)
+                .WithMany(c => c.Likes)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }
