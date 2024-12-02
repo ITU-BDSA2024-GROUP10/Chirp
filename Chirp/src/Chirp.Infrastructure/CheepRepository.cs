@@ -185,4 +185,12 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         await context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<int> GetLikeCount(int cheepId)
+    {
+        var cheep = await context.Cheeps
+            .Include(c => c.Likes)
+            .FirstOrDefaultAsync(c => c.Id == cheepId);
+        return cheep?.Likes.Count ?? 0;
+    }
 }
