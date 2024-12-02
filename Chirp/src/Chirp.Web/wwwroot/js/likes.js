@@ -1,30 +1,24 @@
-async function toggleLike(button, cheepId) {
+async function toggleLike(button, cheepId, isLiking) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const isLiking = !button.classList.contains('liked');
-
-    const endpoint = isLiking ? '/like?handler=Like' : '/like?handler=Unlike';
-    console.log(`Toggle like for Cheep ID: ${cheepId}, IsLiking: ${isLiking}`);
 
     try {
-        const response = await fetch(endpoint, {
+        const response = await fetch('/like', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'RequestVerificationToken': csrfToken 
             },
-            body: `cheepId=${encodeURIComponent(cheepId)}`
+            body: `cheepId=${encodeURIComponent(cheepId)}&isLiking=${isLiking}&returnUrl=${encodeURIComponent(window.location.pathname)}`
         });
 
         if (response.ok) {
-            const data = await response.json();
-            button.innerText = `Like (${data.likeCount})`;
-            button.classList.toggle('liked', isLiking);
+            const newIsLiking = !isLiking;
+            button.innerText = newIsLiking ? `Unlike` : `Like`;
+            button.setAttribute('onclick', `toggleLike(this, ${cheepId}, ${newIsLiking})`);
         } else {
-            console.error('Failed to toggle like:', response.statusText);
             alert('Failed to update like status');
         }
     } catch (error) {
-        console.error('Error toggling like:', error);
-        alert('An error occurred while toggling like');
+        console.error('Failed to toggle like:', error);
     }
 }
