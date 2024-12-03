@@ -129,9 +129,11 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         var query = context.Authors
             .Where(a => a.NormalizedUserName == username.ToUpper())
             .Include(a => a.Comments)
+            .ThenInclude(c => c.Author)
             .Select(a => a.Comments)
             .FirstOrDefaultAsync();
+        var comments = query.Result;
         
-        return query.Result!.Select(c => new CommentDTO(c.Author.UserName!, c.Id, c.Message, new DateTimeOffset(c.TimeStamp).ToUnixTimeSeconds())).ToList();
+        return comments!.Select(c => new CommentDTO(c.Author.UserName!, c.Id, c.Message, new DateTimeOffset(c.TimeStamp).ToUnixTimeSeconds())).ToList();
     }
 }
