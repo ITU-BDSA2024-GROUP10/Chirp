@@ -1,0 +1,63 @@
+@page
+@model Chirp.Web.Pages.SpecificCheep
+
+@{
+    ViewData["Title"] = "Chirp!";
+    Layout = "Shared/_Layout";
+    var cheep = Model.Cheep;
+    var comments = Model.Comments;
+}
+
+@await Component.InvokeAsync("SideVideo", new {isLeft = true})
+@await Component.InvokeAsync("SideVideo", new {isLeft = false})
+
+<div style="padding: 10px;">
+    <strong>
+        <a href="/@cheep.Author">@cheep.Author</a>
+    </strong>
+    <p>@cheep.Message</p>
+    <hr style="border: 0.5px solid #ccc;"/>
+    <div style="display: flex; align-items: center;">
+        <img src="images/comment.png" alt="Comment Icon"
+             style="width: 18px; height: 18px; margin-left: 15px; vertical-align: middle"/>
+        <small style="margin-left: 0.5px">@Model.CommentCount</small>
+    </div>
+    <hr style="border: 1px solid #ccc;"/>
+    @if (User.Identity!.IsAuthenticated)
+    {
+        <div class="cheepbox">
+            <form asp-for="@Model.MessageModel.Message" method="post" asp-page-handler="Comment"
+                  style="display: flex; align-items: center; gap: 10px;">
+                <input type="text" asp-for="@Model.MessageModel.Message" placeholder="Write a comment"
+                       style="flex: 1; padding: 5px;"/>
+                <input type="hidden" name="author" value="@User.Identity.Name"/>
+                <input type="hidden" name="cheepId" value="@cheep.Id"/>
+                <span asp-validation-for="@Model.MessageModel.Message"></span>
+                <input type="submit" value="Post" style="padding: 5px 10px;">
+            </form>
+        </div>
+    }
+    else
+    {
+        <h3>Log in to comment on this Cheep</h3>
+    }
+
+    <div style="padding: 10px">
+        <ul class="cheeps">
+            @foreach (var comment in comments)
+            {
+                <li>
+                    <div style="display: flex; align-items: center;">
+                        <strong>
+                            <a href="/@comment.Author">@comment.Author</a>
+                        </strong>
+                        <small style="margin-left: 8px; margin-right: 10px">-</small>
+                        <small>@Model.TimeSinceComment(comment.UnixTimestamp)</small>
+
+                    </div>
+                    <p>@comment.Message</p>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

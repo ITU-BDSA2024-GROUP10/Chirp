@@ -131,6 +131,36 @@ namespace SimpleDB.Migrations
                     b.ToTable("Cheeps");
                 });
 
+            modelBuilder.Entity("Chirp.Infrastructure.Model.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CheepId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("CheepId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -289,6 +319,25 @@ namespace SimpleDB.Migrations
                     b.Navigation("Author");
                 });
 
+            modelBuilder.Entity("Chirp.Infrastructure.Model.Comment", b =>
+                {
+                    b.HasOne("Chirp.Infrastructure.Model.Author", "Author")
+                        .WithMany("Comments")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Chirp.Infrastructure.Model.Cheep", "Cheep")
+                        .WithMany("Comments")
+                        .HasForeignKey("CheepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Cheep");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -343,6 +392,13 @@ namespace SimpleDB.Migrations
             modelBuilder.Entity("Chirp.Infrastructure.Model.Author", b =>
                 {
                     b.Navigation("Cheeps");
+
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("Chirp.Infrastructure.Model.Cheep", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }
