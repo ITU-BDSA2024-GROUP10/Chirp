@@ -49,6 +49,12 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
             return Page();
         }
         
+        if (!Avatar.FileName.Contains(".png") || !Avatar.FileName.Contains(".jpg"))
+        {
+            ModelState.AddModelError("Avatar", "Please upload a valid image. Only .png and .jpg are allowed.");
+            return Page();
+        }
+        
         using var memoryStream = new MemoryStream();
         await Avatar.CopyToAsync(memoryStream);
         Author.ProfileImage = memoryStream.ToArray();
