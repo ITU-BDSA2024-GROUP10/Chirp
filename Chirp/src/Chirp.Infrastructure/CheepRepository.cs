@@ -150,7 +150,7 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
 
     public async Task<bool> LikeCheep(LikeDTO like)
     {
-        var author = await context.Authors.FirstOrDefaultAsync(a => a.UserName == like.Author);
+        var author = await context.Authors.FirstOrDefaultAsync(a => a.NormalizedUserName == like.Author.ToUpper());
         if (author == null) return false;
 
         var cheep = await context.Cheeps.Include(c => c.Likes).FirstOrDefaultAsync(c => c.Id == like.CheepId);
@@ -173,7 +173,7 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         if (likeEntity == null) return false;
 
         cheep.Likes.Remove(likeEntity);
-        context.Likes.Remove(likeEntity);
+        //context.Likes.Remove(likeEntity);
         await context.SaveChangesAsync();
         return true;
     }
