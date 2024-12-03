@@ -12,18 +12,23 @@ public class TestAuthor
         _testAuthorBuilder = testAuthorBuilder;
     }
 
-    public Author author { get; set; } = new Author();
+    public Author Author { get; set; } = new Author();
     public string Password { get; set; } = "";
 
-    public string? UserName => author.UserName;
-    public string? Email => author.Email;
-    public List<Author> Follows => author.Following;
-    public List<Author> Followers => author.Followers;
+    public string UserName => Author.UserName!;
+    public string Email => Author.Email!;
+    public List<Author> Follows => Author.Following;
+    public List<Author> Followers => Author.Followers;
+    internal List<TestAuthor> TestFollowers { get; set; } = new List<TestAuthor>();
+    internal List<TestAuthor> TestFollowing { get; set; } = new List<TestAuthor>();
     
     public void AddFollow(TestAuthor testAuthor)
     {
-        testAuthor.Followers.Add(author);
-        author.Following.Add(testAuthor.author);
+        testAuthor.Followers.Add(Author);
+        Author.Following.Add(testAuthor.Author);
+        
+        testAuthor.TestFollowers.Add(this);
+        TestFollowing.Add(testAuthor);
     }
 
     public void Create()
@@ -43,7 +48,7 @@ public class TestAuthorBuilder
         _userManager = userManager;
         _testAuthor.Password = "Password123!";
     }
-
+    
     public TestAuthorBuilder WithDefault()
     {
         WithUsernameAndEmail("Mr. test");
@@ -52,7 +57,19 @@ public class TestAuthorBuilder
 
     public TestAuthor Create()
     {
-        _userManager.CreateAsync(_testAuthor.author, _testAuthor.Password).Wait();
+        _userManager.CreateAsync(_testAuthor.Author, _testAuthor.Password).Wait();
+        foreach (var a in _testAuthor.TestFollowers)
+        {
+            _userManager.RemovePasswordAsync(a.Author).Wait();
+            _userManager.AddPasswordAsync(a.Author, a.Password).Wait();
+        }
+        
+        foreach (var a in _testAuthor.TestFollowing)
+        {
+            _userManager.RemovePasswordAsync(a.Author).Wait();
+            _userManager.AddPasswordAsync(a.Author, a.Password).Wait();
+        }
+        
         return _testAuthor;
     }
     
@@ -63,14 +80,14 @@ public class TestAuthorBuilder
 
     public TestAuthorBuilder WithUsername(string username)
     {
-        _userManager.SetUserNameAsync(_testAuthor.author, username).Wait();
+        _userManager.SetUserNameAsync(_testAuthor.Author, username).Wait();
         return this;
     }
 
     public TestAuthorBuilder WithEmail(string email)
     {
-        _userManager.SetEmailAsync(_testAuthor.author, email).Wait();
-        _testAuthor.author.EmailConfirmed = true;
+        _userManager.SetEmailAsync(_testAuthor.Author, email).Wait();
+        _testAuthor.Author.EmailConfirmed = true;
         return this;
     }
 
@@ -89,19 +106,19 @@ public class TestAuthorBuilder
 
     public TestAuthorBuilder WithUnverifiedEmail()
     {
-        _testAuthor.author.EmailConfirmed = false;
+        _testAuthor.Author.EmailConfirmed = false;
         return this;
     }
 
     public TestAuthorBuilder WithFollows(Author author)
     {
-        _testAuthor.author.Following.Add(author);
+        _testAuthor.Author.Following.Add(author);
         return this;
     }
 
     public TestAuthorBuilder WithFollows(IEnumerable<Author> authors)
     {
-        _testAuthor.author.Following.AddRange(authors);
+        _testAuthor.Author.Following.AddRange(authors);
         return this;
     }
 }

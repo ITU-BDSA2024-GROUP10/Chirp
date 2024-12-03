@@ -14,13 +14,13 @@ public class CommentTests : PageTestWithRazorPlaywrightWebApplicationFactory
         _testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
             .WithUsernameAndEmail("author")
             .Create();
-        await GenerateCheep(_testAuthor.author);
+        await GenerateCheep(_testAuthor.Author);
     }
 
     [Test]
     public async Task SpecificCheepViewExists()
     {
-        await GenerateCheep(_testAuthor.author, "this is author");
+        await GenerateCheep(_testAuthor.Author, "this is author");
         await Page.GotoAsync("/");
         await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First
             .ClickAsync();
@@ -30,7 +30,7 @@ public class CommentTests : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task CommentCountUpdates()
     {
-        await GenerateCheep(_testAuthor.author, "this is author");
+        await GenerateCheep(_testAuthor.Author, "this is author");
         await RazorPageUtils.Login(_testAuthor);
         await Page.GotoAsync("/");
         await Expect(Page.Locator("li").Filter(new() { HasText = "author" }).Locator("small").Nth(1))
@@ -47,7 +47,7 @@ public class CommentTests : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task TestAddComment()
     {
-        await GenerateCheep(_testAuthor.author, "this is author");
+        await GenerateCheep(_testAuthor.Author, "this is author");
         await RazorPageUtils.Login(_testAuthor);
         await Page.GotoAsync("/");
         await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First
@@ -61,7 +61,7 @@ public class CommentTests : PageTestWithRazorPlaywrightWebApplicationFactory
     [Test]
     public async Task CannotPostCommentsWhenNotLoggedIn()
     {
-        await GenerateCheep(_testAuthor.author, "this is author");
+        await GenerateCheep(_testAuthor.Author, "this is author");
         await Page.GotoAsync("/");
         await Page.Locator("#messagelist div").Filter(new() { HasText = "—" }).GetByRole(AriaRole.Link).First
             .ClickAsync();

@@ -43,7 +43,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         _testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
             .WithUsernameAndEmail("author")
             .Create();
-        await GenerateCheep(_testAuthor.author);
+        await GenerateCheep(_testAuthor.Author);
         
         _testFollower = new TestAuthorBuilder(RazorFactory.GetUserManager())
             .WithUsernameAndEmail("follower")
@@ -103,7 +103,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         var testAuthor2 = new TestAuthorBuilder(RazorFactory.GetUserManager())
             .WithUsernameAndEmail("author2")
             .Create();
-        await GenerateCheep(testAuthor2.author, "this is author2's cheep");
+        await GenerateCheep(testAuthor2.Author, "this is author2's cheep");
         await RazorPageUtils.Login(_testFollower);
         
         await GoToPublicTimeline();
@@ -115,8 +115,8 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     [Test]
     public async Task ForgetMeLogsOutUserAndRemovesData()
     {
-        await GenerateCheep(_testAuthor.author, "this is author");
-        await GenerateCheep(_testFollower.author, "this is follower");
+        await GenerateCheep(_testAuthor.Author, "this is author");
+        await GenerateCheep(_testFollower.Author, "this is follower");
         await RazorPageUtils.Login(_testFollower);
         await GoToPublicTimeline();
         await FollowAuthor("author follow test");
@@ -158,7 +158,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         // generate more cheeps such that scrolling is possible
         int cheepAmount = 20;
         for (int i = 0; i < cheepAmount; i++) 
-            await GenerateCheep(_testAuthor.author);
+            await GenerateCheep(_testAuthor.Author);
 
         await RazorPageUtils.Login(_testFollower);
         await GoToPublicTimeline();

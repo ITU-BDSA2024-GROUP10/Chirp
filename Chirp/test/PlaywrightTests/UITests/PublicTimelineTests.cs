@@ -27,7 +27,7 @@ public class PublicTimelineTests : PageTestWithRazorPlaywrightWebApplicationFact
         var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
             .WithDefault()
             .Create();
-        await GenerateCheeps(testAuthor.author, 33);
+        await GenerateCheeps(testAuthor.Author, 33);
 
         //act
         await Page.GotoAsync("/");

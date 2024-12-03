@@ -38,8 +38,8 @@ public class USerTimelineTests : PageTestWithRazorPlaywrightWebApplicationFactor
             .WithDefault()
             .WithUsername("Mr. fake")
             .Create();
-        await GenerateCheeps(realTestAuthor.author, 33);
-        await GenerateCheeps(fakeTestAuthor.author, 33);
+        await GenerateCheeps(realTestAuthor.Author, 33);
+        await GenerateCheeps(fakeTestAuthor.Author, 33);
 
         #endregion
 
@@ -61,7 +61,7 @@ public class USerTimelineTests : PageTestWithRazorPlaywrightWebApplicationFactor
             .WithDefault()
             .WithUsername("MR. tESt")
             .Create();
-        var cheep = await GenerateCheep(testAuthor.author);
+        var cheep = await GenerateCheep(testAuthor.Author);
         
         #endregion
 

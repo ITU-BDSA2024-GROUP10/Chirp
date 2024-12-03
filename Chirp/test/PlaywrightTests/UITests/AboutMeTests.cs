@@ -46,7 +46,7 @@ public class AboutMeTests : PageTestWithRazorPlaywrightWebApplicationFactory
         
         testAuthorMain.Create();
         
-        await GenerateCheeps(testAuthorMain.author, 365);
+        await GenerateCheeps(testAuthorMain.Author, 365);
         
         await RazorPageUtils.Login(testAuthorMain);
         
