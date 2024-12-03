@@ -92,6 +92,36 @@ public class AuthorRepositoryUnitTest
         Assert.Equal(author.Name, checkSuccession.UserName);
     }
 
+    [Fact]
+    public async Task GetComments_ReturnsComments()
+    {
+        var author = TestUtils.CreateTestAuthor("test");
+        var cheep = new Cheep
+        {
+            Author = author, 
+            Message = "test", 
+            Id = 1, 
+            TimeStamp = DateTime.Now
+        };
+        var comment = new Comment
+        { Author = author, 
+            Message = "comment", 
+            Id = 1, 
+            Cheep = cheep, 
+            TimeStamp = DateTime.Now 
+        };
+        cheep.Comments.Add(comment);
+        author.Comments.Add(comment);
+        Context.Cheeps.Add(cheep);
+        Context.Comments.Add(comment);
+        Context.Authors.Add(author);
+        await Context.SaveChangesAsync();
+        var comments = await AuthorRepository.GetComments(author.UserName!);
+        var first = comments.First();
+        Assert.NotNull(comments);
+        Assert.Equal(comment.Message,first.Message);
+    }
+
     #region GetAuthorFollows tests
 
     [Fact]
