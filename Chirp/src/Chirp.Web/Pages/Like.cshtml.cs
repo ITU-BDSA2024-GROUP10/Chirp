@@ -16,8 +16,6 @@ public class LikeModel : PageModel
 
     public async Task<IActionResult> OnPostToggleLikeAsync(int cheepId, bool isLiking)
     {
-        try
-        {
             if (!User.Identity?.IsAuthenticated ?? true)
             {
                 return Unauthorized();
@@ -28,21 +26,15 @@ public class LikeModel : PageModel
 
             if (isLiking)
             {
-                await CheepService.LikeCheep(likeDto);
+                CheepService.LikeCheep(likeDto);
             }
             else
             {
-                await CheepService.UnlikeCheep(likeDto);
+                CheepService.UnlikeCheep(likeDto);
             }
 
             var likeCount = await CheepService.GetLikeCount(cheepId);
 
             return new JsonResult(new { likeCount });
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Error toggling like: {ex}");
-            return StatusCode(500, "An error occurred while toggling like.");
-        }
     }
 }

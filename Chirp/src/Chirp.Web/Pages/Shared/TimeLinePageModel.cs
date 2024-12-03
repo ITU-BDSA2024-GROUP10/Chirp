@@ -71,7 +71,7 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
         return RedirectToPage(null);
     }
 
-    public async Task<IActionResult> OnPostToggleLikeAsync()
+    /*public async Task<IActionResult> OnPostToggleLikeAsync()
     {
         try
         {
@@ -106,7 +106,7 @@ public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
             Console.Error.WriteLine($"Error toggling like: {ex.Message}");
             return StatusCode(500, "An error occurred while toggling like.");
         }
-    }
+    }*/
 
     private class LikeRequest
     {
