@@ -11,7 +11,6 @@ public class PageUtils(IPage page)
     
     public async Task Login(string userName, string password)
     {
-        await page.GotoAsync("/");
         await page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
         await page.GetByPlaceholder("Username").ClickAsync();
         await page.GetByPlaceholder("Username").FillAsync(userName);
@@ -25,5 +24,15 @@ public class PageUtils(IPage page)
         await page.GotoAsync("/");
         await page.GetByRole(AriaRole.Link, new() { Name = "logout ["+userName+"]" }).ClickAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
+    }
+
+    public async Task GoToPublicTimeline()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
+    }
+    
+    public async Task GoToPrivateTimeline()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
     }
 }

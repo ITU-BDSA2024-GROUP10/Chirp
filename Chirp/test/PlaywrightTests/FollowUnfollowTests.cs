@@ -12,7 +12,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
 {
     private TestAuthor _testAuthor;
     private TestAuthor _testFollower;
-    
+
     // helper method for following author
     private async Task FollowAuthor(string authorCheepText)
     {
@@ -44,7 +44,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
             .WithUsernameAndEmail("author")
             .Create();
         await GenerateCheep(_testAuthor.Author);
-        
+
         _testFollower = new TestAuthorBuilder(RazorFactory.GetUserManager())
             .WithUsernameAndEmail("follower")
             .Create();
@@ -53,7 +53,8 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     [Test]
     public async Task CantSeeFollowButtonWhenNotLoggedIn()
     {
-        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
+        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" })
+            .GetByRole(AriaRole.Button);
         await Expect(followButton).ToBeHiddenAsync();
     }
 
@@ -61,11 +62,12 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     public async Task CanSeeFollowButtonWhenLoggedIn()
     {
         await RazorPageUtils.Login(_testFollower);
-        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
+        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" })
+            .GetByRole(AriaRole.Button);
         await Expect(followButton).ToBeVisibleAsync();
     }
-        
-    
+
+
     [Test]
     public async Task UserCanFollowAuthor()
     {
@@ -79,8 +81,9 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     [Test]
     public async Task UserCanUnfollowAuthor()
     {
+        await Page.GotoAsync("/");
         await RazorPageUtils.Login(_testFollower);
-        
+
         await GoToPublicTimeline();
         await FollowAuthor("author follow test");
         await GoToPrivateTimeline();
@@ -93,7 +96,8 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     public async Task UserCannotFollowSelf()
     {
         await RazorPageUtils.Login(_testAuthor);
-        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
+        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" })
+            .GetByRole(AriaRole.Button);
         await Expect(followButton).ToBeHiddenAsync();
     }
 
@@ -105,13 +109,15 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
             .Create();
         await GenerateCheep(testAuthor2.Author, "this is author2's cheep");
         await RazorPageUtils.Login(_testFollower);
-        
+
         await GoToPublicTimeline();
         await FollowAuthor("author follow test");
         await GoToPrivateTimeline();
-        await Expect(Page.Locator("li").Filter(new() { HasText = "author2 follow this is author2's cheep" })).ToBeHiddenAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = "author2 follow this is author2's cheep" }))
+            .ToBeHiddenAsync();
         await Expect(Page.Locator("li").Filter(new() { HasText = "author unfollow test" })).ToBeVisibleAsync();
     }
+
     [Test]
     public async Task ForgetMeLogsOutUserAndRemovesData()
     {
@@ -157,7 +163,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     {
         // generate more cheeps such that scrolling is possible
         int cheepAmount = 20;
-        for (int i = 0; i < cheepAmount; i++) 
+        for (int i = 0; i < cheepAmount; i++)
             await GenerateCheep(_testAuthor.Author);
 
         await RazorPageUtils.Login(_testFollower);
@@ -173,7 +179,8 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
 
         // sssert position is unchanged
         var scrollPositionAfterFollow = await Page.EvaluateAsync<int>("() => window.scrollY");
-        Assert.That(scrollPositionAfterFollow, Is.EqualTo(initialScrollPosition), "Scroll position changed after follow action.");
+        Assert.That(scrollPositionAfterFollow, Is.EqualTo(initialScrollPosition),
+            "Scroll position changed after follow action.");
 
         // unfollow 1st button
         var unfollowButton = Page.Locator("li").Nth(1).Locator("button", new() { HasText = "unfollow" });
@@ -181,7 +188,8 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
 
         // assert position is unchanged
         var scrollPositionAfterUnfollow = await Page.EvaluateAsync<int>("() => window.scrollY");
-        Assert.That(scrollPositionAfterUnfollow, Is.EqualTo(initialScrollPosition), "Scroll position changed after unfollow action.");
+        Assert.That(scrollPositionAfterUnfollow, Is.EqualTo(initialScrollPosition),
+            "Scroll position changed after unfollow action.");
     }
 
     [Test]
@@ -192,13 +200,15 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await FollowAuthor("author follow test");
 
         // assert follow button changed to unfollow
-        var unfollowButton = Page.Locator("li").Filter(new() { HasText = "author unfollow test" }).GetByRole(AriaRole.Button);
+        var unfollowButton = Page.Locator("li").Filter(new() { HasText = "author unfollow test" })
+            .GetByRole(AriaRole.Button);
         await Expect(unfollowButton).ToBeVisibleAsync();
 
         await UnfollowAuthor("author unfollow test");
 
         // assert unfollow button changed back
-        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
+        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" })
+            .GetByRole(AriaRole.Button);
         await Expect(followButton).ToBeVisibleAsync();
     }
 }

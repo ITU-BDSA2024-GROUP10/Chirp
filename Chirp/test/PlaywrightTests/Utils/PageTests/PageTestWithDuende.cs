@@ -11,15 +11,6 @@ public class PageTestWithDuende : PageTestWithRazorPlaywrightWebApplicationFacto
 
     private HttpClient _duendeClient;
     
-    public override BrowserNewContextOptions ContextOptions()
-    {
-        return new BrowserNewContextOptions()
-        {
-            Locale = "en-US",
-            ColorScheme = ColorScheme.Light
-        };
-    }
-    
     [OneTimeSetUp]
     public void DuendeOneTimeSetUp()
     {

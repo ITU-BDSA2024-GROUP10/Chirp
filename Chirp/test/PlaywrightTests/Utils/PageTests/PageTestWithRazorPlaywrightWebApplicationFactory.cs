@@ -33,6 +33,7 @@ public class PageTestWithRazorPlaywrightWebApplicationFactory : PageTest
         // Note this does not make a new database it just wipes the data 
         RazorFactory.ResetDB();
         RazorPageUtils = new PageUtils(Page);
+        Page.GotoAsync("/").Wait();
     }
     
     [TearDown]
@@ -68,7 +69,7 @@ public class PageTestWithRazorPlaywrightWebApplicationFactory : PageTest
             {
                 Author = author,
                 Message = message,
-                TimeStamp = DateTime.Now.AddHours(i),
+                TimeStamp = DateTime.Now,
             });
         }
         
