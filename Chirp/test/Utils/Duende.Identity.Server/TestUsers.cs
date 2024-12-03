@@ -16,7 +16,7 @@ public static class TestUsers
             SubjectId = "1",
             Username = "alice",
             Password = "password",
-            
+
             Claims = new List<Claim>
             {
                 new Claim(JwtClaimTypes.Name, "Alice Smith"),
@@ -29,7 +29,7 @@ public static class TestUsers
             SubjectId = "2",
             Username = "TestWithAllInfo",
             Password = "password",
-            
+
             Claims = new List<Claim>
             {
                 new Claim(JwtClaimTypes.Name, "Mr. test with all info"),
@@ -42,7 +42,7 @@ public static class TestUsers
             SubjectId = "3",
             Username = "TestWithEmail",
             Password = "password",
-            
+
             Claims = new List<Claim>
             {
                 new Claim(JwtClaimTypes.Email, "Test@WithEmail.com"),
@@ -54,7 +54,7 @@ public static class TestUsers
             SubjectId = "4",
             Username = "TestWithUserName",
             Password = "password",
-            
+
             Claims = new List<Claim>
             {
                 new Claim(JwtClaimTypes.Name, "mr. Test with username"),
@@ -66,6 +66,19 @@ public static class TestUsers
             SubjectId = "5",
             Username = "TestWithNoInfo",
             Password = "password"
+        },
+        new TestUser
+        {
+            SubjectId = "6",
+            Username = "Mr. Demo",
+            Password = "password",
+
+            Claims = new List<Claim>()
+            {
+                new Claim(JwtClaimTypes.Name, "Mr. Demo"),
+                new Claim(JwtClaimTypes.Email, "MrDemo@Demo.com"),
+                new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean)
+            }
         }
     };
 }
