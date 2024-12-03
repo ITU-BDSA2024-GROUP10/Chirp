@@ -53,7 +53,7 @@ public class AboutMeTests : PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"Name: {testAuthorMain.UserName}" })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"Email: {testAuthorMain.Email}" })).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "You have Cheep'd: 365 times" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Cheeps: 365" })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Following: 2" })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Followers: 1" })).ToBeVisibleAsync();
     }

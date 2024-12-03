@@ -130,4 +130,18 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         await context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<List<CommentDTO>> GetComments(string username)
+    {
+        if (!await UserExists(username)) throw new UserDoesNotExist();
+        var query = context.Authors
+            .Where(a => a.NormalizedUserName == username.ToUpper())
+            .Include(a => a.Comments)
+            .ThenInclude(c => c.Author)
+            .Select(a => a.Comments)
+            .FirstOrDefaultAsync();
+        var comments = query.Result;
+        
+        return comments!.Select(c => new CommentDTO(c.Author.UserName!, c.Id, c.Message, new DateTimeOffset(c.TimeStamp).ToUnixTimeSeconds())).ToList();
+    }
 }

@@ -10,6 +10,7 @@ public interface IAuthorService
     public bool Unfollow(string currentUser, string userToUnFollow);
     public bool MakeFollowersUnfollow(string username);
     public IEnumerable<AuthorDTO?> GetAuthorsByNames(IEnumerable<String> names);
+    public List<CommentDTO> GetComments(string username);
 }
 
 public class AuthorService(IAuthorRepository db) : IAuthorService
@@ -27,6 +28,11 @@ public class AuthorService(IAuthorRepository db) : IAuthorService
     public bool MakeFollowersUnfollow(string username)
     {
         return db.MakeFollowersUnfollow(username).Result;
+    }
+
+    public List<CommentDTO> GetComments(string username)
+    {
+        return db.GetComments(username).Result;
     }
 
     public bool Follow(string currentUser, string userToFollow)

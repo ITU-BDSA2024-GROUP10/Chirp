@@ -17,6 +17,7 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
 {
     public Author? Author { get; set; }
     public List<CheepDTO> Cheeps { get; set; } = [];
+    public int CommentCount { get; set; } = 0;
     public int AmountYouFollow { get; set; } = 0;
     public int AmountOfFollowers { get; set; } = 0;
     [BindProperty]
@@ -95,5 +96,6 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
         Cheeps = cheepService.GetCheepsFromAuthor(authorUsername);
         AmountYouFollow = authorService.GetFollows(authorUsername).Count;
         AmountOfFollowers = authorService.GetFollowers(authorUsername).Count;
+        CommentCount = authorService.GetComments(authorUsername).Count;
     }
 }
