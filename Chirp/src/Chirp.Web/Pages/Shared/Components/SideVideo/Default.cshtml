@@ -1,42 +1,42 @@
-﻿
-@{
-    var videoList = ViewBag.VideoList as List<string>;
-    var isLeft = ViewBag.IsLeft;
-}
-
-@if (isLeft)
-{
-    <div id="videoLeftContainer" class="video-container">
-        <video id="leftVideo" autoplay muted disablePictureInPicture>
-            <source src="@videoList?[0]" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-}
-else
-{
-    <div id="videoRightContainer" class="video-container">
-        <video id="rightVideo" autoplay muted disablePictureInPicture>
-            <source src="@videoList?[0]" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-}
-
-<script type="module">
-    import VideoController from '/js/videoController.js';
-
-    const videoList = @Html.Raw(Json.Serialize(videoList));
-    const isLeft = @Html.Raw(Json.Serialize(isLeft));
-    
-    if(isLeft)
-    {
-        const leftVideoElement = document.getElementById('leftVideo');
-        new VideoController(leftVideoElement, videoList);
-    }
-    else
-    {
-        const rightVideoElement = document.getElementById('rightVideo');
-        new VideoController(rightVideoElement, videoList);
-    }
-</script>
+﻿@* *@
+@* @{ *@
+@*     var videoList = ViewBag.VideoList as List<string>; *@
+@*     var isLeft = ViewBag.IsLeft; *@
+@* } *@
+@* *@
+@* @if (isLeft) *@
+@* { *@
+@*     <div id="videoLeftContainer" class="video-container"> *@
+@*         <video id="leftVideo" autoplay muted disablePictureInPicture> *@
+@*             <source src="@videoList?[0]" type="video/mp4"> *@
+@*             Your browser does not support the video tag. *@
+@*         </video> *@
+@*     </div> *@
+@* } *@
+@* else *@
+@* { *@
+@*     <div id="videoRightContainer" class="video-container"> *@
+@*         <video id="rightVideo" autoplay muted disablePictureInPicture> *@
+@*             <source src="@videoList?[0]" type="video/mp4"> *@
+@*             Your browser does not support the video tag. *@
+@*         </video> *@
+@*     </div> *@
+@* } *@
+@* *@
+@* <script type="module"> *@
+@*     import VideoController from '/js/videoController.js'; *@
+@* *@
+@*     const videoList = @Html.Raw(Json.Serialize(videoList)); *@
+@*     const isLeft = @Html.Raw(Json.Serialize(isLeft)); *@
+@*      *@
+@*     if(isLeft) *@
+@*     { *@
+@*         const leftVideoElement = document.getElementById('leftVideo'); *@
+@*         new VideoController(leftVideoElement, videoList); *@
+@*     } *@
+@*     else *@
+@*     { *@
+@*         const rightVideoElement = document.getElementById('rightVideo'); *@
+@*         new VideoController(rightVideoElement, videoList); *@
+@*     } *@
+@* </script> *@

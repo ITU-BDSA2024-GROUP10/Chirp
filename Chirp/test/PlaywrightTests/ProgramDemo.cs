@@ -28,7 +28,7 @@ public class ProgramDemo : PageTestWithDuende
                 }
 
                 step();
-            }", 50); // Adjust speed (in milliseconds) between steps
+            }", 100); // Adjust speed (in milliseconds) between steps
     }
     
     private async Task ScrollSmothlyToTop()
@@ -49,7 +49,7 @@ public class ProgramDemo : PageTestWithDuende
                 }
 
                 step();
-            }", 50); // Adjust speed (in milliseconds) between steps
+            }", 100); // Adjust speed (in milliseconds) between steps
     }
     
     private async Task Register(TestAuthor testAuthor)
@@ -128,9 +128,9 @@ public class ProgramDemo : PageTestWithDuende
             .WithPassword("password")
             .GetTestAuthor();
         
-        var userToBeFolowowedByExternalUser = new TestAuthorBuilder(RazorFactory.GetUserManager())
-            .WithUsernameAndEmail("UserToBeFolowowedByExternalUser")
-            .GetTestAuthor();
+        var userToBeFolowowedByMRTest = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithUsernameAndEmail("UserToBeFolowowedByMRTest")
+            .Create();
 
         var mrAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
             .WithUsernameAndEmail("Mr. Author")
@@ -144,26 +144,32 @@ public class ProgramDemo : PageTestWithDuende
             .WithUsernameAndEmail("RandomUser")
             .Create();
         
+        var userWhoWasFollowed = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithUsernameAndEmail("UserWhoWasFollowed")
+            .GetTestAuthor();
         
-        userToFollowOtherUSer.AddFollow(userToBeFolowowedByExternalUser);
+        
+        userToFollowOtherUSer.AddFollow(userWhoWasFollowed);
         
         userToFollowOtherUSer.Create();
         
         var test = RazorFactory.GetDbContext().Authors.Select(a => new {a.UserName, a.Email, a.PasswordHash}).ToList();
         
         await GenerateCheeps(randomUser.Author, 300, "Random message");
-        await GenerateCheep(userToBeFolowowedByExternalUser.Author, $"Hello there people, im {userToBeFolowowedByExternalUser.UserName}");
-        await GenerateCheep(userToBeFolowowedByExternalUser.Author, $"This is my second message");
+        await GenerateCheep(userToBeFolowowedByMRTest.Author, $"Hello there people, im {userToBeFolowowedByMRTest.UserName}");
+        await GenerateCheep(userToBeFolowowedByMRTest.Author, $"This is my second message");
         await GenerateCheep(mrAuthor.Author, "This is amazing!");
         
         #endregion
         
         //go to public timeline
-        await Page.GotoAsync(RazorBaseUrl);
+        await Page.GotoAsync("/"); 
+        await Page.WaitForURLAsync($"{RazorBaseUrl}/**");
+        Thread.Sleep(5000);
         //scroll to bottom
-        await ScrollSmothlyToBottom();
+        //await ScrollSmothlyToBottom();
         //scroll to top
-        await ScrollSmothlyToTop();
+        //await ScrollSmothlyToTop();
         //Register user with external login
         await RegisterViaExternalProvider(externalAuthor);
         await Page.WaitForURLAsync($"{RazorBaseUrl}/**");
@@ -180,60 +186,75 @@ public class ProgramDemo : PageTestWithDuende
         await RazorPageUtils.Login(testAuthorToRegister);
         //See private timeline
         await RazorPageUtils.GoToPrivateTimeline();
+        Thread.Sleep(700);
         //Cheep From pirvate timeline
         await PostCheep("This is my first message!");
+        Thread.Sleep(700);
         //Go to public timeline
         await RazorPageUtils.GoToPublicTimeline();
         //Cheep empty from public timeline
         await PostCheep("");
+        Thread.Sleep(700);
         //Cheep from public timeline
         await PostCheep("This is my second message!");
+        Thread.Sleep(700);
         //Go to private timeline
         await RazorPageUtils.GoToPrivateTimeline();
+        Thread.Sleep(700);
         //Go to public timeline
         await RazorPageUtils.GoToPublicTimeline();
         //Follow user
-        await FollowAuthor(userToBeFolowowedByExternalUser);
+        await FollowAuthor(userToBeFolowowedByMRTest);
+        Thread.Sleep(700);
         await FollowAuthor(mrAuthor);
+        Thread.Sleep(700);
         await FollowAuthor(randomUser);
+        Thread.Sleep(700);
         //Unfollow user
         await UnfollowAuthor(randomUser);
+        Thread.Sleep(700);
         //Go to private timeline
         await RazorPageUtils.GoToPrivateTimeline();
         //Unfollow user
-        await UnfollowAuthor(userToBeFolowowedByExternalUser);
+        await UnfollowAuthor(userToBeFolowowedByMRTest);
+        Thread.Sleep(700);
         //Refollow user
-        await FollowAuthor(userToBeFolowowedByExternalUser);
+        await FollowAuthor(userToBeFolowowedByMRTest);
+        Thread.Sleep(700);
         //Unfollow user
         await UnfollowAuthor(mrAuthor);
+        Thread.Sleep(700);
         //Refresh page
         await Page.ReloadAsync();
+        Thread.Sleep(700);
         //Go to about page
         await GoToAboutPage();
+        Thread.Sleep(2000);
         //Forget user
         await ForgetAuthor();
         //Try to login
         await RazorPageUtils.Login(testAuthorToRegister);
+        Thread.Sleep(300);
         //login third user, who was followed by external user
-        await RazorPageUtils.Login(userToBeFolowowedByExternalUser);
+        await RazorPageUtils.Login(userToBeFolowowedByMRTest);
         //go to about me and see that there is now no followers
         await GoToAboutPage();
+        Thread.Sleep(2000);
         //forget me
         await ForgetAuthor();
         //login 4th user
-        await RazorPageUtils.Login(userToFollowOtherUSer);
+        await RazorPageUtils.Login(userWhoWasFollowed);
         //go to about me and see that there is now no one following
         await GoToAboutPage();
+        Thread.Sleep(2000);
         //sleep for 10 seconds
-        // Thread.Sleep(10000);
+        //Thread.Sleep(10000);
         Assert.True(true);
     }
     
     [Test]
     public async Task DemoOfExtraFeatures()
     {
-        
-        
         Assert.True(true);
     }
 }
