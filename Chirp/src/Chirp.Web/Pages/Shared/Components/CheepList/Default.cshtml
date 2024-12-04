@@ -71,13 +71,9 @@ private
                     <button 
                         type="button"
                         onclick="toggleLike(this, @cheep.Id, @(JsonSerializer.Serialize(!hasLiked)))" 
-                        class="like-button @(hasLiked ? "liked" : "")">
+                        class="like-button">
                         @(hasLiked ? "Unlike" : "Like") (@likeCount)
                     </button>
-                }
-                else
-                {
-                    <button disabled>Like (@likeCount)</button>
                 }
             </div>
         </li>

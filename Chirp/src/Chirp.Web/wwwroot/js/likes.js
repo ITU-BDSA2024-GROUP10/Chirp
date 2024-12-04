@@ -16,7 +16,7 @@ async function toggleLike(button, cheepId, isLiking) {
             const likeCount = data.likeCount;
             isLiking = isLiking === 'true' || isLiking === true;
             const newIsLiking = !isLiking;
-            button.innerText = `${newIsLiking ? 'Unlike' : 'Like'} (${likeCount})`;
+            button.innerText = `${newIsLiking ? 'Like' : 'Unlike'} (${likeCount})`;
             button.setAttribute('onclick', `toggleLike(this, ${cheepId}, ${newIsLiking})`);
         } else {
             alert('Failed to update like status');
