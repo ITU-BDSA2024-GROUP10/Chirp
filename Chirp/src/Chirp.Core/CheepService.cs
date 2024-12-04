@@ -4,22 +4,22 @@ namespace Chirp.Core;
 
 public interface ICheepService
 {
-    public List<CheepDTO> GetCheepsByPage(int page, int pageSize);
-    public List<CheepDTO> GetCheepsFromAuthorByPage(string author, int page, int pageSize);
-    public List<CheepDTO> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page, int pageSize);
-    public List<CheepDTO> GetCheepsFromAuthor(string author);
+    public IEnumerable<CheepDTO> GetCheepsByPage(int page, int pageSize);
+    public IEnumerable<CheepDTO> GetCheepsFromAuthorByPage(string author, int page, int pageSize);
+    public IEnumerable<CheepDTO> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page, int pageSize);
+    public IEnumerable<CheepDTO> GetCheepsFromAuthor(string author);
     public int GetAmountOfCheepPages(int pageSize);
     public int GetAmountOfCheepPagesFromAuthors(IEnumerable<String> authors, int pageSize);
     public bool CreateCheep(CheepDTO cheep);
     public bool AddCommentToCheep(CommentDTO comment);
     public int GetCommentAmountOnCheep(int? cheepId);
     public CheepDTO GetCheepFromId(int cheepId);
-    public List<CommentDTO> GetCommentsFromCheep(int cheepId);
+    public IEnumerable<CommentDTO> GetCommentsFromCheep(int cheepId);
 }
 
 public class CheepService(ICheepRepository db) : ICheepService
 {
-    public List<CheepDTO> GetCheepsByPage(int page, int pageSize)
+    public IEnumerable<CheepDTO> GetCheepsByPage(int page, int pageSize)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(pageSize);
 
@@ -29,17 +29,17 @@ public class CheepService(ICheepRepository db) : ICheepService
         return result.ToList();
     }
 
-    public List<CheepDTO> GetCheepsFromAuthor(string author)
+    public IEnumerable<CheepDTO> GetCheepsFromAuthor(string author)
     {
         return db.GetCheepsFromAuthor(author).Result.ToList();
     }
 
-    public List<CheepDTO> GetCheepsFromAuthorByPage(string author, int page, int pageSize)
+    public IEnumerable<CheepDTO> GetCheepsFromAuthorByPage(string author, int page, int pageSize)
     {
         return db.GetCheepsFromAuthorByPage(author, page, pageSize).Result.ToList();
     }
 
-    public List<CheepDTO> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page, int pageSize)
+    public IEnumerable<CheepDTO> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page, int pageSize)
     {
         return db.GetCheepsFromAuthorsByPage(authors, page, pageSize).Result.ToList();
     }
@@ -74,7 +74,7 @@ public class CheepService(ICheepRepository db) : ICheepService
         return db.GetCheepById(cheepId).Result;
     }
 
-    public List<CommentDTO> GetCommentsFromCheep(int cheepId)
+    public IEnumerable<CommentDTO> GetCommentsFromCheep(int cheepId)
     {
         return db.GetCommentsForCheep(cheepId).Result.ToList();
     }

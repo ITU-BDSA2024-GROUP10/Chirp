@@ -6,7 +6,7 @@
 @{
     var targetPage = ViewBag.TargetPage as string ?? "";
     IEnumerable<CheepDTO> cheeps = ViewBag.Cheeps;
-    List<AuthorDTO> Follows = [];
+    IEnumerable<AuthorDTO> Follows = [];
     if (User.Identity!.IsAuthenticated)
     {
         Follows = service.GetFollows(User.Identity!.Name!);
