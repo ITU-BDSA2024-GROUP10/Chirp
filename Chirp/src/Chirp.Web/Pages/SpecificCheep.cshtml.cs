@@ -10,7 +10,7 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
 {
     public CheepDTO Cheep { get; set; } = null!;
     public int CommentCount { get; set; }
-    public List<CommentDTO> Comments { get; set; } = [];
+    public IEnumerable<CommentDTO> Comments { get; set; } = [];
 
     [BindProperty] public MessageModel MessageModel { get; set; } = new MessageModel();
 

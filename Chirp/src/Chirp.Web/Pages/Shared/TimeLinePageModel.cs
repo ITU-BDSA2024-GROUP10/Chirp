@@ -8,7 +8,7 @@ namespace Chirp.Web.Pages.Shared;
 
 public abstract class TimeLinePageModel(ICheepService cheepService) : PageModel
 {
-    public List<CheepDTO> Cheeps { get; set; } = [];
+    public IEnumerable<CheepDTO> Cheeps { get; set; } = [];
     
     protected readonly ICheepService CheepService = cheepService;
     

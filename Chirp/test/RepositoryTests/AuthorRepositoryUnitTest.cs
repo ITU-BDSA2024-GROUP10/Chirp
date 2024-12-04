@@ -155,7 +155,7 @@ public class AuthorRepositoryUnitTest
         Assert.NotNull(result);
         Assert.NotEmpty(result);
         Assert.Single(result);
-        Assert.Equal(following.UserName, result[0].Name);
+        Assert.Equal(following.UserName, result.First().Name);
     }
 
     #endregion
