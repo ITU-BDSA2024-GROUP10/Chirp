@@ -508,6 +508,28 @@ public class CheepRepositoryUnitTest
     #endregion
 
     #region LikeCheeps
+    
+    [Fact]
+    public async Task LikeCheeps_CanLikeCheep()
+    {
+        //Arrange
+        var author1 = TestUtils.CreateTestAuthor("Mr. Test");
+        
+        var cheep = new Cheep { Id = 1, Author = author1, Message = "1", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1).DateTime };
+        Context.Cheeps.Add(cheep);
+
+        await Context.SaveChangesAsync();
+        
+        //Act
+        var result = await CheepRepository.LikeCheep(new LikeDTO(author1.UserName!, cheep.Id));
+        var likes = Context.Cheeps
+            .Include(c => c.Likes)
+            .FirstOrDefault()!.Likes;
+        
+        //Assert
+        Assert.Single(likes);
+    }
+
     [Fact]
     public async Task LikeCheeps_ReturnsCorrectNumberOfLikes()
     {
