@@ -68,10 +68,14 @@ private
 
             @if (User.Identity.IsAuthenticated)
                 {
+                    <a href="#" onclick="toggleLikeHeart(this, @cheep.Id, @(JsonSerializer.Serialize(!hasLiked)))">
+                        <img style="margin-left: 8px" src="@(hasLiked ? "svg/heart-filled.svg" : "svg/heart.svg")"/>
+                    </a>
+                    <small style="margin-left: -8px">@likeCount</small>
                     <button 
                         type="button"
                         onclick="toggleLike(this, @cheep.Id, @(JsonSerializer.Serialize(!hasLiked)))" 
-                        class="like-button">
+                        class="like-button"><img style="margin-left: 8px" src="@(hasLiked ? "svg/heart-filled.svg" : "svg/heart.svg")"/>
                         @(hasLiked ? "Unlike" : "Like") (@likeCount)
                     </button>
                 }
