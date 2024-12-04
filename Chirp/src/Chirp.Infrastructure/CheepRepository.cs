@@ -166,10 +166,15 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
 
     public async Task<bool> UnlikeCheep(LikeDTO like)
     {
-        var cheep = await context.Cheeps.Include(c => c.Likes).FirstOrDefaultAsync(c => c.Id == like.CheepId);
+        var cheep = await context.Cheeps
+            .Include(c => c.Likes)
+            .ThenInclude(l => l.Author)
+            .FirstOrDefaultAsync(c => c.Id == like.CheepId);
         if (cheep == null) return false;
 
-        var likeEntity = cheep.Likes.FirstOrDefault(l => l.Author.UserName == like.Author);
+        var likeEntity = cheep.Likes
+            .Where(l => l.Author.UserName == like.Author)
+            .FirstOrDefault(l => l.Author.NormalizedUserName == like.Author.ToUpper());
         if (likeEntity == null) return false;
 
         cheep.Likes.Remove(likeEntity);
@@ -188,7 +193,7 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
     {
         var cheep = await context.Cheeps
             .Include(c => c.Likes)
-                .ThenInclude(l => l.Author)
+            .ThenInclude(l => l.Author)
             .FirstOrDefaultAsync(c => c.Id == cheepId);
 
         return cheep?.Likes.Any(l => l.Author.UserName == authorName) ?? false;
