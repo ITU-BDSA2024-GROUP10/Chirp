@@ -16,13 +16,13 @@ public class LikeModel : PageModel
 
     public async Task<IActionResult> OnPostToggleLikeAsync(int cheepId, bool isLiking)
     {
-            if (!User.Identity?.IsAuthenticated ?? true)
+            if (!User.Identity?.IsAuthenticated ?? false)
             {
                 return Unauthorized();
             }
 
-            var author = User.Identity.Name;
-            var likeDto = new LikeDTO(author, cheepId);
+            var author = User.Identity!.Name;
+            var likeDto = new LikeDTO(author!, cheepId);
 
             if (isLiking)
             {
