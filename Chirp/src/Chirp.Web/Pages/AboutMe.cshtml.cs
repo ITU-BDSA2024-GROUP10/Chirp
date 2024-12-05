@@ -24,6 +24,9 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
     [Required(ErrorMessage = "Please upload an image.")]
     [DataType(DataType.Upload)]
     public IFormFile? Avatar { get; set; }
+
+    public Dictionary<string, byte[]> ImageMap = new();
+
     public async void OnGet()
     {
         Author = await userManager.FindByNameAsync(User.Identity!.Name!);
@@ -31,6 +34,11 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
         {
             Redirect("/NotFound");
             return;
+        }
+        
+        if (Author.ProfileImage != null)
+        {
+            ImageMap.Add(Author.UserName, Author.ProfileImage);
         }
         
         SetUserInfo(Author.UserName);
@@ -50,7 +58,7 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
             return Page();
         }
         
-        if (!Avatar.FileName.Contains(".png") || !Avatar.FileName.Contains(".jpg"))
+        if (!Avatar.FileName.Contains(".png") && !Avatar.FileName.Contains(".jpg"))
         {
             ModelState.AddModelError("Avatar", "Please upload a valid image. Only .png and .jpg are allowed.");
             return Page();
