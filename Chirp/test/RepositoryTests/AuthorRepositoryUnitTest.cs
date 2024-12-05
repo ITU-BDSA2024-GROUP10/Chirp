@@ -420,11 +420,12 @@ public class AuthorRepositoryUnitTest
         
         //Assert
         Assert.NotNull(result);
-        Assert.NotEmpty(result);
-        Assert.Equal(3, result.Count());
-        Assert.Contains(result, a => a.Name == author.UserName);
-        Assert.Contains(result, a => a.Name == following.UserName);
-        Assert.Contains(result, a => a.Name == notFollowing.UserName);
+        var authorDtos = result as AuthorDTO?[] ?? result.ToArray();
+        Assert.NotEmpty(authorDtos);
+        Assert.Equal(3, authorDtos.Count());
+        Assert.Contains(authorDtos, a => a!.Name == author.UserName);
+        Assert.Contains(authorDtos, a => a!.Name == following.UserName);
+        Assert.Contains(authorDtos, a => a!.Name == notFollowing.UserName);
     }
     
     #endregion
