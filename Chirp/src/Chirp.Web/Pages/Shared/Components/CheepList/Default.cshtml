@@ -6,6 +6,7 @@
 @{
     var targetPage = ViewBag.TargetPage as string ?? "";
     IEnumerable<CheepDTO> cheeps = ViewBag.Cheeps;
+    Dictionary<string, byte[]> imageMap = ViewBag.ImageMap;
     IEnumerable<AuthorDTO> Follows = [];
     if (User.Identity!.IsAuthenticated)
     {
@@ -22,6 +23,7 @@
         <li style="word-wrap: break-word;">
             <p>
                 <strong>
+                    <img src="@(imageMap.ContainsKey(cheep.Author) ? $"data:image/png;base64,{Convert.ToBase64String(imageMap[cheep.Author])}" : "/images/chirp-default-profile-blurred.png")" alt="Profile Image" width="50" height="50" />
                     <a href="/@cheep.Author">@cheep.Author</a>
                     @if (User.Identity!.IsAuthenticated && User.Identity!.Name != cheep.Author)
                     {
