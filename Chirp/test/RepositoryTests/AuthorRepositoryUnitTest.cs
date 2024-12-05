@@ -92,6 +92,36 @@ public class AuthorRepositoryUnitTest
         Assert.Equal(author.Name, checkSuccession.UserName);
     }
 
+    [Fact]
+    public async Task GetComments_ReturnsComments()
+    {
+        var author = TestUtils.CreateTestAuthor("test");
+        var cheep = new Cheep
+        {
+            Author = author, 
+            Message = "test", 
+            Id = 1, 
+            TimeStamp = DateTime.Now
+        };
+        var comment = new Comment
+        { Author = author, 
+            Message = "comment", 
+            Id = 1, 
+            Cheep = cheep, 
+            TimeStamp = DateTime.Now 
+        };
+        cheep.Comments.Add(comment);
+        author.Comments.Add(comment);
+        Context.Cheeps.Add(cheep);
+        Context.Comments.Add(comment);
+        Context.Authors.Add(author);
+        await Context.SaveChangesAsync();
+        var comments = await AuthorRepository.GetComments(author.UserName!);
+        var first = comments.First();
+        Assert.NotNull(comments);
+        Assert.Equal(comment.Message,first.Message);
+    }
+
     #region GetAuthorFollows tests
 
     [Fact]
@@ -125,7 +155,7 @@ public class AuthorRepositoryUnitTest
         Assert.NotNull(result);
         Assert.NotEmpty(result);
         Assert.Single(result);
-        Assert.Equal(following.UserName, result[0].Name);
+        Assert.Equal(following.UserName, result.First().Name);
     }
 
     #endregion
@@ -351,5 +381,52 @@ public class AuthorRepositoryUnitTest
         Assert.Empty(authorsFollowing);
     }
 
+    #endregion
+    
+    #region GetAuthorsByNames tests
+    
+    [Fact]
+    public async Task GetAuthorsByNames_NoAuthorsExist_ReturnsEmptyList()
+    {
+        //Arrange
+        var names = new List<string> { "mr. test", "mr. follow", "mr. not follow" };
+        
+        //Act
+        var result = await AuthorRepository.GetAuthorsByNames(names);
+        
+        //Assert
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+    
+    [Fact]
+    public async Task GetAuthorsByNames_AuthorsExist_ReturnsListOfAuthors()
+    {
+        //Arrange
+        var author = TestUtils.CreateTestAuthor("mr. test");
+        var following = TestUtils.CreateTestAuthor("mr. follow");
+        var notFollowing = TestUtils.CreateTestAuthor("mr. not follow");
+        
+        Context.Authors.Add(notFollowing);
+        Context.Authors.Add(following);
+        Context.Authors.Add(author);
+        
+        await Context.SaveChangesAsync();
+        
+        var names = new List<string> { "mr. test", "mr. follow", "mr. not follow" };
+        
+        //Act
+        var result = await AuthorRepository.GetAuthorsByNames(names);
+        
+        //Assert
+        Assert.NotNull(result);
+        var authorDtos = result as AuthorDTO?[] ?? result.ToArray();
+        Assert.NotEmpty(authorDtos);
+        Assert.Equal(3, authorDtos.Count());
+        Assert.Contains(authorDtos, a => a!.Name == author.UserName);
+        Assert.Contains(authorDtos, a => a!.Name == following.UserName);
+        Assert.Contains(authorDtos, a => a!.Name == notFollowing.UserName);
+    }
+    
     #endregion
 }

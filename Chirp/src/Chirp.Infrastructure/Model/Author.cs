@@ -10,7 +10,8 @@ public sealed class Author : IdentityUser
     public List<Author> Followers { get; set; } = [];
     public List<Comment> Comments { get; set; } = [];
     public List<Like> Likes { get; set; } = [];
-    
+    public byte[]? ProfileImage { get; set; } = null;
+
     public Author()
     {
     }

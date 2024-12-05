@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Web.Pages;
 
-public class UserTimelineModel(ICheepService cheepService, IAuthorService authorService) : TimeLinePageModel(cheepService)
+public class UserTimelineModel(ICheepService cheepService, IAuthorService authorService) : TimeLinePageModel(cheepService, authorService)
 {
-    protected readonly IAuthorService AuthorService = authorService;
+    protected new readonly IAuthorService AuthorService = authorService;
     public ActionResult OnGet(string author, [FromQuery] int page)
     {
         if (page < 1)
@@ -28,6 +28,7 @@ public class UserTimelineModel(ICheepService cheepService, IAuthorService author
         try
         {
             LoadCheeps(page);
+            LoadProfileImages(Cheeps);
         }
         catch (AggregateException ae)
         {

@@ -25,4 +25,11 @@
         <ProjectReference Include="..\Utils\TestUtilities\TestUtilities.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Update="Utils\testImages\test-profile-image.png">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

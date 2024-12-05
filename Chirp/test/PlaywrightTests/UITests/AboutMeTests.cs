@@ -53,7 +53,7 @@ public class AboutMeTests : PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"Name: {testAuthorMain.UserName}" })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = $"Email: {testAuthorMain.Email}" })).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "You have Cheep'd: 365 times" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Cheeps: 365" })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Following: 2" })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Followers: 1" })).ToBeVisibleAsync();
     }
@@ -71,5 +71,31 @@ public class AboutMeTests : PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GetByRole(AriaRole.Button, new() { Name = "Cancel" }).ClickAsync();
         await Expect(Page.GetByText("Are you sure you want to delete your account? This action cannot be undone.")).ToBeHiddenAsync();
         
+    }
+
+    [Test]
+    public async Task CanUploadProfilePicture()
+    {  
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .Create();
+        await RazorPageUtils.Login(testAuthor);
+        await Page.GotoAsync($"/AboutMe");
+        await Page.GetByLabel("Upload Profile Image").ClickAsync();
+        await Page.GetByLabel("Upload Profile Image").SetInputFilesAsync(new[] { "../../../Utils/testImages/test-profile-image.png" });
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Upload" }).ClickAsync();
+        await Expect(Page.GetByRole(AriaRole.Img, new() { Name = "Profile Image" })).ToBeVisibleAsync();
+    }
+    
+    [Test]
+    public async Task UploadProfilePictureShowsErrorOnInvalidFile()
+    {
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithDefault()
+            .Create();
+        await RazorPageUtils.Login(testAuthor);
+        await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Upload" }).ClickAsync();
+        await Expect(Page.GetByText("Please upload an image.")).ToBeVisibleAsync();
     }
 }

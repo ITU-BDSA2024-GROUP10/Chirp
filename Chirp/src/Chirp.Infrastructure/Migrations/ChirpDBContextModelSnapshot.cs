@@ -75,6 +75,9 @@ namespace SimpleDB.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<byte[]>("ProfileImage")
+                        .HasColumnType("BLOB");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
 

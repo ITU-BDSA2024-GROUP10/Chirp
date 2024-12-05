@@ -39,7 +39,7 @@ public class CheepRepositoryUnitTest
         var author = TestUtils.CreateTestAuthor("Mr. test");
         for (int i = 0; i < 7; i++)
         {
-            var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now };
+            var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
             Context.Cheeps.Add(cheep);
         }
 
@@ -58,7 +58,7 @@ public class CheepRepositoryUnitTest
     {
         //arrange
         var author = TestUtils.CreateTestAuthor("Mr. test");
-        var cheep = new Cheep { Author = author, Message = "test", TimeStamp = DateTime.Now };
+        var cheep = new Cheep { Author = author, Message = "test", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1).DateTime };
 
         Context.Cheeps.Add(cheep);
         await Context.SaveChangesAsync();
@@ -78,7 +78,7 @@ public class CheepRepositoryUnitTest
         List<Cheep> cheeps = [];
         for (int i = 0; i < 7; i++)
         {
-            var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now };
+            var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
             cheeps.Add(cheep);
         }
 
@@ -160,7 +160,7 @@ public class CheepRepositoryUnitTest
             var author = TestUtils.CreateTestAuthor($"name{i}");
             authors.Add(author);
 
-            var cheep = new Cheep { Author = author, Message = $"test{i}", TimeStamp = DateTime.Now };
+            var cheep = new Cheep { Author = author, Message = $"test{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
             cheeps.Add(cheep);
         }
 
@@ -188,7 +188,7 @@ public class CheepRepositoryUnitTest
         List<Cheep> cheeps = [];
         for (int i = 0; i < 5; i++)
         {
-            cheeps.Add(new Cheep { Author = author, Message = "test" + i, TimeStamp = DateTime.Now });
+            cheeps.Add(new Cheep { Author = author, Message = "test" + i, TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime });
         }
 
         Context.Authors.Add(author);
@@ -196,6 +196,7 @@ public class CheepRepositoryUnitTest
         await Context.SaveChangesAsync();
 
         var result = (await CheepRepository.GetCheepsFromAuthor(author.UserName!)).ToList();
+        
         cheeps.Reverse();
         Assert.Equal(5, result.Count);
         for (int i = 0; i < 5; i++)
@@ -216,7 +217,7 @@ public class CheepRepositoryUnitTest
             var author = TestUtils.CreateTestAuthor($"name{i}");
             authors.Add(author);
 
-            var cheep = new Cheep { Author = author, Message = $"test{i}", TimeStamp = DateTime.Now };
+            var cheep = new Cheep { Author = author, Message = $"test{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
             cheeps.Add(cheep);
         }
 
@@ -244,12 +245,12 @@ public class CheepRepositoryUnitTest
         {
             if (i % 2 == 0)
             {
-                var cheep = new Cheep { Author = authorB, Message = "", TimeStamp = DateTime.Now };
+                var cheep = new Cheep { Author = authorB, Message = "", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
                 Context.Cheeps.Add(cheep);
             }
             else
             {
-                var cheep = new Cheep { Author = authorA, Message = "", TimeStamp = DateTime.Now };
+                var cheep = new Cheep { Author = authorA, Message = "", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
                 Context.Cheeps.Add(cheep);
                 authTotal++;
             }
@@ -306,7 +307,7 @@ public class CheepRepositoryUnitTest
         var author2 = TestUtils.CreateTestAuthor("Mr. Test2");
 
         List<string> authors = new();
-
+        List<Cheep> cheeps = [];
 
         authors.Add(author1.UserName!);
         authors.Add(author2.UserName!);
@@ -315,12 +316,14 @@ public class CheepRepositoryUnitTest
         {
             if (i % 2 == 0)
             {
-                var cheep = new Cheep { Author = author1, Message = "", TimeStamp = DateTime.Now };
+                var cheep = new Cheep { Author = author1, Message = "", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
+                cheeps.Add(cheep);
                 Context.Cheeps.Add(cheep);
             }
             else
             {
-                var cheep = new Cheep { Author = author2, Message = "", TimeStamp = DateTime.Now };
+                var cheep = new Cheep { Author = author2, Message = "", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
+                cheeps.Add(cheep);
                 Context.Cheeps.Add(cheep);
             }
         }
@@ -360,8 +363,8 @@ public class CheepRepositoryUnitTest
         Context.Cheeps.AddRange(cheeps);
         for (int i = 0; i < 7; i++)
         {
-            var cheep1 = new Cheep { Author = author1, Message = $"test_{i}", TimeStamp = DateTime.Now };
-            var cheep2 = new Cheep { Author = author2, Message = $"test_{i}", TimeStamp = DateTime.Now };
+            var cheep1 = new Cheep { Author = author1, Message = $"test_{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
+            var cheep2 = new Cheep { Author = author2, Message = $"test_{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
             cheeps.Add(cheep1);
             cheeps.Add(cheep2);
         }
