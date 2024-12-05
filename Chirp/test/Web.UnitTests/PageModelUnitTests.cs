@@ -35,7 +35,7 @@ public class PageModelUnitTests
 
         // Assert
         Assert.IsType<PageResult>(result);
-        Assert.Equal(10, pageModel.Cheeps.Count);
+        Assert.Equal(10, pageModel.Cheeps.Count());
         Assert.Equal(cheeps, pageModel.Cheeps);
     }
 }

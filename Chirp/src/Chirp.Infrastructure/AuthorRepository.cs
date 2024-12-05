@@ -38,13 +38,13 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         }
     }
 
-    public async Task<List<AuthorDTO>> GetAuthorFollows(string username)
+    public async Task<IEnumerable<AuthorDTO>> GetAuthorFollows(string username)
     {
         if (!await UserExists(username)) throw new UserDoesNotExist();
         return GetFollowing(username).Result.Select(a => new AuthorDTO(a.UserName!, a.Email!, a.ProfileImage)).ToList();
     }
 
-    public async Task<List<AuthorDTO>> GetAuthorFollowers(string username)
+    public async Task<IEnumerable<AuthorDTO>> GetAuthorFollowers(string username)
     {
         if (!await UserExists(username)) throw new UserDoesNotExist();
         var followers = await context.Authors
@@ -131,7 +131,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         return true;
     }
 
-    public async Task<List<CommentDTO>> GetComments(string username)
+    public async Task<IEnumerable<CommentDTO>> GetComments(string username)
     {
         if (!await UserExists(username)) throw new UserDoesNotExist();
         var query = context.Authors
