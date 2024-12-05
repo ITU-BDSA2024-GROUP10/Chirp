@@ -16,13 +16,13 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     // helper method for following author
     private async Task FollowAuthor(string authorCheepText)
     {
-        await Page.Locator("li").Filter(new() { HasText = authorCheepText }).GetByRole(AriaRole.Button).ClickAsync();
+        await Page.Locator("li").Filter(new() { HasText = authorCheepText }).GetByRole(AriaRole.Button, new() { Name = "follow" }).ClickAsync();
     }
 
     // helper method for unfollow an author
     private async Task UnfollowAuthor(string authorCheepText)
     {
-        await Page.Locator("li").Filter(new() { HasText = authorCheepText }).GetByRole(AriaRole.Button).ClickAsync();
+        await Page.Locator("li").Filter(new() { HasText = authorCheepText }).GetByRole(AriaRole.Button, new() { Name = "unfollow" }).ClickAsync();
     }
 
     // helper method for navigating to public timeline
@@ -53,7 +53,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     [Test]
     public async Task CantSeeFollowButtonWhenNotLoggedIn()
     {
-        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
+        var followButton = Page.Locator("li").GetByRole(AriaRole.Button, new() { Name = "follow" });
         await Expect(followButton).ToBeHiddenAsync();
     }
 
@@ -61,7 +61,7 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
     public async Task CanSeeFollowButtonWhenLoggedIn()
     {
         await RazorPageUtils.Login(_testFollower);
-        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
+        var followButton = Page.Locator("li").GetByRole(AriaRole.Button, new() { Name = "follow" });
         await Expect(followButton).ToBeVisibleAsync();
     }
         
@@ -192,13 +192,13 @@ public class FollowUnfollowTests : PageTestWithRazorPlaywrightWebApplicationFact
         await FollowAuthor("author follow test");
 
         // assert follow button changed to unfollow
-        var unfollowButton = Page.Locator("li").Filter(new() { HasText = "author unfollow test" }).GetByRole(AriaRole.Button);
+        var unfollowButton = Page.Locator("li").Filter(new() { HasText = "author unfollow test" }).GetByRole(AriaRole.Button, new() { Name = "unfollow" });
         await Expect(unfollowButton).ToBeVisibleAsync();
 
         await UnfollowAuthor("author unfollow test");
 
         // assert unfollow button changed back
-        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button);
+        var followButton = Page.Locator("li").Filter(new() { HasText = "author follow test" }).GetByRole(AriaRole.Button, new() { Name = "follow" });
         await Expect(followButton).ToBeVisibleAsync();
     }
 }
