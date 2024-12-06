@@ -2,6 +2,7 @@ using Chirp.Core;
 using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
+using Microsoft.EntityFrameworkCore;
 using RepositoryTests.Utils;
 using TestUtilities;
 
@@ -505,6 +506,52 @@ public class CheepRepositoryUnitTest
         Assert.Single(comments);
         Assert.Equal(comment1.Message, first.Message);
         Assert.Equal(comment1.Author, first.Author);
+    }
+
+    #endregion
+
+    #region LikeCheeps
+    
+    [Fact]
+    public async Task LikeCheeps_CanLikeCheep()
+    {
+        //Arrange
+        var author1 = TestUtils.CreateTestAuthor("Mr. Test");
+        
+        var cheep = new Cheep { Id = 1, Author = author1, Message = "1", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1).DateTime };
+        Context.Cheeps.Add(cheep);
+
+        await Context.SaveChangesAsync();
+        
+        //Act
+        var result = await CheepRepository.LikeCheep(new LikeDTO(author1.UserName!, cheep.Id));
+        var likes = Context.Cheeps
+            .Include(c => c.Likes)
+            .FirstOrDefault()!.Likes;
+        
+        //Assert
+        Assert.Single(likes);
+    }
+
+    [Fact]
+    public async Task LikeCheeps_ReturnsCorrectNumberOfLikes()
+    {
+        //Arrange
+        var author1 = TestUtils.CreateTestAuthor("Mr. Test");
+
+        
+        var cheep = new Cheep { Id = 1, Author = author1, Message = "1", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1).DateTime };
+        var like = new Like {Id = 1, Author = author1, Cheep = cheep};
+        cheep.Likes.Add(like);
+        Context.Cheeps.Add(cheep);
+
+        await Context.SaveChangesAsync();
+        
+        //Act
+        var result = await CheepRepository.GetLikeCount(1);
+        
+        //Assert
+        Assert.Equal(1, result);
     }
 
     #endregion

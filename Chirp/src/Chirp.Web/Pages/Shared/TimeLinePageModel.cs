@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Chirp.Core;
 using Chirp.Core.DTO;
 using Chirp.Web.Pages.BindingModels;
@@ -19,7 +20,7 @@ public abstract class TimeLinePageModel(ICheepService cheepService, IAuthorServi
     protected const int PageSize = 32;
 
     [BindProperty] public MessageModel MessageModel { get; set; } = new MessageModel();
-
+    
     public ActionResult OnPost(string? author, [FromQuery] int page)
     {
         if (string.IsNullOrWhiteSpace(MessageModel.Message))

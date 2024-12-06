@@ -147,4 +147,86 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             new CommentDTO(comment.Author.UserName!, comment.Id, comment.Message,
                 new DateTimeOffset(comment.TimeStamp).ToUnixTimeSeconds()));
     }
+
+    public async Task<bool> LikeCheep(LikeDTO like)
+    {
+        var author = await context.Authors.FirstOrDefaultAsync(a => a.NormalizedUserName == like.Author.ToUpper());
+        if (author == null) return false;
+
+        var cheep = await context.Cheeps.Include(c => c.Likes).FirstOrDefaultAsync(c => c.Id == like.CheepId);
+        if (cheep == null) return false;
+
+        if (cheep.Likes.Any(l => l.Author.UserName == like.Author)) return false; // already liked
+
+        var likeEntity = new Like { Author = author, Cheep = cheep };
+        cheep.Likes.Add(likeEntity);
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> UnlikeCheep(LikeDTO like)
+    {
+        var cheep = await context.Cheeps
+            .Include(c => c.Likes)
+            .ThenInclude(l => l.Author)
+            .FirstOrDefaultAsync(c => c.Id == like.CheepId);
+        if (cheep == null) return false;
+
+        var likeEntity = cheep.Likes
+            .Where(l => l.Author.UserName == like.Author)
+            .FirstOrDefault(l => l.Author.NormalizedUserName == like.Author.ToUpper());
+        if (likeEntity == null) return false;
+
+        cheep.Likes.Remove(likeEntity);
+        //context.Likes.Remove(likeEntity);
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<int> GetLikeCount(int cheepId)
+    {
+        var cheep = await context.Cheeps.Include(c => c.Likes).FirstOrDefaultAsync(c => c.Id == cheepId);
+        return cheep?.Likes.Count ?? 0;
+    }
+
+    public async Task<bool> HasUserLikedCheep(int cheepId, string authorName)
+    {
+        var cheep = await context.Cheeps
+            .Include(c => c.Likes)
+            .ThenInclude(l => l.Author)
+            .FirstOrDefaultAsync(c => c.Id == cheepId);
+
+        return cheep?.Likes.Any(l => l.Author.UserName == authorName) ?? false;
+    }
+
+    public async Task<IEnumerable<CheepDTO>> GetCheepsWithLikesByPage(string userName, int page, int pageSize)
+    {
+        var user = await context.Authors.FirstOrDefaultAsync(a => a.UserName == userName);
+        if (user == null) throw new ArgumentException("User not found");
+
+        var cheeps = await context.Cheeps
+            .Include(c => c.Likes)
+            .OrderByDescending(c => c.TimeStamp)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(c => new
+            {
+                c.Id,
+                c.Author.UserName,
+                c.Message,
+                c.TimeStamp,
+                LikeCount = c.Likes.Count,
+                HasLiked = c.Likes.Any(l => l.Author.Id == user.Id)
+            })
+            .ToListAsync();
+
+        return cheeps.Select(c => new CheepDTO(
+            c.Id,
+            c.UserName!,
+            c.Message,
+            new DateTimeOffset(c.TimeStamp).ToUnixTimeSeconds())
+        {
+            LikeCount = c.LikeCount,
+        });
+    }
 }

@@ -6,4 +6,5 @@ public class CheepDTO(int? id, string author, string message, long unixTimestamp
     public string Author { get; set; } = author;
     public string Message { get; set; } = message;
     public long UnixTimestamp { get; set; } = unixTimestamp;
+    public int LikeCount { get; set; } = 0;
 }
