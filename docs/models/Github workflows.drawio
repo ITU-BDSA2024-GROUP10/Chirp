@@ -1,9 +1,12 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/25.0.2 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="25.0.2">
   <diagram name="Page-1" id="opGQl4_MMT8my-eptg-8">
-    <mxGraphModel dx="1365" dy="907" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="862" dy="573" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-55" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;strokeWidth=1;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="253.5" width="320" height="463" as="geometry" />
+        </mxCell>
         <mxCell id="ZYwOkiqEYRScWMsETzdc-20" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;strokeWidth=1;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
           <mxGeometry x="1260" y="20" width="320" height="210" as="geometry" />
         </mxCell>
@@ -34,8 +37,11 @@
         <mxCell id="FF10epxWlDn9avqX-Y1P-3" value="Check for lable&lt;br&gt;(on pull request)" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
           <mxGeometry x="460" y="35" width="100" height="45" as="geometry" />
         </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-26" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="FF10epxWlDn9avqX-Y1P-4" target="ZYwOkiqEYRScWMsETzdc-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="FF10epxWlDn9avqX-Y1P-4" value="B&lt;span style=&quot;background-color: initial;&quot;&gt;uild and test&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
-          <mxGeometry x="110" y="760" width="120" height="60" as="geometry" />
+          <mxGeometry x="1270" y="266.5" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="ZYwOkiqEYRScWMsETzdc-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="FF10epxWlDn9avqX-Y1P-5" target="ZYwOkiqEYRScWMsETzdc-10">
           <mxGeometry relative="1" as="geometry">
@@ -159,7 +165,7 @@
         <mxCell id="FF10epxWlDn9avqX-Y1P-50" value="Create and push new tag" style="rounded=1;whiteSpace=wrap;html=1;arcSize=21;glass=0;shadow=1;" parent="1" vertex="1">
           <mxGeometry x="200" y="540" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="FF10epxWlDn9avqX-Y1P-56" value="&lt;div&gt;&amp;nbsp;on:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;pull_request_target:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;types:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;- opened&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;- labeled&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;- unlabeled&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;- synchronize&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="FF10epxWlDn9avqX-Y1P-56" value="&lt;div&gt;&amp;nbsp;on:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;pull_request_target:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;types:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;- opened&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;- labeled&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;- unlabeled&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;- synchronize&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeColor=default;dashed=1;" parent="1" vertex="1">
           <mxGeometry x="582" y="40" width="130" height="110" as="geometry" />
         </mxCell>
         <mxCell id="FF10epxWlDn9avqX-Y1P-60" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="FF10epxWlDn9avqX-Y1P-57" target="FF10epxWlDn9avqX-Y1P-59" edge="1">
@@ -254,7 +260,7 @@
         <mxCell id="FF10epxWlDn9avqX-Y1P-91" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;shadow=1;" parent="1" vertex="1">
           <mxGeometry x="740" y="186.5" width="30" height="32" as="geometry" />
         </mxCell>
-        <mxCell id="NUPaYxcpHXeXiJEivPQf-3" value="&lt;div&gt;&amp;nbsp;on:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;push:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;tags:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;- &#39;v*.*.*&#39;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;workflow_run:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;workflows:&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&amp;nbsp;[&#39;Create tag on PR Merge&#39;]&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;types: [completed]&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;workflow_dispatch:&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="NUPaYxcpHXeXiJEivPQf-3" value="&lt;div&gt;&amp;nbsp;on:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;push:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;tags:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;- &#39;v*.*.*&#39;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;workflow_run:&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;workflows:&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&amp;nbsp;[&#39;Create tag on PR Merge&#39;]&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;types: [completed]&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;workflow_dispatch:&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeColor=default;dashed=1;" parent="1" vertex="1">
           <mxGeometry x="999" y="35" width="201" height="140" as="geometry" />
         </mxCell>
         <mxCell id="NUPaYxcpHXeXiJEivPQf-8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="NUPaYxcpHXeXiJEivPQf-4" target="NUPaYxcpHXeXiJEivPQf-7" edge="1">
@@ -350,7 +356,7 @@
         <mxCell id="NUPaYxcpHXeXiJEivPQf-32" value="Create github relese form tag and zips" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;shadow=1;" parent="1" vertex="1">
           <mxGeometry x="1034" y="527" width="120" height="36" as="geometry" />
         </mxCell>
-        <mxCell id="ZYwOkiqEYRScWMsETzdc-1" value="on: [pull_request]" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-1" value="on: [pull_request]" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;dashed=1;strokeColor=default;" vertex="1" parent="1">
           <mxGeometry x="1420" y="45" width="110" height="30" as="geometry" />
         </mxCell>
         <mxCell id="ZYwOkiqEYRScWMsETzdc-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-10" target="ZYwOkiqEYRScWMsETzdc-12">
@@ -373,6 +379,88 @@
         </mxCell>
         <mxCell id="ZYwOkiqEYRScWMsETzdc-18" value="Build with warnings as error" style="rounded=1;whiteSpace=wrap;html=1;arcSize=19;shadow=1;" vertex="1" parent="1">
           <mxGeometry x="1440" y="160" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-21" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-22" target="ZYwOkiqEYRScWMsETzdc-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-22" value="Run checkout@v4" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="330.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-24" target="ZYwOkiqEYRScWMsETzdc-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-24" value="Setup .Net 8" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="390.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-29" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-25" target="ZYwOkiqEYRScWMsETzdc-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-25" value="Dotnet restore" style="rounded=1;whiteSpace=wrap;html=1;arcSize=19;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="450.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-27" value="&lt;div&gt;on:&lt;/div&gt;&lt;div&gt;&amp;nbsp; pull_request:&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp; branches: [ main ]&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=default;fillColor=none;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="260" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-28" target="ZYwOkiqEYRScWMsETzdc-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-28" value="Dotnet build" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="510.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-30" target="ZYwOkiqEYRScWMsETzdc-40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-51" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Yes&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ZYwOkiqEYRScWMsETzdc-50">
+          <mxGeometry x="-0.9215" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-53" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-30" target="ZYwOkiqEYRScWMsETzdc-31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-54" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;No&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ZYwOkiqEYRScWMsETzdc-53">
+          <mxGeometry x="-0.7096" y="1" relative="1" as="geometry">
+            <mxPoint x="14" y="-3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-30" value="Did build succeed" style="rhombus;whiteSpace=wrap;html=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="566.5" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-31" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1315" y="676.5" width="30" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-39" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-40" target="ZYwOkiqEYRScWMsETzdc-42">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-40" value="Run checkout@v4" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="330.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-41" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-42" target="ZYwOkiqEYRScWMsETzdc-44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-42" value="Setup .Net 8" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="390.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-43" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-44" target="ZYwOkiqEYRScWMsETzdc-46">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-44" value="Dotnet restore" style="rounded=1;whiteSpace=wrap;html=1;arcSize=19;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="450.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-45" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-46" target="ZYwOkiqEYRScWMsETzdc-48">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-46" value="Dotnet build" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="510.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-47" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ZYwOkiqEYRScWMsETzdc-48" target="ZYwOkiqEYRScWMsETzdc-49">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-48" value="Install playwrigh" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="570.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZYwOkiqEYRScWMsETzdc-49" value="Dotnet test" style="rounded=1;whiteSpace=wrap;html=1;arcSize=19;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="630.5" width="120" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
