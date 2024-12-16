@@ -75,7 +75,7 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
             dt.ToUnixTimeSeconds()
         );
 
-        if (!cheepService.AddCommentToCheep(commentDTO))
+        if (!cheepService.CreateComment(commentDTO))
         {
             throw new ApplicationException("Failed to add comment");
         }
