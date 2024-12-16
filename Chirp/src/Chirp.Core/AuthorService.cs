@@ -1,55 +1,64 @@
+using Chirp.Core.CustomException;
 using Chirp.Core.DTO;
 
 namespace Chirp.Core;
 /// <summary>
-/// The IAuthorService defines the methods That the AuthorService must implement 
+/// The IAuthorService defines what information you can get from an Author 
 /// </summary>
 public interface IAuthorService
 {
     /// <summary>
-    /// Returns the Users followed by the given User
+    /// Gets the Users followed by the given User
     /// </summary>
     /// <param name="username"></param>
-    /// <returns></returns>
+    /// <exception cref="UserDoesNotExist">Thrown if a user with the given username doesn't exist</exception>
     public IEnumerable<AuthorDTO> GetFollows(string username);
     /// <summary>
     /// Gets the Users that follow the given User
     /// </summary>
     /// <param name="username"></param>
+    /// <exception cref="UserDoesNotExist">Thrown if a user with the given username doesn't exist</exception>
     public IEnumerable<AuthorDTO> GetFollowers(string username);
     /// <summary>
     /// Makes a User follow some other User
     /// </summary>
-    /// <param name="currentUser"></param>
-    /// <param name="userToFollow"></param>
-    public bool Follow(string currentUser, string userToFollow);
+    /// <param name="userWhoFollow">username</param>
+    /// <param name="userToFollow">username</param>
+    /// <returns>True if the follow went through, false if there is a follow connection between the two users</returns>
+    /// <exception cref="UserDoesNotExist">Thrown if a one of the users doesn't exist</exception>
+    /// <exception cref="ArgumentException">Thrown if the value of <paramref name="userWhoFollow"/> is equal to <paramref name="userToFollow"/>.
+    /// </exception>
+    public bool Follow(string userWhoFollow, string userToFollow);
     /// <summary>
     /// Makes a User unfollow some other User
     /// </summary>
-    /// <param name="currentUser"></param>
-    /// <param name="userToUnFollow"></param>
-    public bool Unfollow(string currentUser, string userToUnFollow);
+    /// <param name="userWhoFollows">username</param>
+    /// <param name="userToUnFollow">username</param>
+    /// <returns>True if the unfollow went through, false if there isn't a follow connection between the two users</returns>
+    /// <exception cref="UserDoesNotExist">Thrown if a one of the users doesn't exist</exception>
+    /// <exception cref="ArgumentException">Thrown if the value of <paramref name="userWhoFollows"/> is equal to <paramref name="userToUnFollow"/>.
+    /// </exception>
+    public bool Unfollow(string userWhoFollows, string userToUnFollow);
     /// <summary>
     /// Makes all Users which follow the given User, unfollow them
     /// </summary>
     /// <param name="username"></param>
+    /// <returns>True if the followers unfollowed</returns>
+    /// <exception cref="UserDoesNotExist">Thrown if a user with the given username doesn't exist</exception>
     public bool MakeFollowersUnfollow(string username);
     /// <summary>
     /// Gets all Comments made by the given User
     /// </summary>
     /// <param name="username"></param>
+    /// <exception cref="UserDoesNotExist">Thrown if a user with the given username doesn't exist</exception>
     public IEnumerable<CommentDTO> GetComments(string username);
     /// <summary>
-    /// Gets all authors which the given Names
+    /// Gets all authors with one of the given usernames
     /// </summary>
-    /// <param name="names"></param>
-    /// <returns></returns>
-    public IEnumerable<AuthorDTO?> GetAuthorsByNames(IEnumerable<String> names);
+    /// <param name="usernames"></param>
+    public IEnumerable<AuthorDTO?> GetAuthorsByNames(IEnumerable<String> usernames);
 }
-/// <summary>
-/// The AuthorServices handles calls to the AuthorRepository from the UI
-/// </summary>
-/// <param name="db"></param>
+
 public class AuthorService(IAuthorRepository db) : IAuthorService
 {
     public IEnumerable<AuthorDTO> GetFollows(string username)
@@ -68,16 +77,16 @@ public class AuthorService(IAuthorRepository db) : IAuthorService
     {
         return db.GetComments(username).Result;
     }
-    public bool Follow(string currentUser, string userToFollow)
+    public bool Follow(string userWhoFollow, string userToFollow)
     {
-        return db.Follow(currentUser, userToFollow).Result;
+        return db.Follow(userWhoFollow, userToFollow).Result;
     }
-    public bool Unfollow(string currentUser, string userToUnFollow)
+    public bool Unfollow(string userWhoFollows, string userToUnFollow)
     {
-        return db.UnFollow(currentUser, userToUnFollow).Result;
+        return db.UnFollow(userWhoFollows, userToUnFollow).Result;
     }
-    public IEnumerable<AuthorDTO?> GetAuthorsByNames(IEnumerable<String> names)
+    public IEnumerable<AuthorDTO?> GetAuthorsByNames(IEnumerable<String> usernames)
     {
-        return db.GetAuthorsByNames(names).Result;
+        return db.GetAuthorsByNames(usernames).Result;
     }
 }
