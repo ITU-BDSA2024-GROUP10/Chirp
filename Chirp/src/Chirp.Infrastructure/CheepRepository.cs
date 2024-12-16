@@ -5,10 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
 
-/// <summary>
-/// The AuthorRepository class retrieves and stores cheep data in the ChirpDBContext
-/// </summary>
-/// <param name="context"></param>
 public class CheepRepository(ChirpDBContext context) : ICheepRepository
 {
     private readonly ChirpDBContext context = context;

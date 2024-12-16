@@ -5,10 +5,7 @@ using Chirp.Infrastructure.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
-/// <summary>
-/// The AuthorRepository class retrieves and stores author data in the ChirpDBContext
-/// </summary>
-/// <param name="context"></param>
+
 public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
 {
     private readonly ChirpDBContext context = context;
