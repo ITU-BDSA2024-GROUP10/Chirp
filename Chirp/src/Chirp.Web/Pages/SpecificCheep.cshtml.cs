@@ -20,7 +20,12 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
         CommentCount = cheepService.GetCommentAmountOnCheep(cheepId);
         Comments = cheepService.GetCommentsFromCheep(cheepId);
     }
-
+    /// <summary>
+    /// Returns a formatted string according to the time since a comment was left
+    /// (This method is currently inaccurate by 1 hour due to daylight savings time)
+    /// </summary>
+    /// <param name="timeStamp"></param>
+    /// <returns></returns>
     public string TimeSinceComment(long timeStamp)
     {
         var utcThen = DateTimeOffset.FromUnixTimeSeconds(timeStamp);
@@ -38,7 +43,13 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
         };
         return timesince;
     }
-
+    /// <summary>
+    /// Handles posting a Comment from the User to the current Cheep
+    /// </summary>
+    /// <param name="author"></param>
+    /// <param name="cheepId"></param>
+    /// <returns></returns>
+    /// <exception cref="ApplicationException"></exception>
     public IActionResult OnPostComment(string author, int cheepId)
     {
         if (string.IsNullOrWhiteSpace(MessageModel.Message))
@@ -71,7 +82,10 @@ public class SpecificCheep(ICheepService cheepService) : PageModel
 
         return RedirectToPage("/SpecificCheep", new { cheepId = cheepId });
     }
-
+    /// <summary>
+    /// Makes sure the correct user information is set to the model on reload
+    /// </summary>
+    /// <param name="cheepId"></param>
     private void Reload(int cheepId)
     {
         Cheep = cheepService.GetCheepFromId(cheepId);

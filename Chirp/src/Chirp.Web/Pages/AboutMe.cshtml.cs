@@ -26,7 +26,9 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
     public IFormFile? Avatar { get; set; }
 
     public Dictionary<string, byte[]> ImageMap = new();
-
+    /// <summary>
+    /// Loads the correct user information to the page on Get requests 
+    /// </summary>
     public async void OnGet()
     {
         Author = await userManager.FindByNameAsync(User.Identity!.Name!);
@@ -43,7 +45,9 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
         
         SetUserInfo(Author.UserName);
     }
-
+    /// <summary>
+    /// Adds a profile image to the current User or throws relevant errors
+    /// </summary>
     public async Task<IActionResult> OnPostImage()
     {
         Author = await userManager.FindByNameAsync(User.Identity!.Name!);
@@ -71,7 +75,9 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
         
         return RedirectToPage();
     }
-    
+    /// <summary>
+    /// Handles click on Forget Me button
+    /// </summary>
     public async Task<ActionResult> OnPostConfirmDelete()
     {
         try
@@ -85,7 +91,6 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
         
         return Redirect("/");
     }
-
     public async Task SignOutAndDeleteUser()
     {
         var authorName = User.Identity!.Name!;
@@ -98,7 +103,10 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
             await userManager.DeleteAsync(Author);
         } else throw new Exception("Author data is not valid");
     }
-
+    /// <summary>
+    /// Sets the correct user information for the model according to the username 
+    /// </summary>
+    /// <param name="authorUsername"></param>
     private void SetUserInfo(string authorUsername)
     {
         Cheeps = cheepService.GetCheepsFromAuthor(authorUsername);

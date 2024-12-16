@@ -13,7 +13,12 @@ public class LikeModel : PageModel
     {
         CheepService = cheepService;
     }
-
+    /// <summary>
+    /// Likes or Unlikes a Cheep according to the state of the Cheep
+    /// </summary>
+    /// <param name="cheepId"></param>
+    /// <param name="isLiking"></param>
+    /// <returns></returns>
     public async Task<IActionResult> OnPostToggleLikeAsync(int cheepId, bool isLiking)
     {
             if (!User.Identity?.IsAuthenticated ?? false)

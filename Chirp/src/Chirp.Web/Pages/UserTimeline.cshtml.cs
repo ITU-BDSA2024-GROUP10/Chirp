@@ -9,6 +9,15 @@ namespace Chirp.Web.Pages;
 public class UserTimelineModel(ICheepService cheepService, IAuthorService authorService) : TimeLinePageModel(cheepService, authorService)
 {
     protected new readonly IAuthorService AuthorService = authorService;
+    /// <summary>
+    /// Loads profile images and cheeps for the Private timeline according to the page
+    /// redirects to 404 if no User with the given name exists
+    /// and normalizes the username and page number 
+    /// </summary>
+    /// <param name="author"></param>
+    /// <param name="page"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public ActionResult OnGet(string author, [FromQuery] int page)
     {
         if (page < 1)
@@ -50,7 +59,11 @@ public class UserTimelineModel(ICheepService cheepService, IAuthorService author
         
         return Page();
     }
-
+    /// <summary>
+    /// Sets the Cheeps property according to the page
+    /// </summary>
+    /// <param name="page"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     protected override void LoadCheeps(int page)
     {
         var author = HttpContext.GetRouteValue("author")?.ToString();
@@ -66,7 +79,11 @@ public class UserTimelineModel(ICheepService cheepService, IAuthorService author
         LastPageNumber = CheepService.GetAmountOfCheepPagesFromAuthors(authors, PageSize);
         Cheeps = CheepService.GetCheepsFromAuthorsByPage(authors, page, PageSize);
     }
-    
+    /// <summary>
+    /// Normalizes the Author username for display
+    /// </summary>
+    /// <param name="author"></param>
+    /// <returns></returns>
     public string NormalizeForDisplay(string author)
     {
         var parts = author.Split(' ');
