@@ -46,7 +46,7 @@ public class AboutMe(IAuthorService authorService, ICheepService cheepService, S
         SetUserInfo(Author.UserName);
     }
     /// <summary>
-    /// Adds a profile image to the current User or throws relevant errors
+    /// Adds a profile image to the current User, and display relevant errors
     /// </summary>
     public async Task<IActionResult> OnPostImage()
     {
