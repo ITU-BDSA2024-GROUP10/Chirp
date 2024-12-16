@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Identity;
 namespace Chirp.Infrastructure.Model;
 /// <summary>
 /// The Author class acts as the User for the Chirp! program
-/// an author is able to Cheep, Comment on Cheeps and like Cheeps
+/// an author is able to Cheep, Comment on Cheeps, like Cheeps
+/// and follow other Authors
 /// </summary>
 public sealed class Author : IdentityUser
 {
