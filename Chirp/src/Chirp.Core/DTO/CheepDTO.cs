@@ -1,4 +1,7 @@
 ﻿namespace Chirp.Core.DTO;
+/// <summary>
+/// The CheepDTO class transfors information about Cheeps from the CheepRepository to the UI
+/// </summary>
 
 public class CheepDTO(int? id, string author, string message, long unixTimestamp)
 {
