@@ -25,6 +25,8 @@ Here comes a description of our domain model.
 
 ## Architecture — In the small
 
+![Illustration of the _Chirp!_ program architecture.](images/OnionModel.png)
+
 ## Architecture of deployed application
 
 ## User activities
