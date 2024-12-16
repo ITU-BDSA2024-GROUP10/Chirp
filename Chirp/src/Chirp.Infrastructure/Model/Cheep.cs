@@ -1,7 +1,10 @@
 using FluentValidation;
 
 namespace Chirp.Infrastructure.Model;
-
+/// <summary>
+/// The Cheep class is a small 160-character message that can
+/// be published by authors on the Chirp! platform
+/// </summary>
 public class Cheep
 {
     public int Id { get; set; }
@@ -14,7 +17,13 @@ public class Cheep
     public Cheep()
     {
     }
-
+    /// <summary>
+    /// Constructor to instantiate a new Cheep with the relevant information
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="message"></param>
+    /// <param name="timeStamp"></param>
+    /// <param name="author"></param>
     public Cheep(int id, string message, DateTime timeStamp, Author author)
     {
         Id = id;
