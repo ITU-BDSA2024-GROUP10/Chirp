@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
 
+// For making migrations, run from src/ :
+// dotnet ef migrations add <Name> --project .\Chirp.Infrastructure\  --startup-project .\Chirp.Web\ --output-dir .\Migrations\
+
 public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : IdentityDbContext<Author>(options)
 {
     public DbSet<Cheep> Cheeps { get; set; }
@@ -34,6 +37,9 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
                 .WithMany(a => a.Cheeps)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(c => c.Likes)
+                .WithOne(l => l.Cheep);
         });
 
         //define author entity constraints
@@ -50,6 +56,10 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
 
             entity.HasMany(a => a.Following)
                 .WithMany(a => a.Followers);
+
+            entity.HasMany(a => a.Likes)
+                .WithOne(l => l.Author)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         //define comment entity constraints
@@ -71,6 +81,22 @@ public class ChirpDBContext(DbContextOptions<ChirpDBContext> options) : Identity
 
             entity.HasOne(c => c.Cheep)
                 .WithMany(c => c.Comments)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Like>(entity =>
+        {
+            entity.HasKey(l => l.Id);
+            entity.Property(l => l.Id).ValueGeneratedOnAdd();
+
+            entity.HasOne(l => l.Author)
+                .WithMany(a => a.Likes)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(l => l.Cheep)
+                .WithMany(c => c.Likes)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
         });

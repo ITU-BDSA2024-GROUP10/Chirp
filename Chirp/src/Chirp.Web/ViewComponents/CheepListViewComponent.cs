@@ -5,11 +5,11 @@ namespace Chirp.Web.ViewComponents;
 
 public class CheepListViewComponent : ViewComponent
 {
-    public IViewComponentResult Invoke(IEnumerable<CheepDTO> cheeps, string targetPage)
+    public IViewComponentResult Invoke(IEnumerable<CheepDTO> cheeps, Dictionary<string, byte[]> imageMap, string targetPage)
     {
         ViewBag.TargetPage = targetPage;
         ViewBag.Cheeps = cheeps;
-        
+        ViewBag.ImageMap = imageMap;
         return View("Default");
     }
 }

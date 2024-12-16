@@ -28,7 +28,7 @@ public class RazorPlaywrightWebApplicationFactory(string baseUrl)
 
     //This is overriding the default ResetDB method from InMemoryCostumeWebApplicationFactory
     //because when the db is shared between the test host and the Kestrel host
-    //using ensure deleted, wont clear the database properly.
+    //using ensure deleted, won't clear the database properly.
     //Therefore, we use this to manually delete all data from the database.
     public new void ResetDB()
     {
@@ -43,7 +43,7 @@ public class RazorPlaywrightWebApplicationFactory(string baseUrl)
             foreach (var entityType in context.Model.GetEntityTypes())
             {
                 var tableName = entityType.GetTableName();
-                //Its warning agianst potential SQL injection, but we are not taking input from user,
+                //It warns against potential SQL injection, but we are not taking input from user,
                 //so it's safe to ignore this warning
 #pragma warning disable EF1002
                 context.Database.ExecuteSqlRaw($"DELETE FROM \"{tableName}\";");

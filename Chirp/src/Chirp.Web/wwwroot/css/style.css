@@ -320,3 +320,27 @@ ul.nav li a {
 ul.nav li a:hover {
     background-color: #8b4949;
 }
+
+/* https://www.w3schools.com/cssref/pr_background-image.php */
+
+.like-button {
+    background-color: transparent;
+    background-image: url("../svg/heart.svg");
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+}
+
+.like-button:hover {
+    background-color: transparent;
+}
+
+.like-button-liked {
+    background-color: transparent;
+    background-image: url("../svg/heart-filled.svg");
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+}
+
+.like-button-liked:hover {
+    background-color: transparent;
+}

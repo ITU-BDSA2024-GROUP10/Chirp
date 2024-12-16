@@ -2,6 +2,7 @@ using Chirp.Core;
 using Chirp.Core.DTO;
 using Chirp.Infrastructure;
 using Chirp.Infrastructure.Model;
+using Microsoft.EntityFrameworkCore;
 using RepositoryTests.Utils;
 using TestUtilities;
 
@@ -38,7 +39,7 @@ public class CheepRepositoryUnitTest
         var author = TestUtils.CreateTestAuthor("Mr. test");
         for (int i = 0; i < 7; i++)
         {
-            var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now };
+            var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
             Context.Cheeps.Add(cheep);
         }
 
@@ -57,7 +58,7 @@ public class CheepRepositoryUnitTest
     {
         //arrange
         var author = TestUtils.CreateTestAuthor("Mr. test");
-        var cheep = new Cheep { Author = author, Message = "test", TimeStamp = DateTime.Now };
+        var cheep = new Cheep { Author = author, Message = "test", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1).DateTime };
 
         Context.Cheeps.Add(cheep);
         await Context.SaveChangesAsync();
@@ -77,7 +78,7 @@ public class CheepRepositoryUnitTest
         List<Cheep> cheeps = [];
         for (int i = 0; i < 7; i++)
         {
-            var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTime.Now };
+            var cheep = new Cheep { Author = author, Message = $"test_{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
             cheeps.Add(cheep);
         }
 
@@ -159,7 +160,7 @@ public class CheepRepositoryUnitTest
             var author = TestUtils.CreateTestAuthor($"name{i}");
             authors.Add(author);
 
-            var cheep = new Cheep { Author = author, Message = $"test{i}", TimeStamp = DateTime.Now };
+            var cheep = new Cheep { Author = author, Message = $"test{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
             cheeps.Add(cheep);
         }
 
@@ -187,7 +188,7 @@ public class CheepRepositoryUnitTest
         List<Cheep> cheeps = [];
         for (int i = 0; i < 5; i++)
         {
-            cheeps.Add(new Cheep { Author = author, Message = "test" + i, TimeStamp = DateTime.Now });
+            cheeps.Add(new Cheep { Author = author, Message = "test" + i, TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime });
         }
 
         Context.Authors.Add(author);
@@ -195,6 +196,7 @@ public class CheepRepositoryUnitTest
         await Context.SaveChangesAsync();
 
         var result = (await CheepRepository.GetCheepsFromAuthor(author.UserName!)).ToList();
+        
         cheeps.Reverse();
         Assert.Equal(5, result.Count);
         for (int i = 0; i < 5; i++)
@@ -215,7 +217,7 @@ public class CheepRepositoryUnitTest
             var author = TestUtils.CreateTestAuthor($"name{i}");
             authors.Add(author);
 
-            var cheep = new Cheep { Author = author, Message = $"test{i}", TimeStamp = DateTime.Now };
+            var cheep = new Cheep { Author = author, Message = $"test{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
             cheeps.Add(cheep);
         }
 
@@ -243,12 +245,12 @@ public class CheepRepositoryUnitTest
         {
             if (i % 2 == 0)
             {
-                var cheep = new Cheep { Author = authorB, Message = "", TimeStamp = DateTime.Now };
+                var cheep = new Cheep { Author = authorB, Message = "", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
                 Context.Cheeps.Add(cheep);
             }
             else
             {
-                var cheep = new Cheep { Author = authorA, Message = "", TimeStamp = DateTime.Now };
+                var cheep = new Cheep { Author = authorA, Message = "", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
                 Context.Cheeps.Add(cheep);
                 authTotal++;
             }
@@ -305,7 +307,7 @@ public class CheepRepositoryUnitTest
         var author2 = TestUtils.CreateTestAuthor("Mr. Test2");
 
         List<string> authors = new();
-
+        List<Cheep> cheeps = [];
 
         authors.Add(author1.UserName!);
         authors.Add(author2.UserName!);
@@ -314,12 +316,14 @@ public class CheepRepositoryUnitTest
         {
             if (i % 2 == 0)
             {
-                var cheep = new Cheep { Author = author1, Message = "", TimeStamp = DateTime.Now };
+                var cheep = new Cheep { Author = author1, Message = "", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
+                cheeps.Add(cheep);
                 Context.Cheeps.Add(cheep);
             }
             else
             {
-                var cheep = new Cheep { Author = author2, Message = "", TimeStamp = DateTime.Now };
+                var cheep = new Cheep { Author = author2, Message = "", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
+                cheeps.Add(cheep);
                 Context.Cheeps.Add(cheep);
             }
         }
@@ -359,8 +363,8 @@ public class CheepRepositoryUnitTest
         Context.Cheeps.AddRange(cheeps);
         for (int i = 0; i < 7; i++)
         {
-            var cheep1 = new Cheep { Author = author1, Message = $"test_{i}", TimeStamp = DateTime.Now };
-            var cheep2 = new Cheep { Author = author2, Message = $"test_{i}", TimeStamp = DateTime.Now };
+            var cheep1 = new Cheep { Author = author1, Message = $"test_{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
+            var cheep2 = new Cheep { Author = author2, Message = $"test_{i}", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(i).DateTime };
             cheeps.Add(cheep1);
             cheeps.Add(cheep2);
         }
@@ -502,6 +506,52 @@ public class CheepRepositoryUnitTest
         Assert.Single(comments);
         Assert.Equal(comment1.Message, first.Message);
         Assert.Equal(comment1.Author, first.Author);
+    }
+
+    #endregion
+
+    #region LikeCheeps
+    
+    [Fact]
+    public async Task LikeCheeps_CanLikeCheep()
+    {
+        //Arrange
+        var author1 = TestUtils.CreateTestAuthor("Mr. Test");
+        
+        var cheep = new Cheep { Id = 1, Author = author1, Message = "1", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1).DateTime };
+        Context.Cheeps.Add(cheep);
+
+        await Context.SaveChangesAsync();
+        
+        //Act
+        var result = await CheepRepository.LikeCheep(new LikeDTO(author1.UserName!, cheep.Id));
+        var likes = Context.Cheeps
+            .Include(c => c.Likes)
+            .FirstOrDefault()!.Likes;
+        
+        //Assert
+        Assert.Single(likes);
+    }
+
+    [Fact]
+    public async Task LikeCheeps_ReturnsCorrectNumberOfLikes()
+    {
+        //Arrange
+        var author1 = TestUtils.CreateTestAuthor("Mr. Test");
+
+        
+        var cheep = new Cheep { Id = 1, Author = author1, Message = "1", TimeStamp = DateTimeOffset.FromUnixTimeSeconds(1).DateTime };
+        var like = new Like {Id = 1, Author = author1, Cheep = cheep};
+        cheep.Likes.Add(like);
+        Context.Cheeps.Add(cheep);
+
+        await Context.SaveChangesAsync();
+        
+        //Act
+        var result = await CheepRepository.GetLikeCount(1);
+        
+        //Assert
+        Assert.Equal(1, result);
     }
 
     #endregion

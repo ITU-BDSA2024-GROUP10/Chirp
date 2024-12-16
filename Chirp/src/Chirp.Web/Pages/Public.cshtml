@@ -13,7 +13,7 @@
     @if (Model.Cheeps.Any())
     {
         @await Component.InvokeAsync("PageButtons", new { currentPageNumber = Model.PageNumber, lastPageNumber = Model.LastPageNumber, targetPageUrl = $"/" })
-        @await Component.InvokeAsync("CheepList", new {cheeps = Model.Cheeps, targetPage = $"/"})
+        @await Component.InvokeAsync("CheepList", new {cheeps = Model.Cheeps, imageMap = Model.ImageMap, targetPage = $"/"})
     }
     else
     {
