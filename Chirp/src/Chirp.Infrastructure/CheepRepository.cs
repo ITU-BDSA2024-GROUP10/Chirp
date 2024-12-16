@@ -4,11 +4,18 @@ using Chirp.Infrastructure.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
-
+/// <summary>
+/// The AuthorRepository class retrieves and stores cheep data in the ChirpDBContext
+/// </summary>
+/// <param name="context"></param>
 public class CheepRepository(ChirpDBContext context) : ICheepRepository
 {
     private readonly ChirpDBContext context = context;
-
+    /// <summary>
+    /// Gets all Cheeps on the given page by the given page size
+    /// </summary>
+    /// <param name="page"></param>
+    /// <param name="pageSize"></param>
     public async Task<IEnumerable<CheepDTO>?> GetCheepsByPage(int page, int pageSize)
     {
         if (pageSize < 0) return null;
@@ -25,12 +32,20 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message,
                 new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
-
+    /// <summary>
+    /// Gets Cheeps made by some author with the given Name by the given page and page size
+    /// </summary>
+    /// <param name="author"></param>
+    /// <param name="page"></param>
+    /// <param name="pageSize"></param>
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorByPage(string author, int page, int pageSize)
     {
         return await GetCheepsFromAuthorsByPage([author], page, pageSize);
     }
-
+    /// <summary>
+    /// Gets all Cheeps made by some author with the given Name
+    /// </summary>
+    /// <param name="author"></param>
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthor(string author)
     {
         author = author.ToUpper();
@@ -44,7 +59,12 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message,
                 new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
-
+    /// <summary>
+    /// Gets Cheeps made by some authors with the given Names by the given page and page size
+    /// </summary>
+    /// <param name="authors"></param>
+    /// <param name="page"></param>
+    /// <param name="pageSize"></param>
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorsByPage(IEnumerable<string> authors, int page,
         int pageSize)
     {
@@ -62,19 +82,27 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             new CheepDTO(cheep.Id, cheep.UserName!, cheep.Message,
                 new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds()));
     }
-
+    /// <summary>
+    /// Gets the amount of Cheeps in the Database 
+    /// </summary>
+    /// <returns></returns>
     public Task<int> GetAmountOfCheeps()
     {
         return context.Cheeps.CountAsync();
     }
-
+    /// <summary>
+    /// Gets the amount Cheeps made by the Authors with the given Names
+    /// </summary>
     public Task<int> GetAmountOfCheepsFromAuthors(IEnumerable<String> authors)
     {
         authors = authors.Select(author => author.ToUpper());
         return context.Cheeps
             .CountAsync(cheep => authors.Contains(cheep.Author.NormalizedUserName!));
     }
-
+    /// <summary>
+    /// Creates a new Cheep from the given CheepDTO
+    /// </summary>
+    /// <param name="cheep"></param>
     public async Task<bool> CreateCheep(CheepDTO cheep)
     {
         var author = await context.Authors
@@ -90,7 +118,10 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         await context.SaveChangesAsync();
         return true;
     }
-
+    /// <summary>
+    /// Adds a Comment to some Cheep given the CommentDTO
+    /// </summary>
+    /// <param name="comment"></param>
     public async Task<bool> AddCommentToCheep(CommentDTO comment)
     {
         var author = await context.Authors
@@ -111,7 +142,11 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         await context.SaveChangesAsync();
         return true;
     }
-
+    /// <summary>
+    /// Gets the amount of Comments associated with the given CheepID
+    /// </summary>
+    /// <param name="cheepId"></param>
+    /// <returns></returns>
     public async Task<int> GetCommentAmountOnCheep(int? cheepId)
     {
         if (cheepId == null) return 0;
@@ -122,7 +157,10 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         var commentCount = query!.Comments.Count;
         return commentCount;
     }
-
+    /// <summary>
+    /// Gets the Cheep associated with the given CheepID
+    /// </summary>
+    /// <param name="cheepId"></param>
     public async Task<CheepDTO> GetCheepById(int cheepId)
     {
         var cheep = await context.Cheeps
@@ -134,7 +172,10 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             new DateTimeOffset(cheep.TimeStamp).ToUnixTimeSeconds());
         ;
     }
-
+    /// <summary>
+    /// Gets all Comments associated with the given CheepID
+    /// </summary>
+    /// <param name="cheepId"></param>
     public async Task<IEnumerable<CommentDTO>> GetCommentsForCheep(int cheepId)
     {
         var query = await context.Cheeps
@@ -147,7 +188,10 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
             new CommentDTO(comment.Author.UserName!, comment.Id, comment.Message,
                 new DateTimeOffset(comment.TimeStamp).ToUnixTimeSeconds()));
     }
-
+    /// <summary>
+    /// Likes some Cheep given the LikeDTO
+    /// </summary>
+    /// <param name="like"></param>
     public async Task<bool> LikeCheep(LikeDTO like)
     {
         var author = await context.Authors.FirstOrDefaultAsync(a => a.NormalizedUserName == like.Author.ToUpper());
@@ -163,7 +207,9 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         await context.SaveChangesAsync();
         return true;
     }
-
+    /// <summary>
+    /// Unlikes some Cheep given the LikeDTO
+    /// </summary>
     public async Task<bool> UnlikeCheep(LikeDTO like)
     {
         var cheep = await context.Cheeps
@@ -182,13 +228,20 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
         await context.SaveChangesAsync();
         return true;
     }
-
+    /// <summary>
+    /// Gets how many Likes are associated with some Cheep given the CheepID
+    /// </summary>
+    /// <param name="cheepId"></param>
     public async Task<int> GetLikeCount(int cheepId)
     {
         var cheep = await context.Cheeps.Include(c => c.Likes).FirstOrDefaultAsync(c => c.Id == cheepId);
         return cheep?.Likes.Count ?? 0;
     }
-
+    /// <summary>
+    /// Returns if a User with the given Name has likes the given Cheep
+    /// </summary>
+    /// <param name="cheepId"></param>
+    /// <param name="author"></param>
     public async Task<bool> HasUserLikedCheep(int cheepId, string authorName)
     {
         var cheep = await context.Cheeps
@@ -198,6 +251,12 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
 
         return cheep?.Likes.Any(l => l.Author.UserName == authorName) ?? false;
     }
+    /// <summary>
+    /// Returns all Cheeps liked by the given Author given the current page and page size 
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <param name="page"></param>
+    /// <param name="pageSize"></param>
 
     public async Task<IEnumerable<CheepDTO>> GetCheepsWithLikesByPage(string userName, int page, int pageSize)
     {
