@@ -203,6 +203,20 @@ In order to make run the UI-Tests make sure your system has playwright installed
 
 Next, navigate to _/Chirp/Chirp_ and in your terminal do _dotnet test_.
 
+## Our test structure
+We have three kinds of test
+- UI
+- Unit
+- End to end
+
+Since our services are essentially return statements calling our repository, we found integration tests of these to be of lesser valued, compared to the rest of the project. However, if the project continues, testing them would be beneficial to ensure functionality remains unchanged as the services evolve.
+
+Our UI tests are set up quite genral, we don't mock anything, just use an in memory database, and only validate if the UI behave as expected. You could, in addition to these, have done some tests where you isolate the UI more, e.g., by mocking the behavior of the used service methods. But we prioritized other tasks given the application's size.
+
+Our unit tests are of allmost all of our methods in our two repositories, supposed to be over all
+
+We have some end to end test, but could proaberly use some more, tho since our UI test are so general, they act some what as end to end tests.
+
 # Ethics
 
 ## License
