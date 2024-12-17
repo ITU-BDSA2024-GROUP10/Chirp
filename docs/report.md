@@ -2,12 +2,12 @@
 title: _Chirp!_ Project Report
 subtitle: ITU BDSA 2024 Group `10`
 author:
-- "Christoffer <gryn@itu.dk>"
-- "Rasmus <rarl@itu.dk>"
-- "Mathias <mlao@itu.dk>"
-- "Alex <alext@itu.dk>"
-- "Anthon <acah@itu.dk>"
-- "Bryce <brka@itu.dk>"
+- "Christoffer Grünberg <gryn@itu.dk>"
+- "Rasmus Rosenmejer Larsen <rarl@itu.dk>"
+- "Mathias Labori Olsen <mlao@itu.dk>"
+- "Alex Tilgreen Mogensen <alext@itu.dk>"
+- "Anthon Castillo Hertzum <acah@itu.dk>"
+- "Bryce Raj Karnikar <brka@itu.dk>"
 numbersections: true
 header-includes:
   - \usepackage{caption}
@@ -39,11 +39,17 @@ Due to the application's size, each layer consists only of a single project, as 
 
 ![Illustration of the _Chirp!_ program architecture.](images/OnionModel.png)
 
-
+\pagebreak
 
 ## Architecture of deployed application
 
-asdasdasd
+The _Chirp!_ application is deployed to the Microsoft Azure App Service as a complete component 
+consisting of Chirp.Web for the GUI, Chirp.Infrastructure handling the domain model and repositories.
+The User connects to Chirp.Web through Azure. On read and write requests the Azure Web App will
+make calls to the deployed SQLite server. If users attempt to login or register with OAuth via github
+Chirp.Web will make calls to GitHub Authentication. 
+
+![Illustration of the _Chirp!_ deployment architecture of the application.](images/DeploymentDiagram.png)
 
 ## User activities
 
