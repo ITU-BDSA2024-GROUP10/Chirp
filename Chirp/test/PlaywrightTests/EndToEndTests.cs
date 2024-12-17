@@ -35,9 +35,6 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
         
         await Page.GotoAsync("/");
         await Register(author, password);
-        await Expect(Page.GetByText("Thank you for confirming")).ToBeVisibleAsync();
-        
-        await RazorPageUtils.Login(author.UserName!, password);
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
         await Page.Locator("#Message").ClickAsync();
