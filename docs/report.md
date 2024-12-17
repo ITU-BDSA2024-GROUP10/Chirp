@@ -34,13 +34,27 @@ enabling logging of which Authors have interacted with which Cheeps.
 ## User activities
 
 ## Sequence of functionality/calls trough _Chirp!_
+![Illustration of the _Chirp!_ program architecture.](images/Sequence-of-functionality.png)
 
 # Process
 
 ## Build, test, release, and deployment
 
 ## Team work
+### Project Board
 
+### Unclosed Issues
+Some issues still remain open in the Todo column, these are extra features that the group found interesting but did not get to implement within the time frame of the project work.
+
+In order to better mimic the functionality of _X_ (f.k.a _Twitter_), users should be able to leave comments directly on the timeline pages. 
+This would be implemented by having a popup window appear, where users could leave comments, when clicking a Cheep. 
+However getting this to work while handling and displaying message-format-error proved to be an issue, and the feature was given an _Extra_ tag and archived. 
+
+Another feature that was discussed was moving the database to a separate API project ... ... ...
+
+
+
+### Issue Progression 
 ## How to make _Chirp!_ work locally
 
 ## How to run test suite locally
