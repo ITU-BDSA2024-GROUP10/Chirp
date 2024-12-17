@@ -134,9 +134,7 @@ In order to better mimic the functionality of _X_ (f.k.a _Twitter_), users shoul
 This would be implemented by having a popup window appear, where users could leave comments, when clicking a Cheep. 
 However getting this to work while handling and displaying message-format-errors proved to be an issue, and the feature was given an _Extra_ tag and left open. 
 
-Another feature that was discussed was moving the database to a separate API project ... ... ...
-
-
+We also wanted to make a big refactor, which involved moving what database access we could to an API project. Since we use Identity for user registration and verification, a local database would still be required for the web project to store user information. The main reason for the API project is to decouple data access from the web application, making it easier to build additional features, such as a mobile app, by enabling shared data across projects. While a centralized database could achieve similar results, an API is more future-proof, as it abstracts the database layer, making the switching of the database, have no impact on the projects using the API.
 
 ### Issue Progression 
 The illustration below shows how the group worked with issues during the project. 
