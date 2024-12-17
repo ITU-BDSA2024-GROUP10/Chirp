@@ -9,7 +9,7 @@ namespace Chirp.Infrastructure;
 public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
 {
     private readonly ChirpDBContext context = context;
-   
+
     public async Task<IEnumerable<AuthorDTO?>> GetAuthorsByNames(IEnumerable<string> usernames)
     {
         return await context.Authors
@@ -17,12 +17,13 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
             .Select(a => new AuthorDTO(a.UserName!, a.Email!, a.ProfileImage))
             .ToListAsync();
     }
-    
+
     public async Task<IEnumerable<AuthorDTO>> GetAuthorFollows(string username)
     {
         if (!await UserExists(username)) throw new UserDoesNotExist();
         return GetFollowing(username).Result.Select(a => new AuthorDTO(a.UserName!, a.Email!, a.ProfileImage)).ToList();
     }
+
     public async Task<IEnumerable<AuthorDTO>> GetAuthorFollowers(string username)
     {
         if (!await UserExists(username)) throw new UserDoesNotExist();
@@ -33,6 +34,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
 
         return followers.Select(a => new AuthorDTO(a.UserName!, a.Email!, a.ProfileImage)).ToList();
     }
+
     public async Task<bool> Follow(string userWhoFollow, string userToFollow)
     {
         if (userWhoFollow == userToFollow) throw new ArgumentException("You cannot follow yourself");
@@ -46,6 +48,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         await context.SaveChangesAsync();
         return true;
     }
+
     public async Task<bool> UnFollow(string userWhoFollows, string userToUnfollow)
     {
         userWhoFollows = userWhoFollows.ToUpper();
@@ -64,6 +67,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         await context.SaveChangesAsync();
         return true;
     }
+
     private async Task<Author> GetAuthor(string username)
     {
         username = username.ToUpper();
@@ -71,11 +75,13 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         if (author == null) throw new UserDoesNotExist();
         return author;
     }
+
     private async Task<bool> UserExists(string username)
     {
         username = username.ToUpper();
         return await context.Authors.AnyAsync(a => a.NormalizedUserName == username);
     }
+
     private async Task<bool> DoesFollow(string currentUser, string userToFollow)
     {
         currentUser = currentUser.ToUpper();
@@ -86,6 +92,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
 
         return list != null && list.Any(a => a.NormalizedUserName == userToFollow);
     }
+
     private async Task<IEnumerable<Author>> GetFollowing(string currentUser)
     {
         currentUser = currentUser.ToUpper();
@@ -93,6 +100,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
             .Where(a => a.NormalizedUserName == currentUser)
             .Select(a => a.Following).FirstOrDefaultAsync() ?? new List<Author>();
     }
+
     public async Task<bool> MakeFollowersUnfollow(string username)
     {
         if (!await UserExists(username)) throw new UserDoesNotExist();
@@ -102,6 +110,7 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         await context.SaveChangesAsync();
         return true;
     }
+
     public async Task<IEnumerable<CommentDTO>> GetComments(string username)
     {
         if (!await UserExists(username)) throw new UserDoesNotExist();
@@ -112,7 +121,10 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
             .Select(a => a.Comments)
             .FirstOrDefaultAsync();
         var comments = query.Result;
-        
-        return comments!.Select(c => new CommentDTO(c.Author.UserName!, c.Id, c.Message, new DateTimeOffset(c.TimeStamp).ToUnixTimeSeconds())).ToList();
+
+        return comments!.Select(c =>
+                new CommentDTO(c.Author.UserName!, c.Id, c.Message,
+                    new DateTimeOffset(c.TimeStamp).ToUnixTimeSeconds()))
+            .ToList();
     }
 }

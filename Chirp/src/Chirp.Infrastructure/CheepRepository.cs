@@ -11,7 +11,7 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
 
     public async Task<IEnumerable<CheepDTO>?> GetCheepsByPage(int page, int pageSize)
     {
-        if (pageSize < 0) return null;
+        ArgumentOutOfRangeException.ThrowIfLessThan(pageSize, 1);
 
         var query = context.Cheeps
             .Select(cheep => new { cheep.Id, cheep.Author.UserName, cheep.Message, cheep.TimeStamp })
@@ -29,6 +29,8 @@ public class CheepRepository(ChirpDBContext context) : ICheepRepository
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthorsByPage(IEnumerable<string> usernames, int page,
         int pageSize)
     {
+        ArgumentOutOfRangeException.ThrowIfLessThan(pageSize, 1);
+        
         usernames = usernames.Select(author => author.ToUpper());
         var query = context.Cheeps
             .Where(cheep => usernames.Contains(cheep.Author.NormalizedUserName!))

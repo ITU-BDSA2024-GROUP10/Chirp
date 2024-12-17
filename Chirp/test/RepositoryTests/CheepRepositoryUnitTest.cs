@@ -31,7 +31,6 @@ public class CheepRepositoryUnitTest
     [InlineData(1, 10, 7)] //more than all cheeps
     [InlineData(0, 3, 3)] //page 0
     [InlineData(-1, 3, 3)] //negative page
-    [InlineData(1, 0, 0)] //pagesize 0
     [InlineData(4, 3, 0)] //pagesize * pageno > no of cheeps
     public async Task GetCheepsByPage_ReturnsCorrectNumberOfCheeps(int page, int pageSize, int? expected)
     {
@@ -54,7 +53,7 @@ public class CheepRepositoryUnitTest
     }
 
     [Fact]
-    public async Task GetCheepsByPage_NegativePageSize_ReturnsNull()
+    public async Task GetCheepsByPage_NegativePageSize_ThrowsArgumentOutOfRangeException()
     {
         //arrange
         var author = TestUtils.CreateTestAuthor("Mr. test");
@@ -63,11 +62,8 @@ public class CheepRepositoryUnitTest
         Context.Cheeps.Add(cheep);
         await Context.SaveChangesAsync();
 
-        //act
-        var result = await CheepRepository.GetCheepsByPage(1, -1);
-
         //assert
-        Assert.Null(result);
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => CheepRepository.GetCheepsByPage(1, -1));
     }
 
     [Fact]
