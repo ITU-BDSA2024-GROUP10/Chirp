@@ -34,7 +34,9 @@ enabling logging of which Authors have interacted with which Cheeps.
 ## Architecture — In the small
 
 Due to the application's size, each layer consists only of a single project, as highlighted in bold. **Chirp.Web** references **Chirp.Infrastructure**, which deviates from the Onion architecture, for two reasons:
+
 1. **Program.cs** requires it to configure services.
+
 2. ASP.NET Identity uses it for user registration and verification.
 
 ![Illustration of the _Chirp!_ program architecture.](images/OnionModel.png)
@@ -123,8 +125,11 @@ The blue boxes represents workflows
 ## Pull Requests 
 
 To help validate pull requests and help make sure only code, that lived up to the following, 
+
 - Contain no warnings
+
 - Be abel to build 
+
 - Have no failing test 
 was pulled into main, the following workflow structure was setup. 
 
@@ -136,10 +141,12 @@ was pulled into main, the following workflow structure was setup.
 
 ### Unclosed Issues
 Some issues still remain open in the Todo column, these are extra features that the group found interesting but did not get to implement within the time frame of the project work.
+&nbsp;
 
 In order to better mimic the functionality of _X_ (f.k.a _Twitter_), users should be able to leave comments directly on the timeline pages. 
 This would be implemented by having a popup window appear, where users could leave comments, when clicking a Cheep. 
 However getting this to work while handling and displaying message-format-errors proved to be an issue, and the feature was given an _Extra_ tag and left open. 
+&nbsp;
 
 We also wanted to make a big refactor, which involved moving what database access we could to an API project. Since we use ASP.NET Identity for user registration and verification, a local database would still be required for the web project to store user information. The main reason for the API project is to decouple data access from the web application, making it easier to build additional features, such as a mobile app, by enabling shared data across projects. While a centralized database could achieve similar results, an API is more future-proof, as it abstracts the database layer, making the switching of the database, have no impact on the projects using the API.
 
@@ -205,15 +212,23 @@ Next, navigate to _/Chirp/Chirp_ and in your terminal do _dotnet test_.
 
 ## Our test structure
 We have three kinds of test
+
 - UI
+
 - Unit
+
 - End to end
 
+&nbsp;
+
 Since our services are essentially return statements calling our repository, we found integration tests of these to be of lesser valued, compared to the rest of the project. However, if the project continues, testing them would be beneficial to ensure functionality remains unchanged as the services evolve.
+&nbsp;
 
 Our UI tests are set up quite genral, we don't mock anything, just use an in memory database, and only validate if the UI behave as expected. You could, in addition to these, have done some tests where you isolate the UI more, e.g., by mocking the behavior of the used service methods. But we prioritized other tasks given the application's size.
+&nbsp;
 
 Our unit tests are of allmost all of our methods in our two repositories, supposed to be over all
+&nbsp;
 
 We have some end to end test, but could proaberly use some more, tho since our UI test are so general, they act some what as end to end tests.
 
@@ -230,17 +245,25 @@ CoPilot have been used doing the development of this project. It's a great tool 
 
 ### ChatGPT
 ChatGPT was used primarily for the three following things.
+
 - Understanding and debugging error messages
+
 - Writing some HTML and CSS code
+
 - Understand and discussing
 
+&nbsp;
+
 **Understanding and debugging error messages.**
-This can be very helpful since error messages can be very long and contain a lot of information, which is ideal for LLM's. Sometimes they can also be harder to understand if you don't have a lot of knowledge of the framework you are using. Tho, one has to be careful as to not every time they see an error to jump to the nearest LLM, as debugging is a crucial skill for a developer. You are not always going to be allowed to use a LLM out in a job. Therefor, we tried to mostly use it, after being stock on error for an extended period of time.
+This can be very helpful since error messages can be very long and contain a lot of information, which is ideal for LLM's. Sometimes they can also be harder to understand if you don't have a lot of knowledge of the framework you are using. Tho, one has to be careful as to not every time they see an error to jump to the nearest LLM, as debugging is a crucial skill for a developer. You are not always going to be allowed to use a LLM out in a job. Therefor, we tried to mostly use it, after being stock on error for an extended period of time.  
+&nbsp;
 
 **Writing some HTML and CSS code.**
-Since we don't have a lot of knowledge regarding HTML and CSS, but we have a fairly great programming understanding, we can quite effectively work with an LLM to generate,  HTML and CSS quickly. 
+Since we don't have a lot of knowledge regarding HTML and CSS, but we have a fairly great programming understanding, we can quite effectively work with an LLM to generate,  HTML and CSS quickly.  
+&nbsp;
 
 **Understand and discussing code.**
-If you don't have other people around, this can be very helpful, especially if you find some code online, whether it's from a stack overflow post, or if it's documentation. When learning a new language or framework, this can especially be helpful, since you don't know a lot of the tricks yet.
+If you don't have other people around, this can be very helpful, especially if you find some code online, whether it's from a stack overflow post, or if it's documentation. When learning a new language or framework, this can especially be helpful, since you don't know a lot of the tricks yet.  
+&nbsp;
 
 Overall, the use of LLM's speed-up our development process, and helped us get a better understanding of c# and dot net.
