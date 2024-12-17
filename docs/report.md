@@ -96,11 +96,8 @@ The total diagram can be under _docs/images/UserActivitiesDiagram.png_
 
 
 The figure 5 below illustrates the workflows used for building and deploying the _Chirp!_ application.
-The process stars, when pull request is merged into the main branch. Here a release tag is created and the 
-program is build and tested. 
-After successful tag creating, a release created and then the program is deployed to azure. 
-
-If any of these workflows fail, the deployment is cancelled. 
+The process stars, when pull request is merged into the main branch.
+The blue boxes are workflows
 
 
 ![Illustration of github workflows for building and deploying the _Chirp!_ application.](images/Deployment.png)
