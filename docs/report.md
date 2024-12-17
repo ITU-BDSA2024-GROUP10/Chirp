@@ -150,13 +150,58 @@ and green how issues are merged from the feature branch into main.
 
 ![Illustration of the _Chirp!_ issue progression from creation to merge.](images/FromIssueToMerged.png)
 
+\pagebreak
+
 ## How to make _Chirp!_ work locally
 
-Navigate to _/Chirp/Chirp/src/Chirp.Web_ and in your terminal do _dotnet run_ or _dotnet watch_
+In order for the program to work you will first need to configure the user-secrets. 
+To do this navigate to  _/Chirp/Chirp_, in the terminal, and run:
+
+\vspace*{0.5cm}
+Windows:
+
+```
+dotnet user-secrets init --project .\src\Chirp.Web\
+dotnet user-secrets set "authentication:github:clientId" "Ov23lisGJEMdXORhzpDr" 
+--project .\src\Chirp.Web\
+
+dotnet user-secrets set 
+"authentication:github:clientSecret" "a9229ceee8bb014070dc9abe892cf07d7aba4d0d" 
+--project .\src\Chirp.Web\
+
+```
+
+\vspace*{0.5cm}
+MacOs & Linux:
+
+
+```
+dotnet user-secrets init --project ./src/Chirp.Web/
+dotnet user-secrets set "authentication:github:clientId" "Ov23lisGJEMdXORhzpDr" 
+--project ./src/Chirp.Web/
+
+dotnet user-secrets set 
+"authentication:github:clientSecret" "a9229ceee8bb014070dc9abe892cf07d7aba4d0d" 
+--project ./src/Chirp.Web/
+
+```
+\vspace*{0.5cm}
+Next navigate to _/Chirp/Chirp/src/Chirp.Web_ and in your terminal either of:
+\vspace*{0.5cm}
+```
+dotnet watch 
+```
+
+
+```
+dotnet run 
+```
 
 ## How to run test suite locally
 
-Navigate to _/Chirp/Chirp_ and in your terminal do _dotnet test_.
+In order to make run the UI-Tests make sure your system has playwright installed.
+
+Next, navigate to _/Chirp/Chirp_ and in your terminal do _dotnet test_.
 
 # Ethics
 
