@@ -199,7 +199,9 @@ dotnet run
 
 ## How to run test suite locally
 
-Navigate to _/Chirp/Chirp_ and in your terminal do _dotnet test_.
+In order to make run the UI-Tests make sure your system has playwright installed.
+
+Next, navigate to _/Chirp/Chirp_ and in your terminal do _dotnet test_.
 
 # Ethics
 
