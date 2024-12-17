@@ -166,4 +166,22 @@ This program is licensed with the GPL-2.0 License
 
 ## LLMs, ChatGPT, CoPilot, and others
 
-ChatGPT was used to understand and debug error messages, and write some html for the razor pages. 
+### CoPilot
+CoPilot have been used doing the development of this project. It's a great tool for speeding up development, as it's quicker to read through the code it recommends than to write it. Not everything it recommends is usable or as we want it, but it can also help when learning a new language or framework, to introduce new methods and structure.
+
+### ChatGPT
+ChatGPT was used primarily for the three following things.
+- Understanding and debugging error messages
+- Writing some HTML and CSS code
+- Understand and discussing
+
+**Understanding and debugging error messages.**
+This can be very helpful since error messages can be very long and contain a lot of information, which is ideal for LLM's. Sometimes they can also be harder to understand if you don't have a lot of knowledge of the framework you are using. Tho, one has to be careful as to not every time they see an error to jump to the nearest LLM, as debugging is a crucial skill for a developer. You are not always going to be allowed to use a LLM out in a job. Therefor, we tried to mostly use it, after being stock on error for an extended period of time.
+
+**Writing some HTML and CSS code.**
+Since we don't have a lot of knowledge regarding HTML and CSS, but we have a fairly great programming understanding, we can quite effectively work with an LLM to generate,  HTML and CSS quickly. 
+
+**Understand and discussing code.**
+If you don't have other people around, this can be very helpful, especially if you find some code online, whether it's from a stack overflow post, or if it's documentation. When learning a new language or framework, this can especially be helpful, since you don't know a lot of the tricks yet.
+
+Overall, the use of LLM's speed-up our development process, and helped us get a better understanding of c# and dot net.
