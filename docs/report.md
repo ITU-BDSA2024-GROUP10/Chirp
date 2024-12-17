@@ -19,7 +19,9 @@ numbersections: true
 
 ## Domain model
 
-Here comes a description of our domain model.
+The _Chirp!_ domain model is setup around the Author class. Authors inherit traits for account management from IdentityUser. 
+Authors are able to create Cheeps and interact with them with Likes or Comments. Each Author keeps a list of Likes and Comments
+enabling logging of which Authors have interacted with which Cheeps.
 
 ![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModel.png)
 
