@@ -103,7 +103,7 @@ The total diagram can be under _docs/images/UserActivitiesDiagram.png_
 
 The figure 5 below illustrates the workflows used for building and deploying the _Chirp!_ application.
 The process stars, when pull request is merged into the main branch.
-The blue boxes are workflows
+The blue boxes represents workflows
 
 
 ![Illustration of github workflows for building and deploying the _Chirp!_ application.](images/Deployment.png)
@@ -122,9 +122,11 @@ The blue boxes are workflows
 
 ## Pull Requests 
 
-The group also had workflows setup to make sure pull requests. In order to make sure only code,
-where the build succeeded and no tests failed, was pulled into main the following workflow structure 
-was setup. 
+To help validate pull requests and help make sure only code, that lived up to the following, 
+- Contain no warnings
+- Be abel to build 
+- Have no failing test 
+was pulled into main, the following workflow structure was setup. 
 
 ![Illustration of github workflows for building and deploying the _Chirp!_ application.](images/PullRequests.png)
 
@@ -144,7 +146,7 @@ We also wanted to make a big refactor, which involved moving what database acces
 ### Issue Progression 
 The illustration below shows how the group worked with issues during the project. 
 Steps highlighted in blue show issue creation, red boxes show the development process
-and purple how issues are merged from the feature branch into main.
+and green how issues are merged from the feature branch into main.
 
 ![Illustration of the _Chirp!_ issue progression from creation to merge.](images/FromIssueToMerged.png)
 
