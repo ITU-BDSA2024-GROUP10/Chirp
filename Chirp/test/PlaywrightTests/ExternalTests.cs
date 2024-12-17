@@ -69,7 +69,8 @@ public class ExternalTests : PageTestWithDuende
         await Page.GetByPlaceholder("Please enter your email.").FillAsync("Test@withUsername.com");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
-        await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
+        
+        await logout();
 
         await loginWithExternalProvider();
         await Expect(Page.Locator("body")).ToContainTextAsync("logout [mr. Test with username]");
@@ -89,8 +90,9 @@ public class ExternalTests : PageTestWithDuende
         await Page.GetByPlaceholder("Please enter your username").FillAsync("mr. test with no info");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
-        await Expect(Page.GetByText("Thank you for confirming your")).ToBeVisibleAsync();
 
+        await logout();
+        
         await loginWithExternalProvider();
         await Expect(Page.Locator("body")).ToContainTextAsync("logout [mr. test with no info]");
     }

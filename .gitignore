@@ -484,3 +484,5 @@ Chirp/src/.idea/workspace.xml
 /Chirp/src/Chirp.Razor/database
 /Chirp/src/Chirp.Web/database
 Chirp/.idea/workspace.xml
+*.dtmp
+*.bkp
