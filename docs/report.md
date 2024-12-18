@@ -254,16 +254,16 @@ ChatGPT was used primarily for the three following things:
 
 &nbsp;
 
-**Understanding and debugging error messages.**
-This can be very helpful since error messages can be very long and contain a lot of information, which is ideal for LLM's. Sometimes they can also be harder to understand if you don't have a lot of knowledge of the framework you are using. Tho, one has to be careful as to not every time they see an error to jump to the nearest LLM, as debugging is a crucial skill for a developer. You are not always going to be allowed to use a LLM out in a job. Therefor, we tried to mostly use it, after being stock on error for an extended period of time.  
+**To understand and debug error messages.**
+This can be very helpful since error messages can be very long and contain a lot of information, which is ideal for LLM's. Sometimes they can also be harder to understand if you don't have a lot of knowledge of the framework you are using. Though, one has to be careful as to not every time they see an error to jump to the nearest LLM, as debugging is a crucial skill for a developer. You are not always going to be allowed to use a LLM out in a  job. Therefore, we restricted its usage to only after being stuck on an error for an extended period of time.
 &nbsp;
 
-**Writing some HTML and CSS code.**
-Since we don't have a lot of knowledge regarding HTML and CSS, but we have a fairly great programming understanding, we can quite effectively work with an LLM to generate,  HTML and CSS quickly.  
+**To write some HTML, JS and CSS code.**
+Since we don't have a lot of knowledge regarding HTML, JS and CSS, but we have a fairly great programming understanding, we can quite effectively work with an LLM to generate this code quickly.  
 &nbsp;
 
-**Understand and discussing code.**
+**To understand and discuss code.**
 If you don't have other people around, this can be very helpful, especially if you find some code online, whether it's from a stack overflow post, or if it's documentation. When learning a new language or framework, this can especially be helpful, since you don't know a lot of the tricks yet.  
 &nbsp;
 
-Overall, the use of LLM's speed-up our development process, and helped us get a better understanding of c# and dot net.
+Overall, the use of LLM's sped up our development process and helped us get a better understanding of C# and dotnet. With that, it must be said that as per Helge's recommendation, the entire group has strongly reevaluated their predisposition to utilize LLM's, given its environmental implications. The frequency of usage saw a decline throughout the project, only peaking at difficult moments or tasks that required assistance in the form of personalized guidance.
