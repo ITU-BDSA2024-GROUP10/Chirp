@@ -74,9 +74,9 @@ The total diagram can be under _docs/images/UserActivitiesDiagram.png_
     \includegraphics[width=1\textwidth, height=\textheight, keepaspectratio]{images/LoggedOut.png}
 }
 
-\vspace*{0.2cm}
+\vspace*{0.05cm}
 \captionof{figure}{Illustration of the \textit{Chirp!} functionality while signed out.}
-\vspace*{2cm}
+\vspace*{3.8cm}
 \vspace*{-2cm}
 \noindent
 \hspace*{-2cm}
@@ -84,7 +84,7 @@ The total diagram can be under _docs/images/UserActivitiesDiagram.png_
     \includegraphics[width=1\textwidth, height=\textheight, keepaspectratio]{images/LoggedIn.png}
 }
 
-\vspace*{0.5cm}
+\vspace*{0.05cm}
 \captionof{figure}{Illustration of the \textit{Chirp!} functionality while signed in.}
 
 \pagebreak
