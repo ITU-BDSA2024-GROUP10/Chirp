@@ -241,7 +241,7 @@ This program is licensed with the GPL-2.0 License
 ## LLMs, ChatGPT, CoPilot, and others
 
 ### CoPilot
-CoPilot have been used doing the development of this project. It's a great tool for speeding up development, as it's quicker to read through the code it recommends than to write it. Not everything it recommends is usable or as we want it, but it can also help when learning a new language or framework, to introduce new methods and structure.
+CoPilot was used during the development of this project. It's a great tool for speeding up development, as it's quicker to read through the code it recommends than to write it. Not everything it recommends is usable nor as we want it, but it can also help when learning a new language or framework to introduce new methods and structure.
 
 ### ChatGPT
 ChatGPT was used primarily for the three following things.
