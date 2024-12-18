@@ -19,6 +19,10 @@ header-includes:
 
 \pagebreak
 
+\tableofcontents
+
+\pagebreak
+
 # Design and Architecture of _Chirp!_
 
 ## Domain model
