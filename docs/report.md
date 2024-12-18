@@ -154,6 +154,12 @@ However getting this to work while handling and displaying message-format-errors
 
 We also wanted to make a big refactor, which involved moving what database access we could to an API project. Since we use ASP.NET Identity for user registration and verification, a local database would still be required for the web project to store user information. The main reason for the API project is to decouple data access from the web application, making it easier to build additional features, such as a mobile app, by enabling shared data across projects. While a centralized database could achieve similar results, an API is more future-proof, as it abstracts the database layer, making the switching of the database, have no impact on the projects using the API.
 
+\vspace*{0.3cm}
+
+For the Command-Line-Interface version of _Chirp!_ an error with the end-to-end tests still exists. 
+The tests pass when the database file contains the expected Cheep and the test is run on Windows.
+However the group was unable to make the test work in isolation from the actual database and cross-platform and thus the end-to-end-test branch remains open. 
+
 ### Issue Progression 
 The illustration below shows how the group worked with issues during the project. 
 Steps highlighted in blue show issue creation, red boxes show the development process
