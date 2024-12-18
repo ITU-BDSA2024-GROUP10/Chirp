@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Chirp.Infrastructure;
-
+/// <summary>
+/// The DbInitializer class seeds the Database with Authors and Cheeps
+/// </summary>
 public static class DbInitializer
 {
     public static async void SeedDatabase(ChirpDBContext chirpContext, IServiceProvider serviceProvider)

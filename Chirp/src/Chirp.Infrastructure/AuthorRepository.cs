@@ -10,32 +10,12 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
 {
     private readonly ChirpDBContext context = context;
 
-    public async Task<AuthorDTO?> GetAuthorByName(string name)
-    {
-        var author = await GetAuthor(name);
-        return new AuthorDTO(author.UserName!, author.Email!, author.ProfileImage!);
-    }
-    
-    public async Task<IEnumerable<AuthorDTO?>> GetAuthorsByNames(IEnumerable<string> names)
+    public async Task<IEnumerable<AuthorDTO?>> GetAuthorsByNames(IEnumerable<string> usernames)
     {
         return await context.Authors
-            .Where(a => names.Contains(a.UserName))
+            .Where(a => usernames.Contains(a.UserName))
             .Select(a => new AuthorDTO(a.UserName!, a.Email!, a.ProfileImage))
             .ToListAsync();
-    }
-
-    public async Task<bool> AddAuthor(AuthorDTO author)
-    {
-        try
-        {
-            context.Authors.Add(Author.CreateAuthor(author));
-            await context.SaveChangesAsync();
-            return true;
-        }
-        catch (Exception)
-        {
-            return false;
-        }
     }
 
     public async Task<IEnumerable<AuthorDTO>> GetAuthorFollows(string username)
@@ -55,32 +35,32 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
         return followers.Select(a => new AuthorDTO(a.UserName!, a.Email!, a.ProfileImage)).ToList();
     }
 
-    public async Task<bool> Follow(string currentUser, string userToFollow)
+    public async Task<bool> Follow(string userWhoFollow, string userToFollow)
     {
-        if (currentUser == userToFollow) throw new ArgumentException("You cannot follow yourself");
-        if (!await UserExists(currentUser)) throw new UserDoesNotExist();
+        if (userWhoFollow == userToFollow) throw new ArgumentException("You cannot follow yourself");
+        if (!await UserExists(userWhoFollow)) throw new UserDoesNotExist();
         if (!await UserExists(userToFollow)) throw new UserDoesNotExist("User to follow does not exist");
-        if (await DoesFollow(currentUser, userToFollow)) return false;
+        if (await DoesFollow(userWhoFollow, userToFollow)) return false;
 
         var authorToFollow = await GetAuthor(userToFollow);
-        GetAuthor(currentUser).Result.Following.Add(authorToFollow);
+        GetAuthor(userWhoFollow).Result.Following.Add(authorToFollow);
 
         await context.SaveChangesAsync();
         return true;
     }
 
-    public async Task<bool> UnFollow(string currentUser, string userToUnfollow)
+    public async Task<bool> UnFollow(string userWhoFollows, string userToUnfollow)
     {
-        currentUser = currentUser.ToUpper();
+        userWhoFollows = userWhoFollows.ToUpper();
         userToUnfollow = userToUnfollow.ToUpper();
-        if (currentUser == userToUnfollow) throw new ArgumentException("You cannot unfollow yourself");
-        if (!await UserExists(currentUser)) throw new UserDoesNotExist();
+        if (userWhoFollows == userToUnfollow) throw new ArgumentException("You cannot unfollow yourself");
+        if (!await UserExists(userWhoFollows)) throw new UserDoesNotExist();
         if (!await UserExists(userToUnfollow)) throw new UserDoesNotExist("User to unfollow does not exist");
-        if (!await DoesFollow(currentUser, userToUnfollow)) return false;
+        if (!await DoesFollow(userWhoFollows, userToUnfollow)) return false;
 
         var authorToUnfollow = await GetAuthor(userToUnfollow);
         context.Authors
-            .Where(a => a.NormalizedUserName == currentUser)
+            .Where(a => a.NormalizedUserName == userWhoFollows)
             .Include(a => a.Following)
             .FirstOrDefault()!.Following.Remove(authorToUnfollow);
 
@@ -121,10 +101,10 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
             .Select(a => a.Following).FirstOrDefaultAsync() ?? new List<Author>();
     }
 
-    public async Task<bool> MakeFollowersUnfollow(string user)
+    public async Task<bool> MakeFollowersUnfollow(string username)
     {
-        if (!await UserExists(user)) throw new UserDoesNotExist();
-        (await context.Authors.Where(a => a.NormalizedUserName == user.ToUpper())
+        if (!await UserExists(username)) throw new UserDoesNotExist();
+        (await context.Authors.Where(a => a.NormalizedUserName == username.ToUpper())
             .Include(a => a.Followers)
             .FirstOrDefaultAsync())!.Followers.Clear();
         await context.SaveChangesAsync();
@@ -141,7 +121,10 @@ public class AuthorRepository(ChirpDBContext context) : IAuthorRepository
             .Select(a => a.Comments)
             .FirstOrDefaultAsync();
         var comments = query.Result;
-        
-        return comments!.Select(c => new CommentDTO(c.Author.UserName!, c.Id, c.Message, new DateTimeOffset(c.TimeStamp).ToUnixTimeSeconds())).ToList();
+
+        return comments!.Select(c =>
+                new CommentDTO(c.Author.UserName!, c.Id, c.Message,
+                    new DateTimeOffset(c.TimeStamp).ToUnixTimeSeconds()))
+            .ToList();
     }
 }
