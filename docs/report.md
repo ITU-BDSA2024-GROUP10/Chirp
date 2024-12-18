@@ -228,24 +228,26 @@ dotnet test
 ## Our test structure
 We have three kinds of test
 
-- UI
-
 - Unit
+
+- UI
 
 - End to end
 
 &nbsp;
 
 Since our services are essentially return statements calling our repository, we found integration tests of these to be of lesser valued, compared to the rest of the project. However, if the project continues, testing them would be beneficial to ensure functionality remains unchanged as the services evolve.
-&nbsp;
+\vspace*{0.3cm}
 
-Our UI tests are set up quite general, we don't mock anything, just use an in memory database, and only validate if the UI behave as expected. You could, in addition to these, have done some tests where you isolate the UI more, e.g., by mocking the behavior of the used service methods. But we prioritized other tasks given the application's size.
-&nbsp;
+Most of the unit tests are on the repository methods since these are where almost all of the compute is being done. 
 
-Our unit tests are of almost all of our methods in our two repositories, supposed to be over all
-&nbsp;
+\vspace*{0.3cm}
+Our UI tests are set up quite general, we don't mock anything, just use an in memory database, and only validate if the UI behave as expected. 
+You could, in addition to these, have done some tests where you isolate the UI more, e.g., by mocking the behavior of the used service methods. But we prioritized other tasks given the application's size.
+We have some end to end test, but could probably use some more, since our UI test are so general, they act some what as end to end tests.
 
-We have some end to end test, but could probably use some more, tho since our UI test are so general, they act some what as end to end tests.
+\pagebreak
+
 
 # Ethics
 
@@ -270,15 +272,20 @@ ChatGPT was used primarily for the three following things.
 &nbsp;
 
 **Understanding and debugging error messages.**
-This can be very helpful since error messages can be very long and contain a lot of information, which is ideal for LLM's. Sometimes they can also be harder to understand if you don't have a lot of knowledge of the framework you are using. Tho, one has to be careful as to not every time they see an error to jump to the nearest LLM, as debugging is a crucial skill for a developer. You are not always going to be allowed to use a LLM out in a job. Therefor, we tried to mostly use it, after being stock on error for an extended period of time.  
+This can be very helpful since error messages can be very long and contain a lot of information, which is ideal for LLM's. 
+Sometimes they can also be harder to understand if you don't have a lot of knowledge of the framework you are using. 
 &nbsp;
 
+\vspace*{0.3cm}
+
 **Writing some HTML and CSS code.**
-Since we don't have a lot of knowledge regarding HTML and CSS, but we have a fairly great programming understanding, we can quite effectively work with an LLM to generate,  HTML and CSS quickly.  
+Since HTML and CSS is time consuming we used ChatGPT to help write some of the UI code, that could be fine tuned by hand.   
 &nbsp;
 
 **Understand and discussing code.**
 If you don't have other people around, this can be very helpful, especially if you find some code online, whether it's from a stack overflow post, or if it's documentation. When learning a new language or framework, this can especially be helpful, since you don't know a lot of the tricks yet.  
 &nbsp;
 
-Overall, the use of LLM's speed-up our development process, and helped us get a better understanding of c# and dot net.
+Overall, the use of LLM's speed-up our development process, and helped us get a better understanding of c# and dot net. 
+While using LLM's can help speed up debugging and development processes, it is still important to learn how to work independent of AI-assistance.
+The data centers running the models also consume large amount of energy, and as a developer you need to be conscious of the impact of this technology. 
