@@ -244,13 +244,13 @@ This program is licensed with the GPL-2.0 License
 CoPilot was used during the development of this project. It's a great tool for speeding up development, as it's quicker to read through the code it recommends than to write it. Not everything it recommends is usable nor as we want it, but it can also help when learning a new language or framework to introduce new methods and structure.
 
 ### ChatGPT
-ChatGPT was used primarily for the three following things.
+ChatGPT was used primarily for the three following things:
 
-- Understanding and debugging error messages
+- To understand and debug error messages
 
-- Writing some HTML and CSS code
+- To write some HTML, JS and CSS code
 
-- Understand and discussing
+- To understand and discuss code
 
 &nbsp;
 
