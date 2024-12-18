@@ -55,16 +55,15 @@ public class GeneralTests : PageTestWithRazorPlaywrightWebApplicationFactory
             .WithDefault()
             .Create();
         
-        await Page.GotoAsync("/");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+        await Page.GotoAsync("/Identity/Account/Register");
         await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(testAuthor.UserName!);
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("test@test.test");
+        await Page.GetByPlaceholder("name@example.com").FillAsync(testAuthor.Email!);
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
-        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Password123!");
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(testAuthor.Password);
         await Page.GetByLabel("Confirm Password").ClickAsync();
-        await Page.GetByLabel("Confirm Password").FillAsync("Password123!");
+        await Page.GetByLabel("Confirm Password").FillAsync(testAuthor.Password);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         await Expect(Page.GetByRole(AriaRole.Listitem)).ToContainTextAsync($"Username '{testAuthor.UserName}' is already taken.");
     }
@@ -77,6 +76,28 @@ public class GeneralTests : PageTestWithRazorPlaywrightWebApplicationFactory
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         await Expect(Page.Locator("#registerForm")).ToContainTextAsync("The Email field is required.");
         await Expect(Page.Locator("#registerForm")).ToContainTextAsync("The Password field is required.");
+    }
+
+    [Test]
+    public async Task CreateMultipelUsersWithTheSameEmail()
+    {
+        var testAuthor = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithUsername("test1")
+            .WithEmail("test@test.com")
+            .Create();
+
+        var testAuthor2 = new TestAuthorBuilder(RazorFactory.GetUserManager())
+            .WithUsername("test2")
+            .WithEmail("test@test.com")
+            .GetTestAuthor();
+        
+        await Page.GotoAsync("/");
+        await RazorPageUtils.Register(testAuthor2);
+        await RazorPageUtils.Logout(testAuthor2);
+        await RazorPageUtils.Login(testAuthor);
+        await RazorPageUtils.Logout(testAuthor);
+        await RazorPageUtils.Login(testAuthor2);
+        await RazorPageUtils.Logout(testAuthor2);
     }
     
     [Test]
