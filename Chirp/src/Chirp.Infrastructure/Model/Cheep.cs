@@ -32,12 +32,4 @@ public class Cheep
         TimeStamp = timeStamp;
         Author = author;
     }
-
-    public class CheepValidator : AbstractValidator<Cheep>
-    {
-        public CheepValidator()
-        {
-            RuleFor(x => x.Message).MaximumLength(160);
-        }
-    }
 }
