@@ -263,7 +263,10 @@ We have some end to end test, but could probably use some more, since our UI tes
 
 ## License
 
-This program is licensed with the GNU GENERAL PUBLIC LICENSE Version 3
+This program is licensed with the GNU GENERAL PUBLIC LICENSE Version 3.
+For the dependincies used, they either have an MIT or an Apache-2.0 license.
+And since we only use Duende Identity server for testing purposes, we dont need a license for it.
+Stated at the bottom of, https://duendesoftware.com/products/communityedition
 
 ## LLMs, ChatGPT, CoPilot, and others
 
