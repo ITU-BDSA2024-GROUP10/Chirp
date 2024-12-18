@@ -149,15 +149,19 @@ was pulled into main, the following workflow structure was set up.
 ### Project Board
 
 ### Unclosed Issues
-Some issues still remain open in the Todo column. These are extra features that the group found interesting but did not get to implement within the time frame of the project work.
+Some issues still remain open in the Todo column. These are a combination of features that the group found interesting but did not get to implement within the time frame of the project work, such as bugs, refactors and documentation.
 &nbsp;
+![Project board](images/project%20board.png)
 
 In order to better mimic the functionality of _X_ (f.k.a _Twitter_), users should be able to leave comments directly on the timeline pages. 
 This would be implemented by having a popup window appear, where users could leave comments, when clicking a Cheep. 
 However getting this to work while handling and displaying message-format-errors proved to be an issue, and the feature was given an _Extra_ tag and left open. 
-&nbsp;
+\vspace*{0.3cm}
 
-The group also wanted to make a big refactor, which involved moving what database access we could to an API project. Since we use ASP.NET Identity for user registration and verification, a local database would still be required for the web project to store user information. The main reason for the API project is to decouple data access from the web application, making it easier to build additional features, such as a mobile app, by enabling shared data across projects. While a centralized database could achieve similar results, an API is more future-proof, as it abstracts the database layer, making the switching of the database have no impact on the projects using the API.
+We also wanted to make a big refactor, which involved moving what database access we could to an API project. Since we use ASP.NET Identity for user registration and verification, a local database would still be required for the web project to store user information. The main reason for the API project is to decouple data access from the web application, making it easier to build additional features, such as a mobile app, by enabling shared data across projects. While a centralized database could achieve similar results, an API is more future-proof, as it abstracts the database layer, making the switching of the database, have no impact on the projects using the API.
+\vspace*{0.3cm}
+
+There is also some extra functionality left, e.g. a theme song, as well as a feature for better display of the users data, and a bug regarding the timestamp on comments. The rest of the issus are regarding refactors for better code quality or in code ducumentation and naming consistensy through the code.
 
 \vspace*{0.3cm}
 
