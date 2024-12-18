@@ -39,6 +39,9 @@ Client -> Web ++ : HTTPS GET Request: /?page=1 .
 
 ||||
 
+'Extract authors from cheeps
+Web -> Web : Extract author names from cheeps
+
 'Get authors to get profile images 
   Web -> Core ++ : AuthorService.GetAuthorsByNames(names)
     Core -> Infrastructure ++ : GetAuthorsByNames(names)
