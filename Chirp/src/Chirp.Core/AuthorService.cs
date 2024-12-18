@@ -27,8 +27,8 @@ public interface IAuthorService
     /// </summary>
     /// <param name="userWhoFollow">username</param>
     /// <param name="userToFollow">username</param>
-    /// <returns>True if the follow went through, false if there is a follow connection between the two users</returns>
-    /// <exception cref="UserDoesNotExist">Thrown if a one of the users doesn't exist</exception>
+    /// <returns>True if the follow went through, false if there already exists a follow connection between the two users</returns>
+    /// <exception cref="UserDoesNotExist">Thrown if one of the users doesn't exist</exception>
     /// <exception cref="ArgumentException">Thrown if the value of <paramref name="userWhoFollow"/> is equal to <paramref name="userToFollow"/>.
     /// </exception>
     public bool Follow(string userWhoFollow, string userToFollow);
@@ -39,7 +39,7 @@ public interface IAuthorService
     /// <param name="userWhoFollows">username</param>
     /// <param name="userToUnFollow">username</param>
     /// <returns>True if the unfollow went through, false if there isn't a follow connection between the two users</returns>
-    /// <exception cref="UserDoesNotExist">Thrown if a one of the users doesn't exist</exception>
+    /// <exception cref="UserDoesNotExist">Thrown if one of the users doesn't exist</exception>
     /// <exception cref="ArgumentException">Thrown if the value of <paramref name="userWhoFollows"/> is equal to <paramref name="userToUnFollow"/>.
     /// </exception>
     public bool Unfollow(string userWhoFollows, string userToUnFollow);

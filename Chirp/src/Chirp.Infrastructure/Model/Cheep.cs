@@ -2,9 +2,8 @@ using FluentValidation;
 
 namespace Chirp.Infrastructure.Model;
 /// <summary>
-/// The Cheep class, represent a cheep, which is a small 160-character message that can
-/// be published by authors on the Chirp! platform,
-/// as well as commented and liked by authors
+/// The Cheep class represents the functionality of a Cheep; a 160-character long message that can be posted on the Chirp! application by a given Author.
+/// The Cheep can also be commented on and liked by an Author
 /// </summary>
 public class Cheep
 {

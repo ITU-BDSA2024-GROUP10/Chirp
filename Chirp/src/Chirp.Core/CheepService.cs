@@ -12,7 +12,7 @@ public interface ICheepService
     /// </summary>
     /// <param name="page">if it's less than or equal to zero, It's treated as 1</param>
     /// <param name="pageSize">how many cheeps are on a page. Must be greater than zero</param>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="pageSize"/> less than one</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="pageSize"/> is less than one</exception>
     public IEnumerable<CheepDTO> GetCheepsByPage(int page, int pageSize);
 
     /// <summary>
@@ -21,7 +21,7 @@ public interface ICheepService
     /// <param name="usernames"></param>
     /// <param name="page">if it's less than or equal to zero, It's treated as 1</param>
     /// <param name="pageSize">how many cheeps are on a page. Must be greater than zero</param>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="pageSize"/> less than one</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="pageSize"/> is less than one</exception>
     public IEnumerable<CheepDTO> GetCheepsFromAuthorsByPage(IEnumerable<string> usernames, int page, int pageSize);
 
     /// <summary>
@@ -31,22 +31,20 @@ public interface ICheepService
     public IEnumerable<CheepDTO> GetCheepsFromAuthor(string username);
 
     /// <summary>
-    /// Gets the amount of pages that are needed to display all the cheeps in the database,
-    /// given the page size
+    /// Gets the amount of pages cheeped by an author with a given page size
     /// </summary>
     /// <param name="pageSize">how many cheeps are on a page. Must be greater than zero</param>
     /// <returns>The result is rounded to the next larger int</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="pageSize"/> less than one</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="pageSize"/> is less than one</exception>
     public int GetAmountOfCheepPages(int pageSize);
 
     /// <summary>
-    /// Gets the amount of pages that are needed author to display all Cheeps made by the given authors,
-    /// given the page size
+    /// Gets the amount of pages cheeped by a collection of authors with a given page size
     /// </summary>
     /// <param name="usernames">the usernames of the authors</param>
     /// <param name="pageSize">how many cheeps are on a page. Must be greater than zero</param>
     /// <returns>the result is rounded to the next larger int</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="pageSize"/> less than one</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="pageSize"/> is less than one</exception>
     public int GetAmountOfCheepPagesFromAuthors(IEnumerable<string> usernames, int pageSize);
 
     /// <summary>
@@ -61,26 +59,26 @@ public interface ICheepService
     /// Creates a new comment from the given CommentDTO
     /// </summary>
     /// <param name="comment"></param>
-    /// <returns>True if a comment vas successfully created,
+    /// <returns>True if a comment was successfully created,
     /// false if either the author said to have created the comment,
     /// or the cheep said to have been commented, doesn't exist</returns>
     public bool CreateComment(CommentDTO comment);
 
     /// <summary>
-    /// Gets the amount of Comments associated with the cheep that has the given CheepID
+    /// Gets the amount of Comments associated with the cheep that has the given CheepId
     /// </summary>
     /// <param name="cheepId"></param>
     /// <returns>If <paramref name="cheepId"/> is null, 0 is returned</returns>
     public int GetCommentAmountOnCheep(int? cheepId);
 
     /// <summary>
-    /// Gets the Cheep associated with the given CheepID
+    /// Gets the Cheep associated with the given CheepId
     /// </summary>
     /// <param name="cheepId"></param>
     public CheepDTO GetCheepFromId(int cheepId);
 
     /// <summary>
-    /// Gets all Comments associated with the cheep that has the given CheepID
+    /// Gets all Comments associated with the cheep that has the given CheepId
     /// </summary>
     /// <param name="cheepId"></param>
     public IEnumerable<CommentDTO> GetCommentsFromCheep(int cheepId);
@@ -104,14 +102,14 @@ public interface ICheepService
     public bool UnlikeCheep(LikeDTO like);
 
     /// <summary>
-    /// Gets how many Likes are associated with some Cheep given the CheepID
+    /// Gets how many Likes are associated with some Cheep given the CheepId
     /// </summary>
     /// <param name="cheepId"></param>
     /// <returns>0 if there isn't a cheep associated with the given <paramref name="cheepId"/></returns>
     public Task<int> GetLikeCount(int cheepId);
 
     /// <summary>
-    /// Returns whether an author with the given usernames has liked the cheep with the given CheepID
+    /// Returns whether an author with the given username has liked the cheep with the given CheepId
     /// </summary>
     /// <param name="cheepId"></param>
     /// <param name="username"></param>

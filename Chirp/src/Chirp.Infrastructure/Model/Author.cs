@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity;
 namespace Chirp.Infrastructure.Model;
 /// <summary>
 /// The Author class acts as the User for the Chirp! program
-/// an author is able to Cheep, Comment on Cheeps, like Cheeps
-/// and follow other Authors
+/// where an author is able to Create, Comment and/or Like Cheeps
+/// or Follow other Authors
 /// </summary>
 public sealed class Author : IdentityUser
 {
@@ -33,8 +33,8 @@ public sealed class Author : IdentityUser
     /// </summary>
     /// <param name="username"></param>
     /// <param name="email"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
+    /// <returns>Returns the created Author with the given username and email</returns>
+    /// <exception cref="ArgumentNullException">Thrown to specify that a username or email cannot be null</exception>
     public static Author CreateAuthor(string username, string email)
     {
         _ = username ?? throw new ArgumentNullException(nameof(username));

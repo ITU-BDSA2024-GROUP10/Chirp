@@ -6,7 +6,7 @@ namespace Chirp.Core;
 public interface IAuthorRepository
 {
     /// <summary>
-    /// Gets all authors with one of the given usernames
+    /// Gets all authors by their given usernames
     /// </summary>
     /// <param name="usernames"></param>
     public Task<IEnumerable<AuthorDTO?>> GetAuthorsByNames(IEnumerable<string> usernames);
@@ -31,7 +31,7 @@ public interface IAuthorRepository
     /// <param name="userWhoFollow">username</param>
     /// <param name="userToFollow">username</param>
     /// <returns>True if the follow went through, false if there is a follow connection between the two users</returns>
-    /// <exception cref="UserDoesNotExist">Thrown if a one of the users doesn't exist</exception>
+    /// <exception cref="UserDoesNotExist">Thrown if one of the users doesn't exist</exception>
     /// <exception cref="ArgumentException">Thrown if the value of <paramref name="userWhoFollow"/> is equal to <paramref name="userToFollow"/>.
     /// </exception>
     public Task<bool> Follow(string userWhoFollow, string userToFollow);
@@ -42,7 +42,7 @@ public interface IAuthorRepository
     /// <param name="userWhoFollows">username</param>
     /// <param name="userToUnFollow">username</param>
     /// <returns>True if the unfollow went through, false if there isn't a follow connection between the two users</returns>
-    /// <exception cref="UserDoesNotExist">Thrown if a one of the users doesn't exist</exception>
+    /// <exception cref="UserDoesNotExist">Thrown if one of the users doesn't exist</exception>
     /// <exception cref="ArgumentException">Thrown if the value of <paramref name="userWhoFollows"/> is equal to <paramref name="userToUnFollow"/>.
     /// </exception>
     public Task<bool> UnFollow(string userWhoFollows, string userToUnFollow);
