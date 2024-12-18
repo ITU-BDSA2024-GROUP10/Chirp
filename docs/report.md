@@ -267,3 +267,8 @@ If you don't have other people around, this can be very helpful, especially if y
 &nbsp;
 
 Overall, the use of LLM's sped up our development process and helped us get a better understanding of C# and dotnet. With that, it must be said that as per Helge's recommendation, the entire group has strongly reevaluated their predisposition to utilize LLM's, given its environmental implications. The frequency of usage saw a decline throughout the project, only peaking at difficult moments or tasks that required assistance in the form of personalized guidance.
+
+## Feature: Forget Me
+This feature is infamous for its tediousness in implementation. On the one hand, a developer could go the simple way and anonymize the data such that there is no direct tie to the forgotten user; however, this would not delete the authors cheeps, hereby still pertaining information in the database that really should be 'forgotten' as the feature suggests. If a user wants their data to be fully removed from our platform, we, as developers, should fullfil this wish. Hence, Rasmus went down the tedious path to implement the feature in such a way that when a user is forgotten, they are logged out; all information about the user is deleted; the author is deleted from all the follows lists they are a part of; and all cheeps the user has written are deleted. 
+
+Although this was easy for our little project in terms of processing power, this is much more difficult for larger projects with larger database, as the potential processing workload for the database system during the forget me feature would increase exponentially as more users are added. As such, it becomes easy to understand why the biggest social networks implement this feature in other ways. 
