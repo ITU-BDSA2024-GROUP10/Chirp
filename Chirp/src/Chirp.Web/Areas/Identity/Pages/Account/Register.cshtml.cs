@@ -142,7 +142,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        return RedirectToPage("RegisterConfirmation", new { username = Input.UserName, returnUrl = returnUrl });
                     }
                     else
                     {
