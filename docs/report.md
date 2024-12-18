@@ -259,7 +259,7 @@ We have some end to end test, but could probably use some more, since our UI tes
 
 ## License
 
-This program is licensed with the GPL-2.0 License
+This program is licensed with the GNU GENERAL PUBLIC LICENSE Version 3
 
 ## LLMs, ChatGPT, CoPilot, and others
 
