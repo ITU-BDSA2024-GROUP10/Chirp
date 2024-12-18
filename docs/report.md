@@ -25,7 +25,8 @@ header-includes:
 
 The _Chirp!_ domain model is setup around the Author class. Authors inherit traits for account management from IdentityUser. 
 Authors are able to create Cheeps and interact with them with Likes or Comments. Each Author keeps a list of Likes and Comments
-enabling logging of which Authors have interacted with which Cheeps.
+enabling logging of which Authors have interacted with which Cheeps. Furthermore Authors are able to follow other Authors, 
+storing a list Authors they follow and Authors that follow them.
 
 ![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModel.png)
 
@@ -128,13 +129,16 @@ To help validate pull requests and help make sure only code, that lived up to th
 
 - Contain no warnings
 
-- Be abel to build 
+- Be able to build 
 
 - Have no failing test 
 was pulled into main, the following workflow structure was setup. 
 
-![Illustration of github workflows for building and deploying the _Chirp!_ application.](images/PullRequests.png)
+![Illustration of github workflows for pull requests into the main branch of _Chirp!_ ](images/PullRequests.png){ width=75%}
 
+![Workflow structure for pull requests into the main branch of _Chirp!_ ](images/PR_Workflow.png)
+
+\pagebreak
 
 ## Team work
 ### Project Board
@@ -160,8 +164,15 @@ and green how issues are merged from the feature branch into main.
 \pagebreak
 
 ## How to make _Chirp!_ work locally
+First clone the repository to your machine with 
 
-In order for the program to work you will first need to configure the user-secrets. 
+\vspace*{0.5cm}
+```
+git clone https://github.com/ITU-BDSA2024-GROUP10/Chirp.git
+```
+\vspace*{0.5cm}
+
+In order for the program to work you will need to configure the user-secrets. 
 To do this navigate to  _/Chirp/Chirp_, in the terminal, and run:
 
 \vspace*{0.5cm}
@@ -193,7 +204,7 @@ dotnet user-secrets set
 
 ```
 \vspace*{0.5cm}
-Next navigate to _/Chirp/Chirp/src/Chirp.Web_ and in your terminal either of:
+Next navigate to _/Chirp/Chirp/src/Chirp.Web_ and in your terminal do either:
 \vspace*{0.5cm}
 ```
 dotnet watch 
@@ -208,7 +219,11 @@ dotnet run
 
 In order to make run the UI-Tests make sure your system has playwright installed.
 
-Next, navigate to _/Chirp/Chirp_ and in your terminal do _dotnet test_.
+Next, navigate to _/Chirp/Chirp_ and in your terminal do
+\vspace*{0.5cm}
+```
+dotnet test 
+```
 
 ## Our test structure
 We have three kinds of test
@@ -224,13 +239,13 @@ We have three kinds of test
 Since our services are essentially return statements calling our repository, we found integration tests of these to be of lesser valued, compared to the rest of the project. However, if the project continues, testing them would be beneficial to ensure functionality remains unchanged as the services evolve.
 &nbsp;
 
-Our UI tests are set up quite genral, we don't mock anything, just use an in memory database, and only validate if the UI behave as expected. You could, in addition to these, have done some tests where you isolate the UI more, e.g., by mocking the behavior of the used service methods. But we prioritized other tasks given the application's size.
+Our UI tests are set up quite general, we don't mock anything, just use an in memory database, and only validate if the UI behave as expected. You could, in addition to these, have done some tests where you isolate the UI more, e.g., by mocking the behavior of the used service methods. But we prioritized other tasks given the application's size.
 &nbsp;
 
-Our unit tests are of allmost all of our methods in our two repositories, supposed to be over all
+Our unit tests are of almost all of our methods in our two repositories, supposed to be over all
 &nbsp;
 
-We have some end to end test, but could proaberly use some more, tho since our UI test are so general, they act some what as end to end tests.
+We have some end to end test, but could probably use some more, tho since our UI test are so general, they act some what as end to end tests.
 
 # Ethics
 
