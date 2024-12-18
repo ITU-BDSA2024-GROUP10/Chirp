@@ -27,10 +27,10 @@ header-includes:
 
 ## Domain model
 
-The _Chirp!_ domain model is setup around the Author class. Authors inherit traits for account management from IdentityUser. 
+The _Chirp!_ domain model is set up around the Author class. Authors inherit traits for account management from IdentityUser. 
 Authors are able to create Cheeps and interact with them with Likes or Comments. Each Author keeps a list of Likes and Comments
 enabling logging of which Authors have interacted with which Cheeps. Furthermore Authors are able to follow other Authors, 
-storing a list Authors they follow and Authors that follow them.
+storing a list of Authors they follow and Authors that follow them.
 
 ![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModel.png)
 
@@ -38,7 +38,7 @@ storing a list Authors they follow and Authors that follow them.
 
 ## Architecture — In the small
 
-Due to the application's size, each layer consists only of a single project, as highlighted in bold. **Chirp.Web** references **Chirp.Infrastructure**, which deviates from the Onion architecture, for two reasons:
+Due to the application's size, each layer consists only of a single project, as highlighted in bold. **Chirp.Web** references **Chirp.Infrastructure**, which deviates from the Onion architecture for two reasons:
 
 1. **Program.cs** requires it to configure services.
 
@@ -51,19 +51,19 @@ Due to the application's size, each layer consists only of a single project, as 
 ## Architecture of deployed application
 
 The _Chirp!_ application is deployed to the Microsoft Azure App Service as a complete component 
-consisting of Chirp.Web for the GUI, Chirp.Infrastructure handling the domain model and repositories.
-The User connects to Chirp.Web through Azure. On read and write requests the Azure Web App will
-make calls to the deployed SQLite server. If users attempt to login or register with OAuth via github
+consisting of Chirp.Web for the GUI, with Chirp.Infrastructure handling the domain model and repositories.
+The User connects to Chirp.Web through Azure. On read and write requests, the Azure Web App will
+make calls to the deployed SQLite server. If users attempt to login or register with OAuth via Github,
 Chirp.Web will make calls to GitHub Authentication. 
 
 ![Illustration of the _Chirp!_ deployment architecture of the application.](images/DeploymentDiagram.png)
 
 ## User activities
 
-In order to increase the readability of the UserActivities diagram, the total diagram has been decomposed 
+In order to increase the readability of the UserActivities diagram, the full diagram has been decomposed 
 to show activities depending on whether the User is signed in or not. 
 
-The total diagram can be under _docs/images/UserActivitiesDiagram.png_
+The full diagram can be seen under _docs/images/UserActivitiesDiagram.png_
 
 \pagebreak
 
@@ -108,9 +108,9 @@ The total diagram can be under _docs/images/UserActivitiesDiagram.png_
 ## Build, test, release, and deployment
 
 
-The figure 5 below illustrates the workflows used for building and deploying the _Chirp!_ application.
-The process stars, when pull request is merged into the main branch.
-The blue boxes represents workflows
+Figure 5 below illustrates the workflows used for building and deploying the _Chirp!_ application.
+The process starts when a pull request is merged into the main branch.
+The blue boxes represents workflows.
 
 
 ![Illustration of github workflows for building and deploying the _Chirp!_ application.](images/Deployment.png)
@@ -129,14 +129,15 @@ The blue boxes represents workflows
 
 ## Pull Requests 
 
-To help validate pull requests and help make sure only code, that lived up to the following, 
+To help validate pull requests and help make sure only code that: 
 
-- Contain no warnings
+- Contains no warnings
 
-- Be able to build 
+- Is able to build 
 
-- Have no failing test 
-was pulled into main, the following workflow structure was setup. 
+- Has no failing test 
+
+was pulled into main, the following workflow structure was set up. 
 
 ![Illustration of github workflows for pull requests into the main branch of _Chirp!_ ](images/PullRequests.png){ width=75%}
 
@@ -148,7 +149,7 @@ was pulled into main, the following workflow structure was setup.
 ### Project Board
 
 ### Unclosed Issues
-Some issues still remain open in the Todo column, these are extra features that the group found interesting but did not get to implement within the time frame of the project work.
+Some issues still remain open in the Todo column. These are extra features that the group found interesting but did not get to implement within the time frame of the project work.
 &nbsp;
 
 In order to better mimic the functionality of _X_ (f.k.a _Twitter_), users should be able to leave comments directly on the timeline pages. 
@@ -156,11 +157,11 @@ This would be implemented by having a popup window appear, where users could lea
 However getting this to work while handling and displaying message-format-errors proved to be an issue, and the feature was given an _Extra_ tag and left open. 
 &nbsp;
 
-We also wanted to make a big refactor, which involved moving what database access we could to an API project. Since we use ASP.NET Identity for user registration and verification, a local database would still be required for the web project to store user information. The main reason for the API project is to decouple data access from the web application, making it easier to build additional features, such as a mobile app, by enabling shared data across projects. While a centralized database could achieve similar results, an API is more future-proof, as it abstracts the database layer, making the switching of the database, have no impact on the projects using the API.
+The group also wanted to make a big refactor, which involved moving what database access we could to an API project. Since we use ASP.NET Identity for user registration and verification, a local database would still be required for the web project to store user information. The main reason for the API project is to decouple data access from the web application, making it easier to build additional features, such as a mobile app, by enabling shared data across projects. While a centralized database could achieve similar results, an API is more future-proof, as it abstracts the database layer, making the switching of the database have no impact on the projects using the API.
 
 \vspace*{0.3cm}
 
-For the Command-Line-Interface version of _Chirp!_ an error with the end-to-end tests still exists. 
+For the Command-Line-Interface version of _Chirp!_, an error with the end-to-end tests still exists. 
 The tests pass when the database file contains the expected Cheep and the test is run on Windows.
 However the group was unable to make the test work in isolation from the actual database and cross-platform and thus the end-to-end-test branch remains open. 
 
@@ -174,7 +175,7 @@ and green how issues are merged from the feature branch into main.
 \pagebreak
 
 ## How to make _Chirp!_ work locally
-First clone the repository to your machine with 
+First clone the repository to your machine with:
 
 \vspace*{0.5cm}
 ```
@@ -182,7 +183,7 @@ git clone https://github.com/ITU-BDSA2024-GROUP10/Chirp.git
 ```
 \vspace*{0.5cm}
 
-In order for the program to work you will need to configure the user-secrets. 
+In order for the program to work, you will need to configure the user-secrets. 
 To do this navigate to  _/Chirp/Chirp_, in the terminal, and run:
 
 \vspace*{0.5cm}
@@ -227,7 +228,7 @@ dotnet run
 
 ## How to run test suite locally
 
-In order to make run the UI-Tests make sure your system has playwright installed.
+In order to run the UI-Tests, make sure that your system has Playwright installed.
 
 Next, navigate to _/Chirp/Chirp_ and in your terminal do
 \vspace*{0.5cm}
@@ -246,15 +247,15 @@ We have three kinds of test
 
 &nbsp;
 
-Since our services are essentially return statements calling our repository, we found integration tests of these to be of lesser valued, compared to the rest of the project. However, if the project continues, testing them would be beneficial to ensure functionality remains unchanged as the services evolve.
+Since our services are essentially return statements calling our repository, we found integration tests of these to be of lesser value compared to the rest of the project. However, were the project to continue, testing them would be beneficial to ensure functionality remains unchanged as the services evolve.
 \vspace*{0.3cm}
 
 Most of the unit tests are on the repository methods since these are where almost all of the compute is being done. 
 
 \vspace*{0.3cm}
-Our UI tests are set up quite general, we don't mock anything, just use an in memory database, and only validate if the UI behave as expected. 
-You could, in addition to these, have done some tests where you isolate the UI more, e.g., by mocking the behavior of the used service methods. But we prioritized other tasks given the application's size.
-We have some end to end test, but could probably use some more, since our UI test are so general, they act some what as end to end tests.
+Our UI tests setup is quite general. Nothing is mocked, an in-memory database is used, the only validation is for if the UI behaves as expected. 
+We could, in addition to these, have done some tests where we isolate the UI more, e.g., by mocking the behavior of the used service methods. But we prioritized other tasks given the application's size.
+We have some end-to-end tests, but could probably use some more. Since our UI tests are so general, they act to some degree as end to end tests.
 
 \pagebreak
 
@@ -265,13 +266,13 @@ We have some end to end test, but could probably use some more, since our UI tes
 
 This program is licensed with the GNU GENERAL PUBLIC LICENSE Version 3.
 For the dependincies used, they either have an MIT or an Apache-2.0 license.
-And since we only use Duende Identity server for testing purposes, we dont need a license for it.
-Stated at the bottom of, https://duendesoftware.com/products/communityedition
+And since we only use Duende Identity server for testing purposes, a license is not required,
+as stated at the bottom of, https://duendesoftware.com/products/communityedition
 
 ## LLMs, ChatGPT, CoPilot, and others
 
 ### CoPilot
-CoPilot have been used doing the development of this project. It's a great tool for speeding up development, as it's quicker to read through the code it recommends than to write it. Not everything it recommends is usable or as we want it, but it can also help when learning a new language or framework, to introduce new methods and structure.
+Github CoPilot has been used doing the development of this project. It has been a great tool for speeding up development, as it is quicker to read through the code it recommends than to write it. Not everything it recommends is usable or as desired, but it can also help when learning a new language or framework to introduce new methods and structure.
 
 ### ChatGPT
 ChatGPT was used primarily for the three following things.
@@ -280,25 +281,22 @@ ChatGPT was used primarily for the three following things.
 
 - Writing some HTML and CSS code
 
-- Understand and discussing
-
+- Understanding and discussing code
 &nbsp;
 
 **Understanding and debugging error messages.**
-This can be very helpful since error messages can be very long and contain a lot of information, which is ideal for LLM's. 
-Sometimes they can also be harder to understand if you don't have a lot of knowledge of the framework you are using. 
+An LLM is ideal here since error messages can be very long and contain a lot of information. 
+Sometimes, they can also be harder to understand if one doesn't have a lot of knowledge of the framework being used. 
 &nbsp;
 
-\vspace*{0.3cm}
-
 **Writing some HTML and CSS code.**
-Since HTML and CSS is time consuming we used ChatGPT to help write some of the UI code, that could be fine tuned by hand.   
+Since HTML and CSS is time consuming, we used ChatGPT to help write some of the UI code that could then be fine tuned by hand.   
 &nbsp;
 
 **Understand and discussing code.**
-If you don't have other people around, this can be very helpful, especially if you find some code online, whether it's from a stack overflow post, or if it's documentation. When learning a new language or framework, this can especially be helpful, since you don't know a lot of the tricks yet.  
+This can be very helpful when others are not available, especially when finding code online, for example from Stack Overflow or documentation. When learning a new language or framework, this can especially be helpful, since you don't know a lot of the tricks yet.  
 &nbsp;
 
-Overall, the use of LLM's speed-up our development process, and helped us get a better understanding of c# and dot net. 
+Overall, the use of LLM's sped up our development process, and helped us get a better understanding of C# and .NET. 
 While using LLM's can help speed up debugging and development processes, it is still important to learn how to work independent of AI-assistance.
-The data centers running the models also consume large amount of energy, and as a developer you need to be conscious of the impact of this technology. 
+The data centers running the models also consume large amounts of energy, and as a developer you need to be conscious of the impact of this technology. 
