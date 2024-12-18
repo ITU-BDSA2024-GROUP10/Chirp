@@ -14,17 +14,7 @@ public class EndToEndTests : PageTestWithRazorPlaywrightWebApplicationFactory
 {
     private async Task Register(Author author, string password)
     {
-        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).ClickAsync();
-        await Page.GetByPlaceholder("name", new() { Exact = true }).FillAsync(author.UserName!);
-        await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync(author.Email!);
-        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
-        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
-        await Page.GetByLabel("Confirm Password").ClickAsync();
-        await Page.GetByLabel("Confirm Password").FillAsync(password);
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your account" }).ClickAsync();
+        await RazorPageUtils.Register(author.UserName!, author.Email!, password);
     }
     
     [Test]
