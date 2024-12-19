@@ -74,17 +74,17 @@ The full diagram can be seen under _docs/images/UserActivitiesDiagram.pngT_
 \noindent
 \hspace*{-2cm}
 \makebox[\textwidth][l]{%
-    \includegraphics[width=1\textwidth, height=\textheight, keepaspectratio]{images/LoggedOut.png}
+    \includegraphics[width=1.25\textwidth, height=\textheight, keepaspectratio]{images/LoggedOut.png}
 }
 
 \vspace*{0.05cm}
 \captionof{figure}{Illustration of the \textit{Chirp!} functionality while signed out.}
-\vspace*{3.8cm}
+\vspace*{2cm}
 \vspace*{-2cm}
 \noindent
 \hspace*{-2cm}
 \makebox[\textwidth][l]{%
-    \includegraphics[width=1\textwidth, height=\textheight, keepaspectratio]{images/LoggedIn.png}
+    \includegraphics[width=1.25\textwidth, height=\textheight, keepaspectratio]{images/LoggedIn.png}
 }
 
 \vspace*{0.05cm}
@@ -152,7 +152,7 @@ The following workflow structure was established.
 
 ## Team work
 ### Project Board
-![Project board](images/project%20board.png)
+![The Project Board for _Chirp!_ as of the 19/12-2024](images/project%20board.png)
 
 ### Unclosed Issues
 Some issues remain open in the Todo column. These include a combination of features that the group found interesting but were unable to implement within the project timeframe, as well as bugs, refactoring tasks, and documentation updates.
@@ -244,6 +244,8 @@ Next, navigate to _/Chirp/Chirp_ and in your terminal do
 dotnet test 
 ```
 
+\pagebreak
+
 ## Our test structure
 We have three kinds of test
 
@@ -265,9 +267,6 @@ Our UI tests are designed to be quite general. We don’t mock any dependencies;
 
 We also have some end-to-end tests, though more could be added. Since our UI tests are so general, they somewhat serve the role of end-to-end tests as well.
 
-\pagebreak
-
-
 # Ethics
 
 ## License
@@ -281,6 +280,8 @@ as stated at the bottom of, https://duendesoftware.com/products/communityedition
 
 ### CoPilot
 Github CoPilot has been used during the development of this project. It has been a great tool for speeding up development, as it is quicker to read through the code it recommends than to write it. Not everything it recommends is usable or as desired, but it can also help when learning a new language or framework to introduce new methods and structure.
+
+\pagebreak
 
 ### ChatGPT
 ChatGPT was used primarily for the three following things.
