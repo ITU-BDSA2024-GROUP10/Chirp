@@ -71,17 +71,17 @@ The full diagram can be seen under _docs/images/UserActivitiesDiagram.png_
 \noindent
 \hspace*{-2cm}
 \makebox[\textwidth][l]{%
-    \includegraphics[width=1\textwidth, height=\textheight, keepaspectratio]{images/LoggedOut.png}
+    \includegraphics[width=1.25\textwidth, height=\textheight, keepaspectratio]{images/LoggedOut.png}
 }
 
 \vspace*{0.05cm}
 \captionof{figure}{Illustration of the \textit{Chirp!} functionality while signed out.}
-\vspace*{3.8cm}
+\vspace*{2cm}
 \vspace*{-2cm}
 \noindent
 \hspace*{-2cm}
 \makebox[\textwidth][l]{%
-    \includegraphics[width=1\textwidth, height=\textheight, keepaspectratio]{images/LoggedIn.png}
+    \includegraphics[width=1.25\textwidth, height=\textheight, keepaspectratio]{images/LoggedIn.png}
 }
 
 \vspace*{0.05cm}
@@ -147,11 +147,11 @@ was pulled into main, the following workflow structure was set up.
 
 ## Team work
 ### Project Board
+![The Project Board for _Chirp!_ as of the 19/12-2024](images/project%20board.png)
 
 ### Unclosed Issues
 Some issues still remain open in the Todo column. These are a combination of features that the group found interesting but did not get to implement within the time frame of the project work, such as bugs, refactors and documentation.
 &nbsp;
-![Project board](images/project%20board.png)
 
 In order to better mimic the functionality of _X_ (f.k.a _Twitter_), users should be able to leave comments directly on the timeline pages. 
 This would be implemented by having a popup window appear, where users could leave comments, when clicking a Cheep. 
@@ -240,6 +240,8 @@ Next, navigate to _/Chirp/Chirp_ and in your terminal do
 dotnet test 
 ```
 
+\pagebreak
+
 ## Our test structure
 We have three kinds of test
 
@@ -261,9 +263,6 @@ Our UI tests setup is quite general. Nothing is mocked, an in-memory database is
 We could, in addition to these, have done some tests where we isolate the UI more, e.g., by mocking the behavior of the used service methods. But we prioritized other tasks given the application's size.
 We have some end-to-end tests, but could probably use some more. Since our UI tests are so general, they act to some degree as end to end tests.
 
-\pagebreak
-
-
 # Ethics
 
 ## License
@@ -277,6 +276,8 @@ as stated at the bottom of, https://duendesoftware.com/products/communityedition
 
 ### CoPilot
 Github CoPilot has been used doing the development of this project. It has been a great tool for speeding up development, as it is quicker to read through the code it recommends than to write it. Not everything it recommends is usable or as desired, but it can also help when learning a new language or framework to introduce new methods and structure.
+
+\pagebreak
 
 ### ChatGPT
 ChatGPT was used primarily for the three following things.
