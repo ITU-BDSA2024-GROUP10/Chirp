@@ -61,7 +61,7 @@ SQLite server. If users attempt to login or register using OAuth via GitHub, Chi
 ## User activities
 
 To enhance the readability of the UserActivities diagram, the complete diagram has been divided to display activities based on whether the user is signed in or not.
-Common for the whole application is.
+Common for the whole application is:
 
 - On every page you can go to home(the public timeline)
 
@@ -69,7 +69,7 @@ Common for the whole application is.
 
 - On every page where you can read cheeps, you can switch between pages, with the exception of about me 
 
-The full diagram can be seen under _docs/images/UserActivitiesDiagram.pngT_
+The full diagram can be seen under _docs/images/UserActivitiesDiagram.png_
 
 \pagebreak
 
