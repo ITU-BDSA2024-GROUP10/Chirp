@@ -51,7 +51,10 @@ Due to the application's size, each layer consists only of a single project, as 
 
 ## Architecture of deployed application
 
-The _Chirp!_ application is deployed to Microsoft Azure App Service as a complete component, consisting of Chirp.Web for the GUI, Chirp.core for exposing the business services, and Chirp.Infrastructure for managing the domain model and repositories. Users connect to Chirp.Web through Azure. For read and write requests, the Azure Web App communicates with the deployed SQLite server. If users attempt to login or register using OAuth via GitHub, Chirp.Web sends authentication requests to GitHub.
+The _Chirp!_ application is deployed to Microsoft Azure App Service as a complete component, consisting of Chirp.Web for the GUI, 
+Chirp.core for exposing the business services, and Chirp.Infrastructure for managing the domain model and repositories. 
+Users connect to Chirp.Web through Azure. For read and write requests, the Azure Web App communicates with the deployed 
+SQLite server. If users attempt to login or register using OAuth via GitHub, Chirp.Web sends authentication requests to GitHub.
 
 ![Illustration of the _Chirp!_ deployment architecture of the application.](images/DeploymentDiagram.png)
 
@@ -60,7 +63,7 @@ The _Chirp!_ application is deployed to Microsoft Azure App Service as a complet
 To enhance the readability of the UserActivities diagram, the complete diagram has been divided to display activities based on whether the user is signed in or not.
 Common for the whole application is.
 
-- On every page you can go to home(the public timline)
+- On every page you can go to home(the public timeline)
 
 - On every page where you can read cheeps. 2 videos are playing on both sides.
 
@@ -230,6 +233,7 @@ dotnet watch
 ```
 dotnet run 
 ```
+\vspace*{0.3cm}
 
 The _OpenIdConnect_ button, for registering and log in, is not meant to be used with the application.
 It is the Identity Server and are only used for testing purposes.
