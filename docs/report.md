@@ -63,11 +63,11 @@ SQLite server. If users attempt to login or register using OAuth via GitHub, Chi
 To enhance the readability of the UserActivities diagram, the complete diagram has been divided to display activities based on whether the user is signed in or not.
 Common for the whole application is:
 
-- On every page you can go to home(the public timeline)
+- On every page you can go to home (the public timeline)
 
-- On every page where you can read cheeps. 2 videos are playing on both sides.
+- On every page where you can read cheeps, 2 videos are playing on both sides.
 
-- On every page where you can read cheeps, you can switch between pages, with the exception of about me 
+- On every page where you can read cheeps, you can switch between pages with the exception of about me 
 
 The full diagram can be seen under _docs/images/UserActivitiesDiagram.png_
 
