@@ -27,10 +27,11 @@ header-includes:
 
 ## Domain model
 
-The _Chirp!_ domain model is set up around the Author class. Authors inherit traits for account management from IdentityUser. 
-Authors are able to create Cheeps and interact with them with Likes or Comments. Each Author keeps a list of Likes and Comments
-enabling logging of which Authors have interacted with which Cheeps. Furthermore Authors are able to follow other Authors, 
-storing a list of Authors they follow and Authors that follow them.
+The _Chirp!_ domain model is centered around the Author class. Authors inherit traits for account
+management from IdentityUser. Authors can create Cheeps and interact with them through Likes or
+Comments. Each Author maintains a list of Likes and Comments, enabling the logging of which Authors
+have interacted with which Cheeps. Furthermore, Authors can follow other Authors, storing a list of the
+Authors they follow and the Authors who follow them.
 
 ![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModel.png)
 
@@ -50,20 +51,22 @@ Due to the application's size, each layer consists only of a single project, as 
 
 ## Architecture of deployed application
 
-The _Chirp!_ application is deployed to the Microsoft Azure App Service as a complete component 
-consisting of Chirp.Web for the GUI, with Chirp.Infrastructure handling the domain model and repositories.
-The User connects to Chirp.Web through Azure. On read and write requests, the Azure Web App will
-make calls to the deployed SQLite server. If users attempt to login or register with OAuth via Github,
-Chirp.Web will make calls to GitHub Authentication. 
+The _Chirp!_ application is deployed to Microsoft Azure App Service as a complete component, consisting of Chirp.Web for the GUI, Chirp.core for exposing the business services, and Chirp.Infrastructure for managing the domain model and repositories. Users connect to Chirp.Web through Azure. For read and write requests, the Azure Web App communicates with the deployed SQLite server. If users attempt to login or register using OAuth via GitHub, Chirp.Web sends authentication requests to GitHub.
 
 ![Illustration of the _Chirp!_ deployment architecture of the application.](images/DeploymentDiagram.png)
 
 ## User activities
 
-In order to increase the readability of the UserActivities diagram, the full diagram has been decomposed 
-to show activities depending on whether the User is signed in or not. 
+To enhance the readability of the UserActivities diagram, the complete diagram has been divided to display activities based on whether the user is signed in or not.
+Common for the whole application is.
 
-The full diagram can be seen under _docs/images/UserActivitiesDiagram.png_
+- On every page you can go to home(the public timline)
+
+- On every page where you can read cheeps. 2 videos are playing on both sides.
+
+- On every page where you can read cheeps, you can switch between pages, with the exception of about me 
+
+The full diagram can be seen under _docs/images/UserActivitiesDiagram.pngT_
 
 \pagebreak
 
@@ -97,7 +100,7 @@ The full diagram can be seen under _docs/images/UserActivitiesDiagram.png_
     \includegraphics[width=1.4\textwidth, height=\textheight, keepaspectratio]{images/Sequence-of-functionality.png}
 }
 \vspace*{0.5cm}
-\captionof{figure}{Sequence diagram of the flow of messages through the \textit{Chirp!} application.}
+\captionof{figure}{Sequence diagram of a request to the root endpoint \textit{Chirp!} application.}
 
 
 \pagebreak 
@@ -129,15 +132,17 @@ The blue boxes represents workflows.
 
 ## Pull Requests 
 
-To help validate pull requests and help make sure only code that: 
+To validate pull requests and ensure that only code meeting the following criteria:
 
 - Contains no warnings
 
-- Is able to build 
+- Successfully builds
 
-- Has no failing test 
+- Passes all tests
 
-was pulled into main, the following workflow structure was set up. 
+is merged into the main branch.
+The following workflow structure was established.
+
 
 ![Illustration of github workflows for pull requests into the main branch of _Chirp!_ ](images/PullRequests.png){ width=75%}
 
@@ -147,27 +152,23 @@ was pulled into main, the following workflow structure was set up.
 
 ## Team work
 ### Project Board
-
-### Unclosed Issues
-Some issues still remain open in the Todo column. These are a combination of features that the group found interesting but did not get to implement within the time frame of the project work, such as bugs, refactors and documentation.
-&nbsp;
 ![Project board](images/project%20board.png)
 
-In order to better mimic the functionality of _X_ (f.k.a _Twitter_), users should be able to leave comments directly on the timeline pages. 
-This would be implemented by having a popup window appear, where users could leave comments, when clicking a Cheep. 
-However getting this to work while handling and displaying message-format-errors proved to be an issue, and the feature was given an _Extra_ tag and left open. 
+### Unclosed Issues
+Some issues remain open in the Todo column. These include a combination of features that the group found interesting but were unable to implement within the project timeframe, as well as bugs, refactoring tasks, and documentation updates.
+&nbsp;
+
+To better mimic the functionality of _X_ (formerly known as Twitter), users should be able to leave comments directly on the timeline pages. This feature was intended to be implemented with a popup window that appears when a user clicks on a Cheep, allowing them to leave comments. However, handling and displaying message format errors proved challenging, so the feature was given an "Extra" tag and left open.
 \vspace*{0.3cm}
 
-We also wanted to make a big refactor, which involved moving what database access we could to an API project. Since we use ASP.NET Identity for user registration and verification, a local database would still be required for the web project to store user information. The main reason for the API project is to decouple data access from the web application, making it easier to build additional features, such as a mobile app, by enabling shared data across projects. While a centralized database could achieve similar results, an API is more future-proof, as it abstracts the database layer, making the switching of the database, have no impact on the projects using the API.
+The group also planned a significant refactor, which involved moving as much database access as possible to an API project. Since ASP.NET Identity is used for user registration and verification, a local database would still be required for the web project to store user information. The main purpose of the API project was to decouple data access from the web application, making it easier to build additional features, such as a mobile app, by enabling shared data access across projects. While a centralized database could achieve similar results, an API is more future-proof as it abstracts the database layer, allowing database switching without impacting the projects using the API.
 \vspace*{0.3cm}
 
-There is also some extra functionality left, e.g. a theme song, as well as a feature for better display of the users data, and a bug regarding the timestamp on comments. The rest of the issus are regarding refactors for better code quality or in code ducumentation and naming consistensy through the code.
+Some additional features were also left incomplete, such as a theme song, improved data display for users, and fixing a bug related to timestamps on comments. The remaining issues involve refactoring for better code quality, improving in-code documentation, and ensuring consistent naming conventions throughout the codebase.
 
 \vspace*{0.3cm}
 
-For the Command-Line-Interface version of _Chirp!_, an error with the end-to-end tests still exists. 
-The tests pass when the database file contains the expected Cheep and the test is run on Windows.
-However the group was unable to make the test work in isolation from the actual database and cross-platform and thus the end-to-end-test branch remains open. 
+For the Command-Line-Interface (CLI) version of Chirp!, an error with the end-to-end tests persists. These tests pass when the database file contains the expected Cheep and the tests are run on Windows. However, the group was unable to make the test work in isolation from the actual database and cross-platform. As a result, the end-to-end-test branch remains open.
 
 ### Issue Progression 
 The illustration below shows how the group worked with issues during the project. 
@@ -230,6 +231,9 @@ dotnet watch
 dotnet run 
 ```
 
+The _OpenIdConnect_ button, for registering and log in, is not meant to be used with the application.
+It is the Identity Server and are only used for testing purposes.
+
 ## How to run test suite locally
 
 In order to run the UI-Tests, make sure that your system has Playwright installed.
@@ -251,15 +255,15 @@ We have three kinds of test
 
 &nbsp;
 
-Since our services are essentially return statements calling our repository, we found integration tests of these to be of lesser value compared to the rest of the project. However, were the project to continue, testing them would be beneficial to ensure functionality remains unchanged as the services evolve.
+Since our services are essentially return statements calling our repository, we found integration tests for these to be of lesser value compared to other aspects of the project. However, if the project continues, testing these services would be beneficial to ensure their functionality remains intact as they evolve.
 \vspace*{0.3cm}
 
-Most of the unit tests are on the repository methods since these are where almost all of the compute is being done. 
+All of the unit tests focus on the repository methods, as this is where the majority of the computation takes place.
 
 \vspace*{0.3cm}
-Our UI tests setup is quite general. Nothing is mocked, an in-memory database is used, the only validation is for if the UI behaves as expected. 
-We could, in addition to these, have done some tests where we isolate the UI more, e.g., by mocking the behavior of the used service methods. But we prioritized other tasks given the application's size.
-We have some end-to-end tests, but could probably use some more. Since our UI tests are so general, they act to some degree as end to end tests.
+Our UI tests are designed to be quite general. We don’t mock any dependencies; instead, we use an in-memory database and validate only whether the UI behaves as expected. Additional tests could have been implemented to further isolate the UI, such as mocking the behavior of the service methods used. However, given the size of the application, we prioritized other tasks.
+
+We also have some end-to-end tests, though more could be added. Since our UI tests are so general, they somewhat serve the role of end-to-end tests as well.
 
 \pagebreak
 
@@ -276,7 +280,7 @@ as stated at the bottom of, https://duendesoftware.com/products/communityedition
 ## LLMs, ChatGPT, CoPilot, and others
 
 ### CoPilot
-Github CoPilot has been used doing the development of this project. It has been a great tool for speeding up development, as it is quicker to read through the code it recommends than to write it. Not everything it recommends is usable or as desired, but it can also help when learning a new language or framework to introduce new methods and structure.
+Github CoPilot has been used during the development of this project. It has been a great tool for speeding up development, as it is quicker to read through the code it recommends than to write it. Not everything it recommends is usable or as desired, but it can also help when learning a new language or framework to introduce new methods and structure.
 
 ### ChatGPT
 ChatGPT was used primarily for the three following things.
