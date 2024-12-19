@@ -67,16 +67,16 @@ The full diagram can be seen under _docs/images/UserActivitiesDiagram.png_
 
 \pagebreak
 
-\vspace*{-2cm}
+\vspace*{-4cm}
 \noindent
 \hspace*{-2cm}
 \makebox[\textwidth][l]{%
-    \includegraphics[width=1.25\textwidth, height=\textheight, keepaspectratio]{images/LoggedOut.png}
+    \includegraphics[width=1.35\textwidth, height=\textheight, keepaspectratio]{images/LoggedOut.png}
 }
 
-\vspace*{0.05cm}
+\vspace*{0.5cm}
 \captionof{figure}{Illustration of the \textit{Chirp!} functionality while signed out.}
-\vspace*{2cm}
+\vspace*{2.5cm}
 \vspace*{-2cm}
 \noindent
 \hspace*{-2cm}
@@ -122,7 +122,7 @@ The blue boxes represents workflows.
     \includegraphics[width=1.2\textwidth, height=\textheight]{images/ReleaseWorkflows.png}
 }
 \vspace*{-1cm}
-\vspace*{0.5cm}
+\vspace*{1cm}
 \captionof{figure}{Detailed illustration of the workflows involved in deploying \textit{Chirp!}.}
 
 \pagebreak
